@@ -45,12 +45,16 @@ class CarePlanAdapter extends RecyclerView.Adapter<CarePlanAdapter.ViewHolder>{
         }else{
             tpHeaderModel.setSelected(false);
             holder.day.setTextColor(activity.getResources().getColor(R.color.white));
-            holder.day.setBackground(activity.getResources().getDrawable(R.drawable.rectangleborderred));
+            holder.day.setBackground(activity.getResources().getDrawable(R.drawable.brownborderred));
         }
         if(!tpHeaderModel.isIndicator()){
+            holder.day.setTextColor(activity.getResources().getColor(R.color.black));
+            holder.date.setTextColor(activity.getResources().getColor(R.color.black));
             holder.date.setBackground(activity.getResources().getDrawable(R.drawable.tp_default_date_bg));
         }else{
-            holder.date.setBackground(activity.getResources().getDrawable(R.drawable.circleborderred));
+            holder.day.setTextColor(activity.getResources().getColor(R.color.black));
+            holder.date.setTextColor(activity.getResources().getColor(R.color.white));
+            holder.date.setBackground(activity.getResources().getDrawable(R.drawable.circleborderbrown));
             tpHeaderModel.setIndicator(false);
         }
         holder.dateLayout.setOnClickListener(new View.OnClickListener() {

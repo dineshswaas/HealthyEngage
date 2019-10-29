@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.lzyzsd.circleprogress.DonutProgress;
+import com.budiyev.android.circularprogressbar.CircularProgressBar;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,7 +36,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     List<CarePlanModels> tpHeaderModelList;
     CarePlanAdapter carePlanAdapter;
     TextView percentIndicatior,dateText;
-    DonutProgress donut_progress;
+    CircularProgressBar donut_progress;
     ImageView imageView2,imageView3;
     boolean imageonebool,imagetwobool,isdateAlreadySelect;
     int selectedItemposition = -1;
@@ -65,7 +65,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         carePlanCalenderRecyclerView = (RecyclerView)mView.findViewById(R.id.careplancalender);
         percentIndicatior = (TextView)mView.findViewById(R.id.percentIndicatior);
         dateText = (TextView)mView.findViewById(R.id.date);
-        donut_progress = (DonutProgress)mView.findViewById(R.id.donut_progress);
+        donut_progress = (CircularProgressBar)mView.findViewById(R.id.donut_progress);
         imageView2 = (ImageView)mView.findViewById(R.id.imageView2);
         imageView3 = (ImageView)mView.findViewById(R.id.imageView3);
 
