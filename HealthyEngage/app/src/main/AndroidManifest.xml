@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/appicon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TimeOutActivity"></activity>
-        <activity android:name=".HomePageActivity">
+        <activity android:name=".HomePageActivity"></activity>
+        <activity android:name=".LoingWithMobileActivity" />
+        <activity android:name=".TimeOutActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
