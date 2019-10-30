@@ -15,7 +15,14 @@
 >
 
 
-
+    <LinearLayout
+        android:id="@+id/calenderView"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:background="@color/gray_non_pressed"
+        >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -96,8 +103,8 @@
 
         <com.budiyev.android.circularprogressbar.CircularProgressBar
             android:id="@+id/donut_progress"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_margin="20dp"
             app:animateProgress="true"
             app:backgroundStrokeColor="@color/gray_non_pressed"
@@ -131,12 +138,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layout_marginLeft="5dp"
                 android:text="21-Aug-2019" />
             <TextView
                 android:id="@+id/percentIndicatior"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
+                android:layout_margin="5dp"
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:text="Your care overview is 0% complete " />
@@ -145,119 +154,223 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/textView6"
+    <LinearLayout
+        android:id="@+id/intervention"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:padding="5dp"
-        android:text="INTERVENTIONS" />
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:background="@color/white"
-        android:padding="10dp"
-        android:layout_height="wrap_content">
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView7"
-            android:layout_width="wrap_content"
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_margin="5dp"
-            android:textStyle="bold"
-            android:text="STIVARGA" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:text="INTERVENTIONS" />
+
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="40dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/circleborderwhite"
-                android:layout_height="40dp"
-                />
+            android:id="@+id/interventionMainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="10dp">
 
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="40dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/circleborderwhite"
-                android:layout_height="40dp"
-                />
+
         </LinearLayout>
-
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView9"
+    <LinearLayout
+        android:id="@+id/assesment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:padding="5dp"
-        android:text="ASSESSMENTS" />
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:background="@color/white"
-        android:padding="10dp"
-        android:layout_height="wrap_content">
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:text="ASSESSMENTS" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/assessmentMainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
             android:orientation="vertical"
-            android:layout_margin="5dp"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Fatigue"
-                android:textColor="@color/black"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Body"
-
-                />
-        </LinearLayout>
-
-
+            android:padding="10dp" />
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_marginTop="1dp"
+        android:id="@+id/readonly"
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:padding="10dp"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:text="READ ONLY" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/readonlyMainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
             android:orientation="vertical"
-            android:layout_margin="5dp"
-            android:layout_height="wrap_content">
-            <TextView
+            android:padding="10dp" />
+    </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/detailsView"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:background="@color/gray_non_pressed"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+
+                android:background="@color/white"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"
+                    android:padding="5dp"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                     />
+
+                <TextView
+                    android:id="@+id/back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"
+                    android:text="Back" />
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/gray_non_pressed"
+                android:layout_height="1dp">
+
+            </View>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:background="@color/white"
+                android:layout_height="wrap_content">
+                <!-- <com.github.lzyzsd.circleprogress.DonutProgress
+
+                     android:id="@+id/donut_progress"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_margin="20dp"
+                     app:donut_show_text="false"
+                     app:donut_background_color="@color/white"
+                     app:donut_finished_color="@color/common_signin_btn_default_background"
+                     app:donut_progress="20"/>-->
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="30dp"
+                     android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/intername"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:text="NA" />
+                    <TextView
+                        android:id="@+id/interdosage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@+id/intername"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/draft_grey"
+                        android:text="@string/not_available" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Fever"
-                android:textColor="@color/black"
-                />
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Body"
+                <TextView
 
-                />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="5dp"
+                    android:text="INSTRUCTIONS" />
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+
+                    <TextView
+                        android:id="@+id/instruction"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/black"
+                        android:text="@string/not_available" />
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
 
-    </LinearLayout>
 
+    </LinearLayout>
 </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

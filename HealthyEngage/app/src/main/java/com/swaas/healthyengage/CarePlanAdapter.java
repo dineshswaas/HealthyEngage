@@ -38,7 +38,7 @@ class CarePlanAdapter extends RecyclerView.Adapter<CarePlanAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         final CarePlanModels tpHeaderModel = carePlanModelsList.get(position);
         holder.day.setText(tpHeaderModel.getDayString().toUpperCase().substring(0, 1));
-        holder.date.setText(String.valueOf(tpHeaderModel.getDay()));
+        holder.date.setText(String.valueOf(tpHeaderModel.getDayInt()));
         if(!tpHeaderModel.isSelected()){
             holder.day.setTextColor(activity.getResources().getColor(R.color.grey_black));
             holder.day.setBackground(activity.getResources().getDrawable(R.drawable.rectangleborderwhite));

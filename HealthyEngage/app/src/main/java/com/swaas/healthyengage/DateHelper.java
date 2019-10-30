@@ -26,4 +26,10 @@ class DateHelper {
             return "";
         }
     }
+
+    public static String getCurrentDate() {
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        return currentDate;
+    }
+
 }

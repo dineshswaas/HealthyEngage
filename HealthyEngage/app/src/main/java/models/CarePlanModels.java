@@ -6,20 +6,74 @@ import java.util.List;
 public class CarePlanModels {
 
     String lastSyncDate;
-    List<CarePlan> careplan;
     boolean isSelected,indicator;
-
     String monthString;
     String yearString;
     String dayString;
-    int day;
+    int dayInt;
+    String dates;
+    private String TP_Full_Day;
+    String carePlanId,day,patientId;
 
-    public int getDay() {
+    String id,plan_no,title,goal,problem,plan_start_date,plan_end_date,current_cycle_start_date,current_cycle_end_date;
+    String cycle_status,careplan_status,created_at,updated_at,careplan_template_id,owner_id,category_id,organisation_id;
+    boolean is_active;
+
+    int plan_duration,cycles,break_time,current_cycle;
+
+
+    List<CarePlanAssessment> careplanAssessment;
+    List<CarePlanInstruction> careplanInstruction;
+    List<CarePlanIntervention> careplanIntervention;
+
+
+
+    public String getCarePlanId() {
+        return carePlanId;
+    }
+
+    public void setCarePlanId(String carePlanId) {
+        this.carePlanId = carePlanId;
+    }
+
+    public String getDay() {
         return day;
     }
 
-    public void setDay(int day) {
+    public void setDay(String day) {
         this.day = day;
+    }
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
+
+    public String getTP_Full_Day() {
+        return TP_Full_Day;
+    }
+
+    public void setTP_Full_Day(String TP_Full_Day) {
+        this.TP_Full_Day = TP_Full_Day;
+    }
+
+    public String getDates() {
+        return dates;
+    }
+
+    public void setDates(String dates) {
+        this.dates = dates;
+    }
+
+    public int getDayInt() {
+        return dayInt;
+    }
+
+    public void setDayInt(int day) {
+        this.dayInt = day;
     }
 
     public String getMonthString() {
@@ -70,25 +124,7 @@ public class CarePlanModels {
         this.lastSyncDate = lastSyncDate;
     }
 
-    public List<CarePlan> getCareplan() {
-        return careplan;
-    }
 
-    public void setCareplan(List<CarePlan> careplan) {
-        this.careplan = careplan;
-    }
-
-    public  class  CarePlan{
-        String id,plan_no,title,goal,problem,plan_start_date,plan_end_date,current_cycle_start_date,current_cycle_end_date;
-        String dates,cycle_status,careplan_status,created_at,updated_at,careplan_template_id,owner_id,category_id,organisation_id;
-        boolean is_active;
-
-        int day,plan_duration,cycles,break_time,current_cycle;
-
-
-        List<CarePlanAssessment> careplanAssessment;
-        List<CarePlanInstruction> careplanInstruction;
-        List<CarePlanIntervention> careplanIntervention;
 
         public List<CarePlanIntervention> getCareplanIntervention() {
             return careplanIntervention;
@@ -283,39 +319,6 @@ public class CarePlanModels {
         }
 
 
-        private String TP_Full_Day;
-
-        public String getTP_Full_Day() {
-            return TP_Full_Day;
-        }
-
-        public void setTP_Full_Day(String TP_Full_Day) {
-            this.TP_Full_Day = TP_Full_Day;
-        }
-
-        public int getDay() {
-            return day;
-        }
-
-        public void setDay(int day) {
-            this.day = day;
-        }
-
-        public String getDates() {
-            return dates;
-        }
-
-        public void setDates(String dates) {
-            this.dates = dates;
-        }
-
-        public boolean isSelected() {
-            return isSelected;
-        }
-
-        public void setSelected(boolean selected) {
-            isSelected = selected;
-        }
 
         public String getId() {
             return id;
@@ -491,7 +494,8 @@ public class CarePlanModels {
             public class PatientAssessment{
 
                 String id,value,created_at,updated_at,assessment_date,careplan_id,organisation_id,delegate_id,careplan_assessment_id,patient_id;
-                boolean is_latest,day;
+                boolean is_latest;
+                int day;
 
                 public String getId() {
                     return id;
@@ -581,11 +585,11 @@ public class CarePlanModels {
                     this.is_latest = is_latest;
                 }
 
-                public boolean isDay() {
+                public int isDay() {
                     return day;
                 }
 
-                public void setDay(boolean day) {
+                public void setDay(int day) {
                     this.day = day;
                 }
             }
@@ -808,18 +812,19 @@ public class CarePlanModels {
                 this.days = days;
             }
 
-            public int[] getReminders() {
+            public String[] getReminders() {
                 return reminders;
             }
 
-            public void setReminders(int[] reminders) {
+            public void setReminders(String[] reminders) {
                 this.reminders = reminders;
             }
 
             String id,name,color,dosage,instructions,total_days,created_at,updated_at,careplan_id,category_id,organisation_id;
             int frequency,skip_days;
             boolean is_deleted;
-            int days[],reminders[];
+            int days[];
+            String reminders[];
 
 
             public  class InterventionFrequency{
@@ -962,7 +967,7 @@ public class CarePlanModels {
             }
 
         }
-    }
+
 
 
 }

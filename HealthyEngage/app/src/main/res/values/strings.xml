@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Healthy Engage</string>
+    <string name="not_available">NA</string>
 </resources>

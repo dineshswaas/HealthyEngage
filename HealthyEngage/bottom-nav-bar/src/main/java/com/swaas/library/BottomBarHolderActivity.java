@@ -46,6 +46,7 @@ public class BottomBarHolderActivity extends AppCompatActivity implements Bottom
     private void setupFragments() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, mNavigationPageList.get(0).getFragment());
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
