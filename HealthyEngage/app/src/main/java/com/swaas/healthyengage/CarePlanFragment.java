@@ -2,6 +2,7 @@ package com.swaas.healthyengage;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import Repositories.CarePlanRepository;
+import Repositories.APIRepository;
 import models.CarePlanModels;
 import utils.NetworkUtils;
 import utils.PreferenceUtils;
@@ -45,7 +45,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     CircularProgressBar donut_progress;
     boolean imageonebool,imagetwobool,isdateAlreadySelect;
     int selectedItemposition = -1;
-    CarePlanRepository carePlanRepository;
+    APIRepository carePlanRepository;
     List<CarePlanModels> carePlanList;
     LinearLayout interventionMainLayout,assessmentMainLayout,readonlyMainLayout,detailsView,calenderView;
     ProgressDialog progressBar;
@@ -73,10 +73,10 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
     private void getCarePlanDetailsFromAPI(String date) {
 
-        carePlanRepository = new CarePlanRepository(getActivity());
+        carePlanRepository = new APIRepository(getActivity());
         dateText.setText(DateHelper.getDisplayFormat(date,"yyyy-MM-dd"));
         carePlanList = new ArrayList<>();
-        carePlanRepository.setGetCarePlanDetails(new CarePlanRepository.GetCarePlanModelDetails() {
+        carePlanRepository.setGetCarePlanDetails(new APIRepository.GetCarePlanModelDetails() {
             @Override
             public void getCarePlanSuccess(List<CarePlanModels> carePlanModels) {
                 carePlanList = new ArrayList<>(carePlanModels);
@@ -105,12 +105,22 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     private void onBindReadOnly(List<CarePlanModels.CarePlanInstruction> careplanInstruction) {
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         readonlyMainLayout.removeAllViews();
-        for(CarePlanModels.CarePlanInstruction carePlanInstruction : careplanInstruction){
+        for(final CarePlanModels.CarePlanInstruction carePlanInstruction : careplanInstruction){
             final View view = inflater.inflate(R.layout.instruction_items_view,null);
             final TextView instrName = (TextView)view.findViewById(R.id.instructionname);
             final TextView lable = (TextView)view.findViewById(R.id.instructionlabel);
             instrName.setText(carePlanInstruction.getTitle());
             lable.setText(carePlanInstruction.getLabel());
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    calenderView.setVisibility(View.GONE);
+                    detailsView.setVisibility(View.VISIBLE);
+                    intername.setText(carePlanInstruction.getTitle());
+                    interdosage.setText(carePlanInstruction.getLabel());
+                    instruction.setText(carePlanInstruction.getInstructions());
+                }
+            });
             readonlyMainLayout.addView(view);
         }
     }
@@ -125,6 +135,12 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
             final TextView assStartTime = (TextView)view.findViewById(R.id.assesmentnameSubName);
             assName.setText(assessment.getName());
             assStartTime.setText(assessment.getStart_time());
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(),AssessmentDetailsActivity.class);
+                }
+            });
             assessmentMainLayout.addView(view);
         }
 

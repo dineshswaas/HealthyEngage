@@ -34,5 +34,7 @@ dependencies {
     implementation 'com.squareup.retrofit:retrofit:2.0.0-beta2'
     implementation 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
     implementation 'com.facebook.stetho:stetho-okhttp:1.5.0'
+    implementation 'com.crystal:crystalrangeseekbar:1.1.3'
+    implementation 'com.github.hearsilent:DiscreteSlider:1.1.2'
 
 }

@@ -1,15 +1,27 @@
 <?xml version="1.0"?>
-<FrameLayout
+<LinearLayout
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:background="@color/white"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:layout_height="match_parent"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:textColor="#000000"
-        android:text="Message \n \n Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        android:gravity="center"/>
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@color/gray_non_pressed"
+            android:text="PREVIOUS MESSAGES" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/messagesRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-</FrameLayout>
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+</LinearLayout>
