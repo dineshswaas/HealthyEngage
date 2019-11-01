@@ -1,19 +1,20 @@
 package models;
 
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CarePlanModels {
+public class CarePlanModels implements Serializable{
 
     String lastSyncDate;
     boolean isSelected,indicator;
     String monthString;
     String yearString;
     String dayString;
-    int dayInt;
+    int dayInt,statusCode;
     String dates;
     private String TP_Full_Day;
-    String carePlanId,day,patientId;
+    String carePlanId,day,patientId,name,message;
 
     String id,plan_no,title,goal,problem,plan_start_date,plan_end_date,current_cycle_start_date,current_cycle_end_date;
     String cycle_status,careplan_status,created_at,updated_at,careplan_template_id,owner_id,category_id,organisation_id;
@@ -26,7 +27,29 @@ public class CarePlanModels {
     List<CarePlanInstruction> careplanInstruction;
     List<CarePlanIntervention> careplanIntervention;
 
+    public int getStatusCode() {
+        return statusCode;
+    }
 
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public String getCarePlanId() {
         return carePlanId;
@@ -331,10 +354,34 @@ public class CarePlanModels {
 
 
 
-        public class CarePlanAssessment{
+        public class CarePlanAssessment implements Serializable {
 
-            String id,name,target_or_time,start_time,end_time,input_type,question,min,max,threshold,label_min,label_max,created_at,updated_at,is_deleted,careplan_id,organisation_id;
+            String id,name,target_or_time,positve_label,negative_label,description,start_time,end_time,input_type,question,min,max,threshold,label_min,label_max,created_at,updated_at,is_deleted,careplan_id,organisation_id;
             int prompt_time;
+
+            public String getPositve_label() {
+                return positve_label;
+            }
+
+            public void setPositve_label(String positve_label) {
+                this.positve_label = positve_label;
+            }
+
+            public String getNegative_label() {
+                return negative_label;
+            }
+
+            public void setNegative_label(String negative_label) {
+                this.negative_label = negative_label;
+            }
+
+            public String getDescription() {
+                return description;
+            }
+
+            public void setDescription(String description) {
+                this.description = description;
+            }
 
             List<PatientAssessment> patientAssessment;
 
@@ -491,7 +538,7 @@ public class CarePlanModels {
             }
 
 
-            public class PatientAssessment{
+            public class PatientAssessment implements Serializable{
 
                 String id,value,created_at,updated_at,assessment_date,careplan_id,organisation_id,delegate_id,careplan_assessment_id,patient_id;
                 boolean is_latest;
@@ -596,7 +643,7 @@ public class CarePlanModels {
         }
 
 
-        public class CarePlanInstruction{
+        public class CarePlanInstruction implements Serializable{
             String id,title,label,instructions,created_at,updated_at,careplan_id,organisation_id;
             boolean is_deleted;
 
@@ -674,7 +721,7 @@ public class CarePlanModels {
         }
 
 
-        public class CarePlanIntervention{
+        public class CarePlanIntervention implements Serializable{
 
 
             List<InterventionDay> interventionDay;
@@ -879,7 +926,7 @@ public class CarePlanModels {
                 }
             }
 
-            public class InterventionDay{
+            public class InterventionDay implements Serializable{
 
                 String id,day,created_at,updated_at,careplan_intervention_id,organisation_id,patient_id;
                 boolean is_completed,is_active;

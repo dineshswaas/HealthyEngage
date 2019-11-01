@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import java.util.List;
 
 import Repositories.APIRepository;
 import models.CarePlanModels;
+import utils.Constants;
 import utils.NetworkUtils;
 import utils.PreferenceUtils;
 
@@ -64,7 +66,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         intializeViews();
         bindCalenderDate();
         PreferenceUtils.setAuthorizationKey(getActivity(),"OJkUbcTXbGLTXeiiBV0yw1RadXZ9KWeojMFjn9P4X2iDc4MCnqMQ4oVzCwentCV7");
-        PreferenceUtils.setCarePlanId(getActivity(),"b5948dee-e8b7-4c89-8366-f9f392fc0aeb");
+        PreferenceUtils.setCarePlanId(getActivity(),"694401f8-eb1e-4896-b2bb-3f2ebcf3d957");
         PreferenceUtils.setPatientId(getActivity(),"3f6e4590-cf2f-41bd-b1e2-d301d8108cbf");
         getCarePlanDetailsFromAPI(DateHelper.getCurrentDate());
 
@@ -88,6 +90,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
             @Override
             public void getCarePlanFailure(String s) {
+                Toast.makeText(getActivity(),"Network error,please try again.",Toast.LENGTH_LONG).show();
                 hideProgress();
             }
         });
@@ -129,16 +132,28 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assessmentMainLayout.removeAllViews();
-        for(CarePlanModels.CarePlanAssessment assessment : careplanAssessment){
+        for(final CarePlanModels.CarePlanAssessment assessment : careplanAssessment){
             final View view = inflater.inflate(R.layout.assesment_items_view,null);
             final TextView assName = (TextView)view.findViewById(R.id.assesmentname);
             final TextView assStartTime = (TextView)view.findViewById(R.id.assesmentnameSubName);
             assName.setText(assessment.getName());
-            assStartTime.setText(assessment.getStart_time());
+            if(!TextUtils.isEmpty(assessment.getTarget_or_time())){
+                assStartTime.setText(assessment.getTarget_or_time());
+            }else{
+                assStartTime.setText(assessment.getStart_time());
+            }
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(),AssessmentDetailsActivity.class);
+                    try{
+                        Intent intent = new Intent(getActivity(),AssessmentDetailsActivity.class);
+                        intent.putExtra(Constants.INTENT_PARM,assessment);
+                        startActivity(intent);
+                    }catch (Exception e){
+                        Log.d("parm",e.getMessage());
+                    }
+
                 }
             });
             assessmentMainLayout.addView(view);

@@ -8,6 +8,16 @@ public class APIResponseModels<T> {
 
 
     private List<T> careplan;
+    private List<T> error;
+
+    public List<T> getError() {
+        return error;
+    }
+
+    public void setError(List<T> error) {
+        this.error = error;
+    }
+
     private String lastSyncDate;
 
     public String getLastSyncDate() {

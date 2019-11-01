@@ -40,6 +40,8 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
             if(apiResponseModels != null){
                 if(apiResponseModels.getCareplan() != null){
                     getCarePlanModelDetails.getCarePlanSuccess(apiResponseModels.getCareplan());
+                }else if(apiResponseModels.getError() != null){
+                    getCarePlanModelDetails.getCarePlanSuccess(apiResponseModels.getCareplan());
                 }
             }
             }
