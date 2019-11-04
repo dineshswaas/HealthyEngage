@@ -1,6 +1,7 @@
 package com.swaas.healthyengage;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -12,17 +13,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import Repositories.APIRepository;
 import models.ConnectAPIModel;
+import utils.Constants;
 
 /**
  * Created by Adib on 13-Apr-17.
  */
 
-public class ConnectFragment extends Fragment{
+public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareClick{
 
     ProgressDialog progressBar;
     APIRepository apiRepository;
@@ -110,8 +113,8 @@ public class ConnectFragment extends Fragment{
             ConnectAPIModel.Organisation organisation = connectAPI.getOrganisation();
             ConnectAPIModel connectAPIModel = new ConnectAPIModel();
             connectAPIModel.setId(organisation.getId());;
-            connectAPIModel.setFirst_name("Emergency Care");
-            connectAPIModel.setLast_name("");
+            connectAPIModel.setFirst_name("Emergency");
+            connectAPIModel.setLast_name("Care");
             connectAPIModel.setTime_zone(organisation.getTime_zone());
             connectAPIModel.setEmergency_number(organisation.getEmergency_number());
             connectAPIModel.setShift_start_time(organisation.getShift_start_time());
@@ -139,6 +142,7 @@ public class ConnectFragment extends Fragment{
 
         connectRecycler.setLayoutManager(new LinearLayoutManager(connectRecycler.getContext(), LinearLayoutManager.VERTICAL, false));
         connectAdapter = new ConnectAdapter(ConnectFragment.this,connectAPIModelList);
+        connectAdapter.setOnCareClickClickListener(this);
         connectRecycler.addItemDecoration(new DividerItemDecoration(connectRecycler.getContext(), DividerItemDecoration.VERTICAL));
         connectRecycler.setAdapter(connectAdapter);
     }
@@ -153,4 +157,12 @@ public class ConnectFragment extends Fragment{
         progressBar.hide();
     }
 
+    @Override
+    public void onCareClick(int position) {
+
+        Intent intent = new Intent(getActivity(),CareTakersDetailsActivity.class);
+        intent.putExtra(Constants.INTENT_PARM, (Serializable) connectAPIModelList.get(position));
+        startActivity(intent);
+
+    }
 }

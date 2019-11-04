@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/appicon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AssessmentDetailsActivity"></activity>
+        <activity android:name=".CareTakersDetailsActivity"></activity>
+        <activity android:name=".AssessmentDetailsActivity" />
         <activity android:name=".TimeOutActivity" />
         <activity android:name=".LoingWithMobileActivity" />
         <activity android:name=".HomePageActivity">

@@ -112,9 +112,6 @@ class CarePlanAdapter extends RecyclerView.Adapter<CarePlanAdapter.ViewHolder>{
     }
 
 
-    public OnTpDateClickListener getOnTpDateClickListener() {
-        return onTpDateClickListener;
-    }
 
     public void setOnTpDateClickListener(OnTpDateClickListener onTpDateClickListener) {
         this.onTpDateClickListener = onTpDateClickListener;
