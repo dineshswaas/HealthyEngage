@@ -168,7 +168,7 @@
 
             <RelativeLayout
                 android:id="@+id/pickerParentView"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white">
@@ -209,6 +209,90 @@
                 </LinearLayout>
 
             </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/sliderParentView"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+
+                <LinearLayout
+                    android:id="@+id/sliderheader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/donut_progress"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/sliderquestion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:text="@string/not_available"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_non_pressed">
+
+                    </View>
+
+
+                    <com.warkiz.tickseekbar.TickSeekBar
+                        android:id="@+id/tickSeekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:tsb_ticks_count="6"
+                        android:paddingLeft="20dp"
+                        app:tsb_max="50"
+                        app:tsb_min="0"
+                        android:paddingRight="20dp"
+                        android:paddingTop="20dp"
+                        app:tsb_thumb_color="@color/interventionblue"
+                        app:tsb_thumb_size="16dp"
+                        app:tsb_show_tick_marks_type="oval"
+                        app:tsb_tick_marks_color="@color/interventionblue"
+                        app:tsb_tick_marks_size="8dp"
+                        app:tsb_show_tick_texts="above"
+                        app:tsb_tick_texts_color="@color/black"
+                        app:tsb_tick_texts_size="13sp"
+                        app:tsb_track_background_color="@color/grey_non_pressed"
+                        app:tsb_track_background_size="2dp"
+                        app:tsb_track_progress_color="@color/interventionblue"
+                        app:tsb_track_progress_size="3dp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:padding="10dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/minlabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/not_available" />
+
+                        <TextView
+                            android:id="@+id/maxlabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/not_available" />
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
 
 
         </android.support.v7.widget.CardView>
