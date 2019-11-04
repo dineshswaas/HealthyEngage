@@ -3,6 +3,8 @@ package com.swaas.healthyengage;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Repositories.APIRepository;
@@ -71,7 +74,7 @@ public class ConnectFragment extends Fragment{
     }
 
     private void onBindConnectList(ConnectAPIModel connectAPI) {
-
+        connectAPIModelList = new ArrayList<>();
         ConnectAPIModel.Author author = connectAPI.getAuthor();
         if(author != null){
             ConnectAPIModel connectAPIModel = new ConnectAPIModel();
@@ -83,6 +86,7 @@ public class ConnectFragment extends Fragment{
             connectAPIModel.setGender(author.getGender());
             connectAPIModel.setCountry_code(author.getCountry_code());
             connectAPIModel.setFromPatient(false);
+            connectAPIModel.setHeaderText("CARE TEAM");
             connectAPIModelList.add(connectAPIModel);
         }
 
@@ -97,11 +101,6 @@ public class ConnectFragment extends Fragment{
             connectAPIModel.setMobile_no(navigator.getMobile_no());
             connectAPIModel.setGender(navigator.getGender());
             connectAPIModel.setFromPatient(false);
-            if(connectAPI.getOrganisation() != null){
-                connectAPIModel.setShift_start_time(connectAPI.getShift_start_time());
-                connectAPIModel.setShift_end_time(connectAPI.getShift_end_time());
-            }
-
             connectAPIModel.setCountry_code(navigator.getCountry_code());
             connectAPIModelList.add(connectAPIModel);
         }
@@ -112,8 +111,11 @@ public class ConnectFragment extends Fragment{
             ConnectAPIModel connectAPIModel = new ConnectAPIModel();
             connectAPIModel.setId(organisation.getId());;
             connectAPIModel.setFirst_name("Emergency Care");
+            connectAPIModel.setLast_name("");
             connectAPIModel.setTime_zone(organisation.getTime_zone());
             connectAPIModel.setEmergency_number(organisation.getEmergency_number());
+            connectAPIModel.setShift_start_time(organisation.getShift_start_time());
+            connectAPIModel.setShift_end_time(organisation.getShift_end_time());
             connectAPIModel.setFromPatient(false);
             connectAPIModelList.add(connectAPIModel);
         }
@@ -130,11 +132,15 @@ public class ConnectFragment extends Fragment{
             connectAPIModel.setGender(patient.getGender());
             connectAPIModel.setCountry_code(patient.getCountry_code());
             connectAPIModel.setFromPatient(true);
+            connectAPIModel.setHeaderText("MY PATIENT");
             connectAPIModelList.add(connectAPIModel);
         }
 
-        connectAdapter = new ConnectAdapter(ConnectFragment.this,connectAPIModelList);
 
+        connectRecycler.setLayoutManager(new LinearLayoutManager(connectRecycler.getContext(), LinearLayoutManager.VERTICAL, false));
+        connectAdapter = new ConnectAdapter(ConnectFragment.this,connectAPIModelList);
+        connectRecycler.addItemDecoration(new DividerItemDecoration(connectRecycler.getContext(), DividerItemDecoration.VERTICAL));
+        connectRecycler.setAdapter(connectAdapter);
     }
 
 
