@@ -8,6 +8,7 @@ import APIServices.APIServices;
 import APIServices.RetrofitAPIBuilder;
 import models.APIResponseModels;
 import models.CarePlanModels;
+import models.ConnectAPIModel;
 import models.PatientMessageAPIModel;
 import models.PatientMessageModels;
 import retrofit.Call;
@@ -22,6 +23,7 @@ public class APIRepository {
     private Context mContext;
     private GetCarePlanModelDetails getCarePlanModelDetails;
     private GerPatientMessages gerPatientMessages;
+    private GetCareTakersDetails getCareTakersDetails;
   public APIRepository(Context context){
     this.mContext = context;
   }
@@ -105,7 +107,45 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
     }
 
 
+    /*Connect */
 
+    public void getCareTakers(){
+        if(NetworkUtils.isNetworkAvailable(mContext)){
+            Retrofit retrofit = RetrofitAPIBuilder.getInstance();
+            APIServices carePlanServices =retrofit.create(APIServices.class);
+            Call call =carePlanServices.getCareTakers(PreferenceUtils.getAuthorizationKey(mContext),
+                    PreferenceUtils.getPatientId(mContext));
+            call.enqueue(new Callback<ConnectAPIModel<ConnectAPIModel>>() {
+                @Override
+                public void onResponse(Response<ConnectAPIModel<ConnectAPIModel>> response, Retrofit retrofit) {
+                    ConnectAPIModel apiResponseModels =response.body();
+                    if(apiResponseModels != null){
+                        if(apiResponseModels != null){
+                            getCareTakersDetails.getCareTakersSuccess(apiResponseModels);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    getCareTakersDetails.getCareTakersFailure(t.getMessage());
+                }
+            });
+
+        }
+    }
+
+
+    public void setGetCareTakersDetails(GetCareTakersDetails getCareTakersDetails){
+        this.getCareTakersDetails = getCareTakersDetails;
+    }
+
+    public interface GetCareTakersDetails{
+
+        void getCareTakersSuccess(ConnectAPIModel connectAPIModel);
+        void getCareTakersFailure(String s);
+
+    }
 
 
 

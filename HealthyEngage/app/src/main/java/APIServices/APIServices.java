@@ -2,6 +2,7 @@ package APIServices;
 
 import models.APIResponseModels;
 import models.CarePlanModels;
+import models.ConnectAPIModel;
 import models.PatientMessageAPIModel;
 import models.PatientMessageModels;
 import retrofit.Call;
@@ -23,5 +24,13 @@ public interface APIServices {
     Call<PatientMessageAPIModel<PatientMessageModels>> getPatientMessages(@Header("Authorization") String value,
                                                                           @Path("patientId") String patientId,
                                                                           @Body PatientMessageModels models);
+
+
+
+    @POST("api/Patients/{id}/careTakers")
+    Call<ConnectAPIModel<ConnectAPIModel>> getCareTakers(@Header("Authorization") String value,
+                                                         @Path("id") String id);
+
+
 
 }
