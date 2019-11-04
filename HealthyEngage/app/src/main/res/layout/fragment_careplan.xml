@@ -118,7 +118,6 @@
             app:indeterminateSweepAnimationDuration="600"
             app:indeterminateMinimumAngle="45"
             app:maximum="100"
-            app:progress="30"
             android:background="@mipmap/icon_ios_user"
             app:progressAnimationDuration="500"
             app:startAngle="270"/>

@@ -28,6 +28,7 @@ import java.util.List;
 
 import Repositories.APIRepository;
 import models.CarePlanModels;
+import models.InterventionElements;
 import utils.Constants;
 import utils.NetworkUtils;
 import utils.PreferenceUtils;
@@ -51,6 +52,8 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     List<CarePlanModels> carePlanList;
     LinearLayout interventionMainLayout,assessmentMainLayout,readonlyMainLayout,detailsView,calenderView;
     ProgressDialog progressBar;
+    double completionPercentage;
+    double interventionValue;
     public static CarePlanFragment newInstance() {
         return new CarePlanFragment();
     }
@@ -76,15 +79,13 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
         carePlanRepository = new APIRepository(getActivity());
         dateText.setText(DateHelper.getDisplayFormat(date,"yyyy-MM-dd"));
-        carePlanList = new ArrayList<>();
+        //carePlanList = new ArrayList<>();
         carePlanRepository.setGetCarePlanDetails(new APIRepository.GetCarePlanModelDetails() {
             @Override
             public void getCarePlanSuccess(List<CarePlanModels> carePlanModels) {
                 carePlanList = new ArrayList<>(carePlanModels);
-                onBindInterventionData(carePlanList.get(0).getCareplanIntervention());
-                onBindAssessmentData(carePlanList.get(0).getCareplanAssessment());
-                onBindReadOnly(carePlanList.get(0).getCareplanInstruction());
-                hideProgress();
+                onBindOverAllDetails();
+
             }
 
             @Override
@@ -98,10 +99,20 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         carePlanModels.setDay(date);
         carePlanModels.setPatientId(PreferenceUtils.getPatientId(getActivity()));
         if(NetworkUtils.isNetworkAvailable(getActivity())){
-            showProgressBar("Fetching care plan details for "+DateHelper.getDisplayFormat(date,"yyyy-MM-dd"));
+            showProgressBar("Fetching care plan details.");
             carePlanRepository.getCarePlanDetails(carePlanModels);
         }
 
+    }
+
+    private void onBindOverAllDetails() {
+        setCompletion(0);
+        completionPercentage = 0;
+        interventionValue = 0;
+        onBindInterventionData(carePlanList.get(0).getCareplanIntervention());
+        onBindAssessmentData(carePlanList.get(0).getCareplanAssessment());
+        onBindReadOnly(carePlanList.get(0).getCareplanInstruction());
+        hideProgress();
     }
 
     private void onBindReadOnly(List<CarePlanModels.CarePlanInstruction> careplanInstruction) {
@@ -164,21 +175,57 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         interventionMainLayout.removeAllViews();
+        int totalFrequency = 0;
+
         for(final CarePlanModels.CarePlanIntervention intervention : careplanIntervention){
             final View view = inflater.inflate(R.layout.intervenation_items,null);
             final TextView interventionName = (TextView)view.findViewById(R.id.interventionName);
+            final ImageView arrow = (ImageView)view.findViewById(R.id.arrow);
             final TextView interventionAlisName = (TextView)view.findViewById(R.id.interventionAlisName);
             final LinearLayout interventionImageMainLay = (LinearLayout)view.findViewById(R.id.interventionImageMainLay);
             interventionName.setText(intervention.getName());
             interventionAlisName.setText(intervention.getDosage());
+            totalFrequency = intervention.getFrequency() + totalFrequency;
+            interventionValue = (double) 50/totalFrequency;
+            List<InterventionElements> elementsList = new ArrayList<>();
 
-            LayoutInflater inflaterFreq = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             for(int i = 1;i<=intervention.getFrequency();i++){
+                InterventionElements interventionElements = new InterventionElements();
+                interventionElements.setHad(false);
+                elementsList.add(interventionElements);
+           }
+            intervention.setInterventionElements(elementsList);
+
+            for (final InterventionElements interventionElements :intervention.getInterventionElements()){
+                LayoutInflater inflaterFreq = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View viewFreq = inflaterFreq.inflate(R.layout.intervenation_freq_items,null);
                 final ImageView imagefreq = (ImageView)viewFreq.findViewById(R.id.imagefreq);
+                imagefreq.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(interventionElements.isHad()){
+                            completionPercentage = completionPercentage - interventionValue;
+                            imagefreq.setBackground(getResources().getDrawable(R.drawable.blueborder));
+                            interventionElements.setHad(false);
+                            setCompletion((int)completionPercentage);
+                        }else{
+                            completionPercentage = completionPercentage+interventionValue;
+                            imagefreq.setBackground(getResources().getDrawable(R.drawable.bluecircle));
+                            interventionElements.setHad(true);
+                            setCompletion((int)completionPercentage);
+                        }
+
+                    }
+                });
                 interventionImageMainLay.addView(viewFreq);
             }
-            view.setOnClickListener(new View.OnClickListener() {
+
+
+
+
+
+
+            arrow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     calenderView.setVisibility(View.GONE);
@@ -294,7 +341,10 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         tpHeaderModelList.get(position).setSelected(true);
         carePlanAdapter.notifyDataSetChanged();
         dateText.setText( DateHelper.getDisplayFormat(tpHeaderModelList.get(position).getDates(),"yyyy-MM-dd"));
-        getCarePlanDetailsFromAPI(tpHeaderModelList.get(position).getDates());
+        if(carePlanList != null){
+            onBindOverAllDetails();
+        }
+        //getCarePlanDetailsFromAPI(tpHeaderModelList.get(position).getDates());
     }
 
     @Override
@@ -356,6 +406,11 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     }
     void hideProgress(){
         progressBar.hide();
+    }
+
+    void setCompletion(float value){
+        donut_progress.setProgress((int) Math.round(value));
+        percentIndicatior.setText("Your care overview is "+String.valueOf(Math.round(value))+"% complete");
     }
 
 }

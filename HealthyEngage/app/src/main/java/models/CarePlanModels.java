@@ -726,6 +726,15 @@ public class CarePlanModels implements Serializable{
 
             List<InterventionDay> interventionDay;
             List<InterventionFrequency> interventionFrequency;
+            List<InterventionElements> interventionElements;
+
+            public List<InterventionElements> getInterventionElements() {
+                return interventionElements;
+            }
+
+            public void setInterventionElements(List<InterventionElements> interventionElements) {
+                this.interventionElements = interventionElements;
+            }
 
             public List<InterventionDay> getInterventionDay() {
                 return interventionDay;
@@ -738,6 +747,14 @@ public class CarePlanModels implements Serializable{
             public void setInterventionFrequency(List<InterventionFrequency> interventionFrequency) {
                 this.interventionFrequency = interventionFrequency;
             }
+
+
+
+
+
+
+
+
 
             public String getId() {
                 return id;
