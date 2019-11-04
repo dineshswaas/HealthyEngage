@@ -59,7 +59,6 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView =  inflater.inflate(R.layout.fragment_careplan, container, false);
@@ -358,4 +357,5 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     void hideProgress(){
         progressBar.hide();
     }
+
 }
