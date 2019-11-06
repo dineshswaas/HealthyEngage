@@ -13,11 +13,11 @@ public class InterventionElements {
         this.value = value;
     }
 
-    public boolean isHad() {
+    public boolean isCompleted() {
         return isHad;
     }
 
-    public void setHad(boolean had) {
+    public void setCompleted(boolean had) {
         isHad = had;
     }
 }

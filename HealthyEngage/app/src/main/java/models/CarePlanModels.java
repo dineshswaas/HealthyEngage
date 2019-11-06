@@ -13,7 +13,9 @@ public class CarePlanModels implements Serializable{
     String dayString;
     int dayInt,statusCode;
     String dates;
+    boolean today;
     private String TP_Full_Day;
+    int position;
     String carePlanId,day,patientId,name,message;
 
     String id,plan_no,title,goal,problem,plan_start_date,plan_end_date,current_cycle_start_date,current_cycle_end_date;
@@ -22,6 +24,22 @@ public class CarePlanModels implements Serializable{
 
     int plan_duration,cycles,break_time,current_cycle;
 
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public boolean isToday() {
+        return today;
+    }
+
+    public void setToday(boolean today) {
+        this.today = today;
+    }
 
     List<CarePlanAssessment> careplanAssessment;
     List<CarePlanInstruction> careplanInstruction;
@@ -726,6 +744,11 @@ public class CarePlanModels implements Serializable{
 
             List<InterventionDay> interventionDay;
             List<InterventionFrequency> interventionFrequency;
+
+            public List<InterventionFrequency> getInterventionFrequency() {
+                return interventionFrequency;
+            }
+
             List<InterventionElements> interventionElements;
 
             public List<InterventionElements> getInterventionElements() {
@@ -893,6 +916,15 @@ public class CarePlanModels implements Serializable{
 
             public  class InterventionFrequency{
                 String id,reminder,created_at,updated_at,careplan_intervention_id,organisation_id;
+                boolean is_completed;
+
+                public boolean isIs_completed() {
+                    return is_completed;
+                }
+
+                public void setIs_completed(boolean is_completed) {
+                    this.is_completed = is_completed;
+                }
 
                 public String getId() {
                     return id;
@@ -948,6 +980,163 @@ public class CarePlanModels implements Serializable{
                 String id,day,created_at,updated_at,careplan_intervention_id,organisation_id,patient_id;
                 boolean is_completed,is_active;
                 int cycle_no;
+
+                List<PatientIntervention> patientIntervention;
+                List<DeletedPatientIntervention>deletedPatientIntervention;
+
+                public List<DeletedPatientIntervention> getDeletedPatientIntervention() {
+                    return deletedPatientIntervention;
+                }
+
+                public void setDeletedPatientIntervention(List<DeletedPatientIntervention> deletedPatientIntervention) {
+                    this.deletedPatientIntervention = deletedPatientIntervention;
+                }
+
+                public List<PatientIntervention> getPatientIntervention() {
+                    return patientIntervention;
+                }
+
+                public void setPatientIntervention(List<PatientIntervention> patientIntervention) {
+                    this.patientIntervention = patientIntervention;
+                }
+
+
+                public class DeletedPatientIntervention{
+                    String id,delegate_id,intervention_date,created_at,intervention_days_id,intervention_frequency_id,organisation_id,patient_id;
+
+                    public String getId() {
+                        return id;
+                    }
+
+                    public void setId(String id) {
+                        this.id = id;
+                    }
+
+                    public String getDelegate_id() {
+                        return delegate_id;
+                    }
+
+                    public void setDelegate_id(String delegate_id) {
+                        this.delegate_id = delegate_id;
+                    }
+
+                    public String getIntervention_date() {
+                        return intervention_date;
+                    }
+
+                    public void setIntervention_date(String intervention_date) {
+                        this.intervention_date = intervention_date;
+                    }
+
+                    public String getCreated_at() {
+                        return created_at;
+                    }
+
+                    public void setCreated_at(String created_at) {
+                        this.created_at = created_at;
+                    }
+
+                    public String getIntervention_days_id() {
+                        return intervention_days_id;
+                    }
+
+                    public void setIntervention_days_id(String intervention_days_id) {
+                        this.intervention_days_id = intervention_days_id;
+                    }
+
+                    public String getIntervention_frequency_id() {
+                        return intervention_frequency_id;
+                    }
+
+                    public void setIntervention_frequency_id(String intervention_frequency_id) {
+                        this.intervention_frequency_id = intervention_frequency_id;
+                    }
+
+                    public String getOrganisation_id() {
+                        return organisation_id;
+                    }
+
+                    public void setOrganisation_id(String organisation_id) {
+                        this.organisation_id = organisation_id;
+                    }
+
+                    public String getPatient_id() {
+                        return patient_id;
+                    }
+
+                    public void setPatient_id(String patient_id) {
+                        this.patient_id = patient_id;
+                    }
+                }
+
+
+                public class PatientIntervention{
+                    String id,delegate_id,intervention_date,created_at,intervention_days_id,intervention_frequency_id,organisation_id,patient_id;
+
+                   public String getId() {
+                       return id;
+                   }
+
+                   public void setId(String id) {
+                       this.id = id;
+                   }
+
+                   public String getDelegate_id() {
+                       return delegate_id;
+                   }
+
+                   public void setDelegate_id(String delegate_id) {
+                       this.delegate_id = delegate_id;
+                   }
+
+                   public String getIntervention_date() {
+                       return intervention_date;
+                   }
+
+                   public void setIntervention_date(String intervention_date) {
+                       this.intervention_date = intervention_date;
+                   }
+
+                   public String getCreated_at() {
+                       return created_at;
+                   }
+
+                   public void setCreated_at(String created_at) {
+                       this.created_at = created_at;
+                   }
+
+                   public String getIntervention_days_id() {
+                       return intervention_days_id;
+                   }
+
+                   public void setIntervention_days_id(String intervention_days_id) {
+                       this.intervention_days_id = intervention_days_id;
+                   }
+
+                   public String getIntervention_frequency_id() {
+                       return intervention_frequency_id;
+                   }
+
+                   public void setIntervention_frequency_id(String intervention_frequency_id) {
+                       this.intervention_frequency_id = intervention_frequency_id;
+                   }
+
+                   public String getOrganisation_id() {
+                       return organisation_id;
+                   }
+
+                   public void setOrganisation_id(String organisation_id) {
+                       this.organisation_id = organisation_id;
+                   }
+
+                   public String getPatient_id() {
+                       return patient_id;
+                   }
+
+                   public void setPatient_id(String patient_id) {
+                       this.patient_id = patient_id;
+                   }
+               }
 
                 public String getId() {
                     return id;
