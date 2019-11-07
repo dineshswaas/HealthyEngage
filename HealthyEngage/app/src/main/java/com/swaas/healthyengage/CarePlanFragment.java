@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -90,10 +91,12 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         //carePlanList = new ArrayList<>();
         carePlanRepository.setGetCarePlanDetails(new APIRepository.GetCarePlanModelDetails() {
             @Override
-            public void getCarePlanSuccess(List<CarePlanModels> carePlanModels) {
+            public void getCarePlanSuccess(List<CarePlanModels> carePlanModels,String lastSyncDate) {
                 carePlanList = new ArrayList<>(carePlanModels);
                 PreferenceUtils.setCarePlanList(getActivity(),null  );
                 PreferenceUtils.setCarePlanList(getActivity(),carePlanList);
+                PreferenceUtils.setLastSyncDate(getActivity(),null);
+                PreferenceUtils.setLastSyncDate(getActivity(),lastSyncDate);
                 calenderStartDate = carePlanList.get(0).getCurrent_cycle_start_date().split("T")[0];
                 calenderEndDate = carePlanList.get(0).getCurrent_cycle_end_date().split("T")[0];
                 bindCalenderDate();
@@ -109,7 +112,11 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         });
         CarePlanModels carePlanModels = new CarePlanModels();
         carePlanModels.setCarePlanId(PreferenceUtils.getCarePlanId(getActivity()));
-        carePlanModels.setDay(date);
+        if(!TextUtils.isEmpty(PreferenceUtils.getLastSyncDate(getActivity()))){
+            carePlanModels.setDay(PreferenceUtils.getLastSyncDate(getActivity()));
+        }else{
+            carePlanModels.setDay(Constants.DEFAULT_SERVER_DATE);
+        }
         carePlanModels.setPatientId(PreferenceUtils.getPatientId(getActivity()));
         if(NetworkUtils.isNetworkAvailable(getActivity())){
             showProgressBar("Fetching care plan details.");
@@ -204,8 +211,42 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         interventionMainLayout.removeAllViews();
         int totalFrequency = 0;
+        List<CarePlanModels.CarePlanIntervention> interventionList = new ArrayList<>();
 
+        /*Ascending Intervention Name*/
+        ArrayList<String> interventionNameSorting = new ArrayList<>();
+        for(CarePlanModels.CarePlanIntervention name : careplanIntervention){
+            interventionNameSorting.add(name.getName());
+        }
+        Collections.sort(interventionNameSorting);
+        for(String nameTemp : interventionNameSorting){
+            for(CarePlanModels.CarePlanIntervention nameInter : careplanIntervention){
+                if(nameTemp.equalsIgnoreCase(nameInter.getName())){
+                    interventionList.add(nameInter);
+                }
+            }
+        }
+        if(interventionList != null && interventionList.size() > 0){
+            careplanIntervention = new ArrayList<>(interventionList);
+        }
 
+        /*Ascending the Frequency*/
+/*        List<String> integerList = new ArrayList<>();
+        List<CarePlanModels.CarePlanIntervention.InterventionFrequency> frequencyList = new ArrayList<>();
+        for(CarePlanModels.CarePlanIntervention intervention : careplanIntervention){
+            for(CarePlanModels.CarePlanIntervention.InterventionFrequency frequency : intervention.getInterventionFrequency()){
+                integerList.add(frequency.getReminder());
+            }
+            Collections.sort(integerList);
+            for(String integer : integerList){
+                for(CarePlanModels.CarePlanIntervention.InterventionFrequency frequency : intervention.getInterventionFrequency()){
+                    if(integer.equalsIgnoreCase(frequency.getReminder())){
+                        frequencyList.add(frequency);
+                    }
+                }
+            }
+            intervention.setInterventionFrequency(new ArrayList<CarePlanModels.CarePlanIntervention.InterventionFrequency>(frequencyList));
+        }*/
 
 
         for(final CarePlanModels.CarePlanIntervention intervention : careplanIntervention){

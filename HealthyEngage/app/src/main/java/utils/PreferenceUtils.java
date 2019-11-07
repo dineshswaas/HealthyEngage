@@ -17,7 +17,7 @@ public class PreferenceUtils {
     private static final String CARE_PLAN_ID = "CARE_PLAN_ID";
     private static final String DELEGATE_ID = "DELEGATE_ID";
     private static final String CARE_PLAN_LIST = "CARE_PLAN_LIST";
-
+    private static final String LAST_SYNC_DATE = "LAST_SYNC_DATE";
     public static String getAuthorizationKey(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
         String mode = sharedPreferences.getString(Authorization, "");
@@ -91,4 +91,18 @@ public class PreferenceUtils {
         String doctorJsonString = sharedPreferences.getString(CARE_PLAN_LIST, null);
         return doctorJsonString;
     }
+
+    public static String getLastSyncDate(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
+        String mode = sharedPreferences.getString(LAST_SYNC_DATE, "");
+        return mode;
+    }
+
+    public static void setLastSyncDate(Context context, String value) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(LAST_SYNC_DATE, value);
+        editor.commit();
+    }
+
 }

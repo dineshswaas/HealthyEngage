@@ -41,9 +41,9 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
             APIResponseModels apiResponseModels =response.body();
             if(apiResponseModels != null){
                 if(apiResponseModels.getCareplan() != null){
-                    getCarePlanModelDetails.getCarePlanSuccess(apiResponseModels.getCareplan());
+                    getCarePlanModelDetails.getCarePlanSuccess(apiResponseModels.getCareplan(),apiResponseModels.getLastSyncDate());
                 }else if(apiResponseModels.getError() != null){
-                    getCarePlanModelDetails.getCarePlanSuccess(apiResponseModels.getCareplan());
+                    getCarePlanModelDetails.getCarePlanSuccess(apiResponseModels.getCareplan(),apiResponseModels.getLastSyncDate());
                 }
             }
             }
@@ -63,7 +63,7 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
     }
     public interface GetCarePlanModelDetails{
 
-        void getCarePlanSuccess(List<CarePlanModels> carePlanModels);
+        void getCarePlanSuccess(List<CarePlanModels> carePlanModels,String lastSyncDate);
         void getCarePlanFailure(String s);
     }
 

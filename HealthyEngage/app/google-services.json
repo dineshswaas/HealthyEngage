@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "327476888176",
+    "firebase_url": "https://healthyengage-1bf82.firebaseio.com",
+    "project_id": "healthyengage-1bf82",
+    "storage_bucket": "healthyengage-1bf82.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327476888176:android:7055c3695ab34d4d9aeab5",
+        "android_client_info": {
+          "package_name": "com.swaas.healthyengage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "327476888176-1lrnd7mh1e3e9eafmglq07bjbr96b4qm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.swaas.healthyengage",
+            "certificate_hash": "29004ac568eb431b1a1e5eb850f14e16fd8420b3"
+          }
+        },
+        {
+          "client_id": "327476888176-67m7rlunfb92e8krtnema18jgkhchqb5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8pb8CycEi27I5vVbhxCGiWZK3YgNmKWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "327476888176-67m7rlunfb92e8krtnema18jgkhchqb5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "327476888176-2qj45fkujf2am3apm3cn5dfg0r5qiblg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.healthyengage.engagepatients"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
