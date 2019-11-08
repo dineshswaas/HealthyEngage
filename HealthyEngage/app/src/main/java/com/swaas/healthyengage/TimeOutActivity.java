@@ -15,6 +15,6 @@ public class TimeOutActivity extends AppCompatActivity {
     }
 
     public void gotonext(View view) {
-        startActivity(new Intent(this,LoingWithMobileActivity.class));
+        startActivity(new Intent(this, LoginWithMobileActivity.class));
     }
 }

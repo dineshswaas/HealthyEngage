@@ -18,6 +18,9 @@ public class PreferenceUtils {
     private static final String DELEGATE_ID = "DELEGATE_ID";
     private static final String CARE_PLAN_LIST = "CARE_PLAN_LIST";
     private static final String LAST_SYNC_DATE = "LAST_SYNC_DATE";
+    private static final String USER_ID = "USER_ID";
+    private static final String UUID = "UUID";
+    private static final String LOGIN_MOBILE_NUMBER = "LOGIN_MOBILE_NUMBER";
     public static String getAuthorizationKey(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
         String mode = sharedPreferences.getString(Authorization, "");
@@ -104,5 +107,43 @@ public class PreferenceUtils {
         editor.putString(LAST_SYNC_DATE, value);
         editor.commit();
     }
+    public static String getUserId(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
+        String mode = sharedPreferences.getString(USER_ID, "");
+        return mode;
+    }
 
+    public static void setUserId(Context context, String value) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USER_ID, value);
+        editor.commit();
+    }
+
+
+    public static String getUuid(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
+        String mode = sharedPreferences.getString(UUID, "");
+        return mode;
+    }
+
+    public static void setUuid(Context context, String value) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(UUID, value);
+        editor.commit();
+    }
+
+    public static String getLoginMobileNumber(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
+        String mode = sharedPreferences.getString(LOGIN_MOBILE_NUMBER, "");
+        return mode;
+    }
+
+    public static void setLoginMobileNumber(Context context, String value) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(LOGIN_MOBILE_NUMBER, value);
+        editor.commit();
+    }
 }

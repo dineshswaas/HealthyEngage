@@ -5,6 +5,7 @@ import models.CarePlanModels;
 import models.ConnectAPIModel;
 import models.PatientMessageAPIModel;
 import models.PatientMessageModels;
+import models.UserVerifyModel;
 import retrofit.Call;
 import retrofit.http.Body;
 import retrofit.http.Header;
@@ -32,5 +33,15 @@ public interface APIServices {
                                                          @Path("id") String id);
 
 
+
+    @POST("api/PatientInterventions")
+    Call<APIResponseModels> updateCarePlanIntervention(@Header("Authorization") String value,
+                                                                       @Body CarePlanModels carePlanModels);
+
+    @POST("api/Users/patient/verifyMobile")
+    Call<UserVerifyModel> patientVerifyMobile(@Body UserVerifyModel userVerifyModel);
+
+    @POST("api/Users/patient/verify")
+    Call<APIResponseModels<CarePlanModels>> checkPatientVerify(@Body UserVerifyModel userVerifyModel);
 
 }

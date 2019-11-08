@@ -13,11 +13,12 @@
         android:roundIcon="@mipmap/appicon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CareTakersDetailsActivity"></activity>
+        <activity android:name=".OTPScreenActivity"></activity>
+        <activity android:name=".CareTakersDetailsActivity" />
         <activity android:name=".AssessmentDetailsActivity" />
-        <activity android:name=".TimeOutActivity" />
-        <activity android:name=".LoingWithMobileActivity" />
-        <activity android:name=".HomePageActivity">
+        <activity android:name=".LoginWithMobileActivity" />
+        <activity android:name=".HomePageActivity" />
+        <activity android:name=".TimeOutActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +32,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name=".InstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

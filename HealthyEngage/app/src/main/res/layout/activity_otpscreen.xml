@@ -4,27 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TimeOutActivity">
+    tools:context=".OTPScreenActivity">
 
 
     <Button
         android:id="@+id/button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="gotoVerifyMobile"
+        android:onClick="verifyOTP"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginBottom="212dp"
         android:background="@color/colorPrimary"
-        android:text="Get verification code"
+        android:text="submit"
         android:textColor="@color/white" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/lale"
+        android:layout_above="@+id/header"
         android:layout_alignParentTop="true"
 
         android:gravity="center">
@@ -46,7 +46,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/lale"
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/editText"
@@ -61,7 +61,7 @@
             android:gravity="center"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:text="Enter your mobile number \n \n We will send as 4 digit verification code to this mobile number."
+            android:text=" Enter your 4 digit verification code."
             android:textColor="@color/colorPrimary"
             android:textStyle="bold" />
 
@@ -81,5 +81,5 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/rectangleborder"
         android:inputType="phone"
-        android:hint="Mobile Number" />
+        android:hint="Verification Code" />
 </RelativeLayout>

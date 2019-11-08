@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.budiyev.android.circularprogressbar.CircularProgressBar;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 
 import java.text.DateFormat;
@@ -75,9 +77,20 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         mView =  inflater.inflate(R.layout.fragment_careplan, container, false);
         intializeViews();
 
-        PreferenceUtils.setAuthorizationKey(getActivity(),"OJkUbcTXbGLTXeiiBV0yw1RadXZ9KWeojMFjn9P4X2iDc4MCnqMQ4oVzCwentCV7");
+     /*   PreferenceUtils.setAuthorizationKey(getActivity(),"0Lb3T7WI6WDKfcP0CRVOaeeIMEcoGHNXvdH3ellLQQsUB8dLUPxK3SnbY52DHO8E");
+        PreferenceUtils.setCarePlanId(getActivity(),"0c9725c8-47e5-4feb-8536-9306bd1a560e");
+        PreferenceUtils.setPatientId(getActivity(),"52575534-bcee-40f0-b6b5-0612bfe7db06");
+        PreferenceUtils.setUserId(getActivity(),"e031d072-14db-4b10-abd6-0e18e5daf0c4");*/
+
+        //ProductionUser
+/*        PreferenceUtils.setAuthorizationKey(getActivity(),"OJkUbcTXbGLTXeiiBV0yw1RadXZ9KWeojMFjn9P4X2iDc4MCnqMQ4oVzCwentCV7");
         PreferenceUtils.setCarePlanId(getActivity(),"694401f8-eb1e-4896-b2bb-3f2ebcf3d957");
-        PreferenceUtils.setPatientId(getActivity(),"3f6e4590-cf2f-41bd-b1e2-d301d8108cbf");
+        PreferenceUtils.setPatientId(getActivity(),"3f6e4590-cf2f-41bd-b1e2-d301d8108cbf");*/
+
+
+
+        String token = FirebaseInstanceId.getInstance().getToken();
+
         selectedDate = DateHelper.getCurrentDate();
         getCarePlanDetailsFromAPI(DateHelper.getCurrentDate());
 
@@ -231,9 +244,9 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         }
 
         /*Ascending the Frequency*/
-/*        List<String> integerList = new ArrayList<>();
-        List<CarePlanModels.CarePlanIntervention.InterventionFrequency> frequencyList = new ArrayList<>();
         for(CarePlanModels.CarePlanIntervention intervention : careplanIntervention){
+            List<CarePlanModels.CarePlanIntervention.InterventionFrequency> frequencyList = new ArrayList<>();
+            List<String> integerList = new ArrayList<>();
             for(CarePlanModels.CarePlanIntervention.InterventionFrequency frequency : intervention.getInterventionFrequency()){
                 integerList.add(frequency.getReminder());
             }
@@ -246,7 +259,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
                 }
             }
             intervention.setInterventionFrequency(new ArrayList<CarePlanModels.CarePlanIntervention.InterventionFrequency>(frequencyList));
-        }*/
+        }
 
 
         for(final CarePlanModels.CarePlanIntervention intervention : careplanIntervention){
