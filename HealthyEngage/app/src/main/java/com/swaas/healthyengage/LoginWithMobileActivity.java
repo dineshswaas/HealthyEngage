@@ -2,6 +2,8 @@ package com.swaas.healthyengage;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -23,10 +25,12 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import DataBase.DatabaseHandler;
 import Repositories.APIRepository;
 import models.APIResponseModels;
 import models.UserVerifyModel;
@@ -37,6 +41,7 @@ public class LoginWithMobileActivity extends AppCompatActivity {
 
     EditText editText;
     ProgressDialog progressBar;
+    private SQLiteDatabase database = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +103,7 @@ public class LoginWithMobileActivity extends AppCompatActivity {
             public void getAPIResponseModelSuccess(APIResponseModels apiResponseModels) {
                 if(apiResponseModels != null){
                     progressBar.hide();
+                    openOrCreateDatabaseCustom();
                     APIResponseModels.AccessToken accessToken = apiResponseModels.getAccessToken();
                     PreferenceUtils.setAuthorizationKey(LoginWithMobileActivity.this,accessToken.getId());
                     PreferenceUtils.setUserId(LoginWithMobileActivity.this,accessToken.getUserId());
@@ -122,9 +128,11 @@ public class LoginWithMobileActivity extends AppCompatActivity {
         apiRepository.getPatientDetails(userVerifyModel);
     }
 
-
-
-
+    private void openOrCreateDatabaseCustom() {
+        DatabaseHandler databaseHandler = new DatabaseHandler(this);
+        database = databaseHandler.getWritableDatabase();
+        databaseHandler.onCreate(database);
+    }
 
 
     private void sendOTPToPatient(String mobileNumber) {

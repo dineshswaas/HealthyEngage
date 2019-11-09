@@ -107,11 +107,11 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
                 carePlanList = new ArrayList<>(carePlanModels);
                 PreferenceUtils.setCarePlanList(getActivity(),null  );
                 PreferenceUtils.setCarePlanList(getActivity(),carePlanList);
-                PreferenceUtils.setLastSyncDate(getActivity(),null);
-                PreferenceUtils.setLastSyncDate(getActivity(),lastSyncDate);
+               // PreferenceUtils.setLastSyncDate(getActivity(),null);
+               // PreferenceUtils.setLastSyncDate(getActivity(),lastSyncDate);
                 calenderStartDate = carePlanList.get(0).getCurrent_cycle_start_date().split("T")[0];
                 calenderEndDate = carePlanList.get(0).getCurrent_cycle_end_date().split("T")[0];
-                bindCalenderDate();
+                bindCalenderDate(carePlanList);
                 onBindOverAllDetails();
 
             }
@@ -138,7 +138,6 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     }
 
     private void onBindOverAllDetails() {
-        setCompletion(0);
         completionPercentage = 0;
         interventionValue = 0;
         String localListValue = PreferenceUtils.getCarePlanList(getActivity());
@@ -148,6 +147,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         onBindInterventionData(carePlanList.get(0).getCareplanIntervention());
         onBindAssessmentData(carePlanList.get(0).getCareplanAssessment());
         onBindReadOnly(carePlanList.get(0).getCareplanInstruction());
+        setCompletion((int)tpHeaderModelList.get(selectedItemposition).getProgressValue());
         hideProgress();
     }
 
@@ -274,7 +274,8 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
 
             for (final CarePlanModels.CarePlanIntervention.InterventionFrequency frequency :intervention.getInterventionFrequency()){
-
+                frequency.setIs_completed(false);
+                frequency.setValue(false);
                 for(CarePlanModels.CarePlanIntervention.InterventionDay interventionDay : intervention.getInterventionDay()){
                     if(interventionDay.getDay().split("T")[0].equalsIgnoreCase(selectedDate)){
 
@@ -282,6 +283,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
                             for(CarePlanModels.CarePlanIntervention.InterventionDay.PatientIntervention patientIntervention : interventionDay.getPatientIntervention()){
                                 if(frequency.getId().equalsIgnoreCase(patientIntervention.getIntervention_frequency_id())){
                                     frequency.setIs_completed(true);
+
                                 }
                             }
                         }
@@ -299,6 +301,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
                 frequency.setDay(DateHelper.getCurrentDate());
                 if(frequency.isIs_completed()){
                     imagefreq.setBackground(getResources().getDrawable(R.drawable.bluecircle));
+                    //completionPercentage = completionPercentage+interventionValue;
                 }else{
                     imagefreq.setBackground(getResources().getDrawable(R.drawable.blueborder));
                 }
@@ -312,13 +315,13 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
                                 imagefreq.setBackground(getResources().getDrawable(R.drawable.blueborder));
                                 frequency.setIs_completed(false);
                                 frequency.setValue(false);
-                                setCompletion((int)completionPercentage);
+                                //setCompletion((int)completionPercentage);
                             }else{
                                 completionPercentage = completionPercentage+interventionValue;
                                 imagefreq.setBackground(getResources().getDrawable(R.drawable.bluecircle));
                                 frequency.setIs_completed(true);
                                 frequency.setValue(true);
-                                setCompletion((int)completionPercentage);
+                                //setCompletion((int)completionPercentage);
                             }
                             sendUpdateInterventionDetails(frequency);
                         }
@@ -347,14 +350,14 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
             interventionMainLayout.addView(view);
         }
 
-        for(CarePlanModels.CarePlanIntervention intervention : careplanIntervention){
+       /* for(CarePlanModels.CarePlanIntervention intervention : careplanIntervention){
             for(CarePlanModels.CarePlanIntervention.InterventionFrequency frequency : intervention.getInterventionFrequency()){
                 if(frequency.isIs_completed()){
                     completionPercentage = completionPercentage+interventionValue;
                 }
             }
-        }
-        setCompletion((int)completionPercentage);
+        }*/
+
 
     }
 
@@ -384,7 +387,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         frequency.setLastSyncDate(PreferenceUtils.getLastSyncDate(getActivity()));
         frequency.setPatientId(PreferenceUtils.getPatientId(getActivity()));
         frequency.setUserId(PreferenceUtils.getUserId(getActivity()));
-        frequency.setDay(DateHelper.getCurrentDate());
+        frequency.setDay(selectedDate);
 
 /*        CarePlanModels carePlanModels = new CarePlanModels();
         carePlanModels.setCareplanInterventionId(frequency.getCareplanInterventionId());
@@ -423,7 +426,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
 
     }
-    private void bindCalenderDate() {
+    private void bindCalenderDate(List<CarePlanModels> carePlanList) {
 
         try {
             //To get start and end date of the dcr calendar dates.
@@ -443,11 +446,12 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
                 tpHeader.setDates(DateHelper.convertDateToString(startDate.getTime(), "yyyy-MM-dd"));
                 tpHeader.setPosition(position++);
                 if(DateHelper.getCurrentDate().equalsIgnoreCase(tpHeader.getDates())){
-                    currentDatePosition = position;
+                    selectedItemposition = tpHeader.getPosition();
+                    currentDatePosition = tpHeader.getPosition();
                     tpHeader.setSelected(true);
                     tpHeader.setToday(true);
                 }
-
+                tpHeader.setProgressValue(calculateCompletionValue(tpHeader.getDates()));
                 tpHeaderModelList.add(tpHeader);
             }
             if (tpHeaderModelList != null && tpHeaderModelList.size() > 0) {
@@ -461,12 +465,44 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
     }
 
+
+    int  calculateCompletionValue(String date){
+        int totalFrequencyHeader = 0;
+        double completionPercentageHeader=0;
+        double interventionValueHeader = 0;
+
+        for(final CarePlanModels.CarePlanIntervention intervention : carePlanList.get(0).getCareplanIntervention()) {
+            totalFrequencyHeader = intervention.getFrequency() + totalFrequencyHeader;
+        }
+
+        for(final CarePlanModels.CarePlanIntervention intervention : carePlanList.get(0).getCareplanIntervention()) {
+            interventionValueHeader = (double) 50 / totalFrequencyHeader;
+            for (final CarePlanModels.CarePlanIntervention.InterventionFrequency frequency : intervention.getInterventionFrequency()) {
+                for (CarePlanModels.CarePlanIntervention.InterventionDay interventionDay : intervention.getInterventionDay()) {
+                    if (interventionDay.getDay().split("T")[0].equalsIgnoreCase(date)) {
+                        if (interventionDay.getPatientIntervention() != null && interventionDay.getPatientIntervention().size() > 0) {
+                            for (CarePlanModels.CarePlanIntervention.InterventionDay.PatientIntervention patientIntervention : interventionDay.getPatientIntervention()) {
+                                if (frequency.getId().equalsIgnoreCase(patientIntervention.getIntervention_frequency_id())) {
+                                    completionPercentageHeader = completionPercentageHeader+interventionValueHeader;
+
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        return (int) completionPercentageHeader;
+    }
+
     private void bindCalenderAdapter() {
         carePlanCalenderRecyclerView.setLayoutManager(new LinearLayoutManager(carePlanCalenderRecyclerView.getContext(), LinearLayoutManager.HORIZONTAL, false));
         carePlanAdapter = new CarePlanAdapter(CarePlanFragment.this, tpHeaderModelList);
         carePlanAdapter.setOnTpDateClickListener(this);
         carePlanCalenderRecyclerView.setAdapter(carePlanAdapter);
-        carePlanCalenderRecyclerView.scrollToPosition(currentDatePosition);
+        //carePlanCalenderRecyclerView.scrollToPosition(currentDatePosition);
+
     }
 
     void moveToToday(){
@@ -504,7 +540,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         if(carePlanList != null){
             onBindOverAllDetails();
         }
-
+        //setCompletion((int)tpHeaderModelList.get(position).getProgressValue());
         //getCarePlanDetailsFromAPI(tpHeaderModelList.get(position).getDates());
     }
 
@@ -513,7 +549,6 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.today:
-                selectedDate = DateHelper.getCurrentDate();
                 getCarePlanDetailsFromAPI(DateHelper.getCurrentDate());
                 break;
 
@@ -575,6 +610,10 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     void setCompletion(float value){
         donut_progress.setProgress((int) Math.round(value));
         percentIndicatior.setText("Your care overview is "+String.valueOf(Math.round(value))+"% complete");
+
+/*        tpHeaderModelList.get(selectedItemposition).setProgressValue((int) Math.round(value));
+        carePlanAdapter.notifyItemChanged(selectedItemposition);*/
+
     }
 
 }

@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.budiyev.android.circularprogressbar.CircularProgressBar;
+
 import java.util.List;
 
 import models.CarePlanModels;
@@ -39,6 +41,7 @@ class CarePlanAdapter extends RecyclerView.Adapter<CarePlanAdapter.ViewHolder>{
         final CarePlanModels tpHeaderModel = carePlanModelsList.get(position);
         holder.day.setText(tpHeaderModel.getDayString().toUpperCase().substring(0, 1));
         holder.date.setText(String.valueOf(tpHeaderModel.getDayInt()));
+        holder.circularProgressBar.setProgress(tpHeaderModel.getProgressValue());
         if(!tpHeaderModel.isSelected()){
             holder.day.setTextColor(activity.getResources().getColor(R.color.grey_black));
             holder.day.setBackground(activity.getResources().getDrawable(R.drawable.rectangleborderwhite));
@@ -96,6 +99,7 @@ class CarePlanAdapter extends RecyclerView.Adapter<CarePlanAdapter.ViewHolder>{
         public final View mView;
         public final TextView date, day;
         public final LinearLayout dateLayout;
+        public final CircularProgressBar circularProgressBar;
         public ImageView indicator;
         public ViewHolder(View view) {
             super(view);
@@ -103,6 +107,7 @@ class CarePlanAdapter extends RecyclerView.Adapter<CarePlanAdapter.ViewHolder>{
             dateLayout = (LinearLayout) view.findViewById(R.id.date_layout);
             date = (TextView) view.findViewById(R.id.date);
             day = (TextView) view.findViewById(R.id.day);
+            circularProgressBar = (CircularProgressBar)view.findViewById(R.id.donut_progress);
         }
     }
 

@@ -1,18 +1,11 @@
 <?xml version="1.0"?>
-
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white_smoke"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:fillViewport="true">
 <LinearLayout
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:background="@color/gray_non_pressed"
->
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/white_smoke"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent">
 
 
     <LinearLayout
@@ -24,73 +17,73 @@
         android:background="@color/gray_non_pressed"
         >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-
-        android:background="@color/white"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:padding="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/icon_ios_user" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:textSize="19dp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="Care Plan" />
-
-
-        <TextView
-            android:id="@+id/today"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="10dp"
-
-            android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:layout_centerVertical="true"
-            android:text="Today"
-            android:textColor="@color/dark_red"
-            android:textStyle="bold" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:background="@color/gray_non_pressed"
-        android:layout_height="1dp">
-
-    </View>
-
-
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/careplancalender"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:background="@color/white"
             android:layout_height="wrap_content"
-            />
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:padding="5dp"
+                    app:srcCompat="@drawable/icon_ios_user" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:text="Care Plan"
+                    android:textColor="@color/black"
+                    android:textSize="19dp"
+                    android:textStyle="bold" />
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="wrap_content">
-       <!-- <com.github.lzyzsd.circleprogress.DonutProgress
+                <TextView
+                    android:id="@+id/today"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:text="Today"
+                    android:textColor="@color/dark_red"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_non_pressed">
+
+            </View>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/careplancalender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+                <!-- <com.github.lzyzsd.circleprogress.DonutProgress
 
             android:id="@+id/donut_progress"
             android:layout_width="wrap_content"
@@ -101,59 +94,75 @@
             app:donut_finished_color="@color/common_signin_btn_default_background"
             app:donut_progress="20"/>-->
 
-        <com.budiyev.android.circularprogressbar.CircularProgressBar
-            android:id="@+id/donut_progress"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_margin="20dp"
-            app:animateProgress="true"
-            app:backgroundStrokeColor="@color/gray_non_pressed"
-            app:backgroundStrokeWidth="10dp"
-            app:drawBackgroundStroke="true"
-            app:foregroundStrokeCap="round"
-            app:foregroundStrokeColor="@color/pink_pressed"
-            app:foregroundStrokeWidth="10dp"
-            app:indeterminate="false"
-            app:indeterminateRotationAnimationDuration="1200"
-            app:indeterminateSweepAnimationDuration="600"
-            app:indeterminateMinimumAngle="45"
-            app:maximum="100"
-            android:background="@mipmap/icon_ios_user"
-            app:progressAnimationDuration="500"
-            app:startAngle="270"/>
+                <com.budiyev.android.circularprogressbar.CircularProgressBar
+                    android:id="@+id/donut_progress"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="20dp"
+                    android:background="@mipmap/icon_ios_user"
+                    app:animateProgress="true"
+                    app:backgroundStrokeColor="@color/gray_non_pressed"
+                    app:backgroundStrokeWidth="10dp"
+                    app:drawBackgroundStroke="true"
+                    app:foregroundStrokeCap="round"
+                    app:foregroundStrokeColor="@color/pink_pressed"
+                    app:foregroundStrokeWidth="10dp"
+                    app:indeterminate="false"
+                    app:indeterminateMinimumAngle="45"
+                    app:indeterminateRotationAnimationDuration="1800"
+                    app:indeterminateSweepAnimationDuration="1200"
+                    app:maximum="100"
+                    app:progressAnimationDuration="1000"
+                    app:startAngle="270" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/donut_progress"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:gravity="center"
+                        android:text="21-Aug-2019" />
+
+                    <TextView
+                        android:id="@+id/percentIndicatior"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="Your care overview is 0% complete "
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+        <android.support.v4.widget.NestedScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:fillViewport="true">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
 
 
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_toRightOf="@+id/donut_progress"
-            android:layout_centerVertical="true"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginLeft="5dp"
-                android:text="21-Aug-2019" />
-            <TextView
-                android:id="@+id/percentIndicatior"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:layout_margin="5dp"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:text="Your care overview is 0% complete " />
-
-        </LinearLayout>
-
-    </RelativeLayout>
-
-    <LinearLayout
         android:id="@+id/intervention"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -208,7 +217,7 @@
     <LinearLayout
         android:id="@+id/readonly"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
@@ -228,6 +237,8 @@
             android:orientation="vertical"
             android:padding="10dp" />
     </LinearLayout>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
     </LinearLayout>
 
     <LinearLayout
@@ -373,4 +384,4 @@
 
     </LinearLayout>
 </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+

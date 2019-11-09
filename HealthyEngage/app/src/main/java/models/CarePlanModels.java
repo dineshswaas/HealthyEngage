@@ -18,7 +18,15 @@ public class CarePlanModels implements Serializable{
     int position;
     String carePlanId,day,patientId,name,message,careplanInterventionId,interventionIndex,userId;
     boolean value;
+    int progressValue;
 
+    public int getProgressValue() {
+        return progressValue;
+    }
+
+    public void setProgressValue(int progressValue) {
+        this.progressValue = progressValue;
+    }
 
     Error error;
 
