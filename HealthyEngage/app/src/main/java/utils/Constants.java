@@ -7,6 +7,8 @@ public class Constants {
     public static final String COMPANY_BASE_URL = "http://18.191.216.174:3000/"; // DEV
 
     public static final String AUTHY_API_URL = "https://api.authy.com/";
+    public static final String AUTHY_API_KEY="X-Authy-API-Key";
+    public static final String AUTHY_API_VALUE = "yINoSYAbwIhZ11jNqGZ690BgbslJe7j2";
 
     public static final String INTENT_PARM = "INTENT_PARM";
     public static final String INPUT_SLIDER = "Slider";

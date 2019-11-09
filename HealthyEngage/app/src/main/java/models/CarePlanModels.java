@@ -16,13 +16,88 @@ public class CarePlanModels implements Serializable{
     boolean today;
     private String TP_Full_Day;
     int position;
-    String carePlanId,day,patientId,name,message;
+    String carePlanId,day,patientId,name,message,careplanInterventionId,interventionIndex,userId;
+    boolean value;
+
+
+    Error error;
+
+    public Error getError() {
+        return error;
+    }
+
+    public void setError(Error error) {
+        this.error = error;
+    }
+
+    public class Error {
+        int statusCode;
+        String name,message;
+
+        public int getStatusCode() {
+            return statusCode;
+        }
+
+        public void setStatusCode(int statusCode) {
+            this.statusCode = statusCode;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+    }
+
+
+    public boolean isValue() {
+        return value;
+    }
+
+    public void setValue(boolean value) {
+        this.value = value;
+    }
 
     String id,plan_no,title,goal,problem,plan_start_date,plan_end_date,current_cycle_start_date,current_cycle_end_date;
     String cycle_status,careplan_status,created_at,updated_at,careplan_template_id,owner_id,category_id,organisation_id;
     boolean is_active;
 
     int plan_duration,cycles,break_time,current_cycle;
+
+    public String getCareplanInterventionId() {
+        return careplanInterventionId;
+    }
+
+    public void setCareplanInterventionId(String careplanInterventionId) {
+        this.careplanInterventionId = careplanInterventionId;
+    }
+
+    public String getInterventionIndex() {
+        return interventionIndex;
+    }
+
+    public void setInterventionIndex(String interventionIndex) {
+        this.interventionIndex = interventionIndex;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
 
 
     public int getPosition() {
@@ -915,8 +990,73 @@ public class CarePlanModels implements Serializable{
 
 
             public  class InterventionFrequency{
-                String id,reminder,created_at,updated_at,careplan_intervention_id,organisation_id;
-                boolean is_completed;
+                String id,reminder,created_at,updated_at,careplan_intervention_id,organisation_id,day,lastSyncDate,patientId,userId,careplanInterventionId,delegateId;
+                boolean is_completed,value;
+                String interventionIndex;
+
+                public String getDelegateId() {
+                    return delegateId;
+                }
+
+                public void setDelegateId(String delegateId) {
+                    this.delegateId = delegateId;
+                }
+
+                public String getCareplanInterventionId() {
+                    return careplanInterventionId;
+                }
+
+                public void setCareplanInterventionId(String careplanInterventionId) {
+                    this.careplanInterventionId = careplanInterventionId;
+                }
+
+                public String getLastSyncDate() {
+                    return lastSyncDate;
+                }
+
+                public void setLastSyncDate(String lastSyncDate) {
+                    this.lastSyncDate = lastSyncDate;
+                }
+
+                public String getPatientId() {
+                    return patientId;
+                }
+
+                public void setPatientId(String patientId) {
+                    this.patientId = patientId;
+                }
+
+                public String getUserId() {
+                    return userId;
+                }
+
+                public void setUserId(String userId) {
+                    this.userId = userId;
+                }
+
+                public boolean isValue() {
+                    return value;
+                }
+
+                public void setValue(boolean value) {
+                    this.value = value;
+                }
+
+                public String getInterventionIndex() {
+                    return interventionIndex;
+                }
+
+                public void setInterventionIndex(String interventionIndex) {
+                    this.interventionIndex = interventionIndex;
+                }
+
+                public String getDay() {
+                    return day;
+                }
+
+                public void setDay(String day) {
+                    this.day = day;
+                }
 
                 public boolean isIs_completed() {
                     return is_completed;

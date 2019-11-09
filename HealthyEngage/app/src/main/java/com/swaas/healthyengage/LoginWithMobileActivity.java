@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +28,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import Repositories.APIRepository;
+import models.APIResponseModels;
 import models.UserVerifyModel;
 import utils.NetworkUtils;
 import utils.PreferenceUtils;
@@ -65,7 +67,8 @@ public class LoginWithMobileActivity extends AppCompatActivity {
                 UserVerifyModel userVerifyModel = apiResponseModels;
                 if(userVerifyModel.isStatus()){
                     PreferenceUtils.setLoginMobileNumber(LoginWithMobileActivity.this,editText.getText().toString().trim());
-                    sendOTPToPatient(editText.getText().toString().trim());
+                    //sendOTPToPatient(editText.getText().toString().trim());
+                    getPatientDetails();
                 }else{
                     Toast.makeText(LoginWithMobileActivity.this,"Something went wrong.",Toast.LENGTH_LONG).show();
                     PreferenceUtils.setLoginMobileNumber(LoginWithMobileActivity.this,"");
@@ -83,6 +86,45 @@ public class LoginWithMobileActivity extends AppCompatActivity {
         userVerifyModel.setMobileNo(mobile);
         apiRepository.verifyMobile(userVerifyModel);
     }
+
+
+
+
+    private void getPatientDetails() {
+
+        APIRepository apiRepository = new APIRepository(this);
+        apiRepository.setGetAPIResponseModel(new APIRepository.GetAPIResponseModel() {
+            @Override
+            public void getAPIResponseModelSuccess(APIResponseModels apiResponseModels) {
+                if(apiResponseModels != null){
+                    progressBar.hide();
+                    APIResponseModels.AccessToken accessToken = apiResponseModels.getAccessToken();
+                    PreferenceUtils.setAuthorizationKey(LoginWithMobileActivity.this,accessToken.getId());
+                    PreferenceUtils.setUserId(LoginWithMobileActivity.this,accessToken.getUserId());
+                    PreferenceUtils.setCarePlanId(LoginWithMobileActivity.this,apiResponseModels.getCareplanId());
+                    PreferenceUtils.setPatientId(LoginWithMobileActivity.this,apiResponseModels.getPatientId());
+                    PreferenceUtils.setDelegateId(LoginWithMobileActivity.this,apiResponseModels.getDelegateId());
+                    PreferenceUtils.setLastSyncDate(LoginWithMobileActivity.this,apiResponseModels.getLastSyncDate());
+                    startActivity(new Intent(LoginWithMobileActivity.this,HomePageActivity.class));
+                }
+            }
+
+            @Override
+            public void getAPIResponseModelFailure(String s) {
+                progressBar.hide();
+                Toast.makeText(LoginWithMobileActivity.this,"Something went wrong",Toast.LENGTH_SHORT).show();
+            }
+        });
+        UserVerifyModel userVerifyModel = new UserVerifyModel();
+        userVerifyModel.setMobile_no(PreferenceUtils.getLoginMobileNumber(this));
+        userVerifyModel.setCountry_code("91");
+        userVerifyModel.setToken(FirebaseInstanceId.getInstance().getToken());
+        apiRepository.getPatientDetails(userVerifyModel);
+    }
+
+
+
+
 
 
     private void sendOTPToPatient(String mobileNumber) {

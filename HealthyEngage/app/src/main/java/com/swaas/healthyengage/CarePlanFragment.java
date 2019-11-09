@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.List;
 
 import Repositories.APIRepository;
+import models.APIResponseModels;
 import models.CarePlanModels;
 import models.InterventionElements;
 import utils.Constants;
@@ -77,19 +78,17 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         mView =  inflater.inflate(R.layout.fragment_careplan, container, false);
         intializeViews();
 
-     /*   PreferenceUtils.setAuthorizationKey(getActivity(),"0Lb3T7WI6WDKfcP0CRVOaeeIMEcoGHNXvdH3ellLQQsUB8dLUPxK3SnbY52DHO8E");
-        PreferenceUtils.setCarePlanId(getActivity(),"0c9725c8-47e5-4feb-8536-9306bd1a560e");
+/*        PreferenceUtils.setAuthorizationKey(getActivity(),"LpWno3DZs4dnmcoejrGPaWBFlk5DwSxETal0DMMJJmkJQEME8zWzDrtIBM8wU6Ea");
+        PreferenceUtils.setCarePlanId(getActivity(),"60b0d2ff-8fde-401e-8fc3-9454ca46702b");
         PreferenceUtils.setPatientId(getActivity(),"52575534-bcee-40f0-b6b5-0612bfe7db06");
-        PreferenceUtils.setUserId(getActivity(),"e031d072-14db-4b10-abd6-0e18e5daf0c4");*/
+        PreferenceUtils.setUserId(getActivity(),"e031d072-14db-4b10-abd6-0e18e5daf0c4");
+        PreferenceUtils.setLastSyncDate(getActivity(),"2019-11-07T00:00:00.000Z");*/
 
         //ProductionUser
 /*        PreferenceUtils.setAuthorizationKey(getActivity(),"OJkUbcTXbGLTXeiiBV0yw1RadXZ9KWeojMFjn9P4X2iDc4MCnqMQ4oVzCwentCV7");
         PreferenceUtils.setCarePlanId(getActivity(),"694401f8-eb1e-4896-b2bb-3f2ebcf3d957");
         PreferenceUtils.setPatientId(getActivity(),"3f6e4590-cf2f-41bd-b1e2-d301d8108cbf");*/
 
-
-
-        String token = FirebaseInstanceId.getInstance().getToken();
 
         selectedDate = DateHelper.getCurrentDate();
         getCarePlanDetailsFromAPI(DateHelper.getCurrentDate());
@@ -119,7 +118,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
             @Override
             public void getCarePlanFailure(String s) {
-                Toast.makeText(getActivity(),"Network error,please try again.",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),s,Toast.LENGTH_LONG).show();
                 hideProgress();
             }
         });
@@ -290,12 +289,14 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
                     }
                 }
             }
-
+            int index = 0;
             for (final CarePlanModels.CarePlanIntervention.InterventionFrequency frequency :intervention.getInterventionFrequency()){
                 LayoutInflater inflaterFreq = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View viewFreq = inflaterFreq.inflate(R.layout.intervenation_freq_items,null);
                 final ImageView imagefreq = (ImageView)viewFreq.findViewById(R.id.imagefreq);
-
+                frequency.setInterventionIndex(String.valueOf(index++));
+                frequency.setCareplanInterventionId(frequency.getCareplan_intervention_id());
+                frequency.setDay(DateHelper.getCurrentDate());
                 if(frequency.isIs_completed()){
                     imagefreq.setBackground(getResources().getDrawable(R.drawable.bluecircle));
                 }else{
@@ -305,17 +306,23 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
                 imagefreq.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(frequency.isIs_completed()){
-                            completionPercentage = completionPercentage - interventionValue;
-                            imagefreq.setBackground(getResources().getDrawable(R.drawable.blueborder));
-                            frequency.setIs_completed(false);
-                            setCompletion((int)completionPercentage);
-                        }else{
-                            completionPercentage = completionPercentage+interventionValue;
-                            imagefreq.setBackground(getResources().getDrawable(R.drawable.bluecircle));
-                            frequency.setIs_completed(true);
-                            setCompletion((int)completionPercentage);
+                        if(NetworkUtils.isNetworkAvailable(getActivity())){
+                            if(frequency.isIs_completed()){
+                                completionPercentage = completionPercentage - interventionValue;
+                                imagefreq.setBackground(getResources().getDrawable(R.drawable.blueborder));
+                                frequency.setIs_completed(false);
+                                frequency.setValue(false);
+                                setCompletion((int)completionPercentage);
+                            }else{
+                                completionPercentage = completionPercentage+interventionValue;
+                                imagefreq.setBackground(getResources().getDrawable(R.drawable.bluecircle));
+                                frequency.setIs_completed(true);
+                                frequency.setValue(true);
+                                setCompletion((int)completionPercentage);
+                            }
+                            sendUpdateInterventionDetails(frequency);
                         }
+
 
                     }
                 });
@@ -348,6 +355,48 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
             }
         }
         setCompletion((int)completionPercentage);
+
+    }
+
+    private void sendUpdateInterventionDetails(CarePlanModels.CarePlanIntervention.InterventionFrequency frequency) {
+
+        APIRepository apiRepository = new APIRepository(getActivity());
+
+        apiRepository.setGetAPIResponseModel(new APIRepository.GetAPIResponseModel() {
+            @Override
+            public void getAPIResponseModelSuccess(APIResponseModels apiResponseModels) {
+                if(apiResponseModels != null){
+                    if(apiResponseModels.isStatus()){
+                        PreferenceUtils.setCarePlanList(getActivity(),null);
+                        PreferenceUtils.setCarePlanList(getActivity(),carePlanList);
+                        onBindOverAllDetails();
+                    }else if(apiResponseModels.getError() != null){
+
+                    }
+                }
+            }
+
+            @Override
+            public void getAPIResponseModelFailure(String s) {
+
+            }
+        });
+        frequency.setLastSyncDate(PreferenceUtils.getLastSyncDate(getActivity()));
+        frequency.setPatientId(PreferenceUtils.getPatientId(getActivity()));
+        frequency.setUserId(PreferenceUtils.getUserId(getActivity()));
+        frequency.setDay(DateHelper.getCurrentDate());
+
+/*        CarePlanModels carePlanModels = new CarePlanModels();
+        carePlanModels.setCareplanInterventionId(frequency.getCareplanInterventionId());
+        carePlanModels.setDay(DateHelper.getCurrentDate());
+        carePlanModels.setInterventionIndex(frequency.getInterventionIndex());
+        carePlanModels.setLastSyncDate(PreferenceUtils.getLastSyncDate(getActivity()));
+        carePlanModels.setPatientId(PreferenceUtils.getPatientId(getActivity()));
+        carePlanModels.setUserId(PreferenceUtils.getUserId(getActivity()));
+        carePlanModels.setValue(frequency.isValue());*/
+
+        apiRepository.updateIntervention(frequency);
+
 
     }
 
@@ -516,6 +565,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
     void showProgressBar(String message){
         progressBar.setMessage(message);
+        progressBar.setCancelable(false);
         progressBar.show();
     }
     void hideProgress(){

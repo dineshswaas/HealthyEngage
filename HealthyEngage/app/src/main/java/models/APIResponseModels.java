@@ -8,10 +8,66 @@ public class APIResponseModels<T> {
 
 
     private List<T> careplan;
-    private List<T> error;
+    private  Error<T> error;
     String day,mobileNo,country_code,mobile_no,token,careplanId,patientId,delegateId,lastSyncDate;
-    int status,sync;
+    boolean sync,status;
+
+    public boolean isSync() {
+        return sync;
+    }
+
+    public void setSync(boolean sync) {
+        this.sync = sync;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
     AccessToken<T> accessToken;
+
+
+
+    public Error<T> getError() {
+        return error;
+    }
+
+    public void setError(Error<T> error) {
+        this.error = error;
+    }
+
+    public class Error<T> {
+    int statusCode;
+    String name,message;
+
+        public int getStatusCode() {
+            return statusCode;
+        }
+
+        public void setStatusCode(int statusCode) {
+            this.statusCode = statusCode;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+    }
 
     public String getCareplanId() {
         return careplanId;
@@ -124,29 +180,7 @@ public class APIResponseModels<T> {
         this.day = day;
     }
 
-    public int getStatus() {
-        return status;
-    }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public int getSync() {
-        return sync;
-    }
-
-    public void setSync(int sync) {
-        this.sync = sync;
-    }
-
-    public List<T> getError() {
-        return error;
-    }
-
-    public void setError(List<T> error) {
-        this.error = error;
-    }
 
 
     public String getLastSyncDate() {

@@ -1,6 +1,7 @@
 package Repositories;
 
 import android.content.Context;
+import android.provider.SyncStateContract;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
+import utils.Constants;
 import utils.NetworkUtils;
 import utils.PreferenceUtils;
 
@@ -66,6 +68,8 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
                 }else if(apiResponseModels.getError() != null){
                     getCarePlanModelDetails.getCarePlanSuccess(apiResponseModels.getCareplan(),apiResponseModels.getLastSyncDate());
                 }
+            }else{
+                getCarePlanModelDetails.getCarePlanFailure("No Careplan assigned to this patient");
             }
             }
 
@@ -171,12 +175,12 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
 
     /*UPDATE INTERVENTION*/
 
-    public void updateIntervention(CarePlanModels carePlanModels){
+    public void updateIntervention(CarePlanModels.CarePlanIntervention.InterventionFrequency frequency){
         if(NetworkUtils.isNetworkAvailable(mContext)){
             Retrofit retrofit = RetrofitAPIBuilder.getInstance();
             APIServices carePlanServices =retrofit.create(APIServices.class);
             Call call =carePlanServices.updateCarePlanIntervention(PreferenceUtils.getAuthorizationKey(mContext),
-                    carePlanModels);
+                    frequency);
             call.enqueue(new Callback<APIResponseModels>() {
                 @Override
                 public void onResponse(Response<APIResponseModels> response, Retrofit retrofit) {
@@ -268,13 +272,15 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
                     try {
                         responseBody = new String(error.networkResponse.data, "utf-8");
                     JSONObject data = new JSONObject(responseBody);
-                    JSONArray errors = data.getJSONArray("errors");
-                    JSONObject jsonMessage = errors.getJSONObject(0);
-                    String message = jsonMessage.getString("message");
+                    //JSONArray errors = data.getJSONArray("errors");
+                   // JSONObject jsonMessage = errors.getJSONObject(0);
+                    String message = data.getString("message");
                     getUserVerifyModel.getUserVerifyModelFailure(message);
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
+                        getUserVerifyModel.getUserVerifyModelFailure("Something went wrong.");
                     } catch (JSONException e) {
+                        getUserVerifyModel.getUserVerifyModelFailure("Something went wrong.");
                         e.printStackTrace();
                     }
                 }
@@ -283,7 +289,7 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
                 public Map getHeaders() throws AuthFailureError {
                     HashMap headers = new HashMap();
                     headers.put("Content-Type", "application/json");
-                    headers.put("X-Authy-API-Key", "yINoSYAbwIhZ11jNqGZ690BgbslJe7j2");
+                    headers.put(Constants.AUTHY_API_KEY, Constants.AUTHY_API_VALUE);
                     return headers;
                 }
             };

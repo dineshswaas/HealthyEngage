@@ -36,7 +36,7 @@ public interface APIServices {
 
     @POST("api/PatientInterventions")
     Call<APIResponseModels> updateCarePlanIntervention(@Header("Authorization") String value,
-                                                                       @Body CarePlanModels carePlanModels);
+                                                                       @Body CarePlanModels.CarePlanIntervention.InterventionFrequency carePlanModels);
 
     @POST("api/Users/patient/verifyMobile")
     Call<UserVerifyModel> patientVerifyMobile(@Body UserVerifyModel userVerifyModel);
