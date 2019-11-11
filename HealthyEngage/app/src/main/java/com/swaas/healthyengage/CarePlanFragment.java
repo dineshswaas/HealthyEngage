@@ -192,15 +192,50 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assessmentMainLayout.removeAllViews();
+
+        List<CarePlanModels.CarePlanAssessment> planAssessmentList = new ArrayList<>();
+
+        /*Ascending Assessment Name*/
+        ArrayList<String> assessmentNameSorting = new ArrayList<>();
+        for(CarePlanModels.CarePlanAssessment name : careplanAssessment){
+            assessmentNameSorting.add(name.getName());
+        }
+        Collections.sort(assessmentNameSorting);
+        for(String nameTemp : assessmentNameSorting){
+            for(CarePlanModels.CarePlanAssessment nameInter : careplanAssessment){
+                if(nameTemp.equalsIgnoreCase(nameInter.getName())){
+                    planAssessmentList.add(nameInter);
+                }
+            }
+        }
+        if(planAssessmentList != null && planAssessmentList.size() > 0){
+            careplanAssessment = new ArrayList<>(planAssessmentList);
+        }
+
+
+
+
         for(final CarePlanModels.CarePlanAssessment assessment : careplanAssessment){
             final View view = inflater.inflate(R.layout.assesment_items_view,null);
             final TextView assName = (TextView)view.findViewById(R.id.assesmentname);
             final TextView assStartTime = (TextView)view.findViewById(R.id.assesmentnameSubName);
+            final TextView valueText = (TextView)view.findViewById(R.id.valueText);
+            valueText.setVisibility(View.INVISIBLE);
             assName.setText(assessment.getName());
             if(!TextUtils.isEmpty(assessment.getTarget_or_time())){
                 assStartTime.setText(assessment.getTarget_or_time());
             }else{
                 assStartTime.setText(assessment.getStart_time());
+            }
+
+            if(assessment.getPatientAssessment() != null){
+                CarePlanModels.CarePlanAssessment.PatientAssessment assessment1 = assessment.getPatientAssessment().get(0);
+                if(assessment1 != null){
+                    if(!TextUtils.isEmpty(assessment1.getValue())){
+                        valueText.setVisibility(View.VISIBLE);
+                        valueText.setText(assessment1.getValue());
+                    }
+                }
             }
 
             view.setOnClickListener(new View.OnClickListener() {

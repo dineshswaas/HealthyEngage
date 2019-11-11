@@ -5,7 +5,9 @@ import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -42,6 +44,8 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
     Spinner pickerSpinner;
     List<String> pickerList;
     TickSeekBar  tickSeekBar;
+    TextView submitText;
+    int  min=0,max=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +100,9 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             sliderParentView.setVisibility(View.VISIBLE);
             onBindSliderDetails();
         }
+
+
+
 
     }
 
@@ -154,15 +161,95 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_dropdown_item,pickerList);
             pickerSpinner.setAdapter(adapter);
+            if(carePlanAssessment.getPatientAssessment() != null){
+                CarePlanModels.CarePlanAssessment.PatientAssessment assessment = carePlanAssessment.getPatientAssessment().get(0);
+                if(assessment != null){
+                    if(!TextUtils.isEmpty(assessment.getValue())){
+                        if(Integer.parseInt(assessment.getValue()) > 0){
+                            pickerSpinner.setSelection(getIndex(pickerSpinner, assessment.getValue()));
+                        }
+                    }
+                }
+            }
         }
 
 
-    }
 
+    }
+    private int getIndex(Spinner spinner, String myString){
+
+        int index = 0;
+
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).equals(myString)){
+                index = i;
+            }
+        }
+        return index;
+    }
     private void onBindTextDetails() {
         if(!TextUtils.isEmpty(carePlanAssessment.getQuestion())){
             question.setText(carePlanAssessment.getQuestion());
         }
+        submitTextDisabled();
+
+        if(carePlanAssessment.getPatientAssessment() != null){
+            CarePlanModels.CarePlanAssessment.PatientAssessment assessment = carePlanAssessment.getPatientAssessment().get(0);
+            if(assessment != null){
+                if(!TextUtils.isEmpty(carePlanAssessment.getMin()) && !TextUtils.isEmpty(carePlanAssessment.getMax())){
+                    min = Integer.parseInt(carePlanAssessment.getMin());
+                    max = Integer.parseInt(carePlanAssessment.getMax());
+                }
+                if(!TextUtils.isEmpty(assessment.getValue())){
+                    textEditText.setText(assessment.getValue());
+                    submitTextEnabled();
+                }
+            }
+
+        }
+
+        textEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            if(!TextUtils.isEmpty(s)){
+                submitTextEnabled();
+            }else{
+                submitTextDisabled();
+            }
+            }
+        });
+        //9 exceeds the maximum allowed value (8)
+        //0 is less than minimum allowed value (1)
+
+        submitText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!TextUtils.isEmpty(textEditText.getText().toString())){
+                    int actualValue = Integer.parseInt(textEditText.getText().toString());
+                    if(actualValue < min){
+                        Toast.makeText(AssessmentDetailsActivity.this,
+                                String.valueOf(actualValue)+" exceeds the minimum allowed value ("+String.valueOf(min)+")",Toast.LENGTH_SHORT).show();
+                    } else if(actualValue > max){
+                        Toast.makeText(AssessmentDetailsActivity.this,
+                                String.valueOf(actualValue)+" exceeds the maximim allowed value ("+String.valueOf(max)+")",Toast.LENGTH_SHORT).show();
+                    }else{
+
+                    }
+                }
+            }
+        });
+
+
 
     }
 
@@ -179,6 +266,19 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         }
 
         radioGroup.clearCheck();
+        if(carePlanAssessment.getPatientAssessment() != null){
+            CarePlanModels.CarePlanAssessment.PatientAssessment assessment = carePlanAssessment.getPatientAssessment().get(0);
+            if(assessment != null){
+                if(!TextUtils.isEmpty(assessment.getValue())){
+                    if(Integer.parseInt(assessment.getValue()) > 0){
+                        rpositiveButton.setChecked(true);
+                    }else{
+                        rnegativeButton.setChecked(true);
+                    }
+                }
+            }
+
+        }
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -194,6 +294,8 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
     private void initializeView() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Healthy Engage");
+        getSupportActionBar().setSubtitle("Assessment");
         name = (TextView)findViewById(R.id.name);
         description = (TextView)findViewById(R.id.description);
         textParentLayout = (RelativeLayout)findViewById(R.id.textParentView);
@@ -213,13 +315,8 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         minlabel = (TextView)findViewById(R.id.minlabel);
         maxlabel = (TextView)findViewById(R.id.maxlabel);
         buttonlayout = (RelativeLayout)findViewById(R.id.buttonlayout);
+        submitText = (TextView)findViewById(R.id.submitText);
 
-        buttonlayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
 
@@ -233,5 +330,17 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+
+    void submitTextDisabled(){
+        submitText.setEnabled(false);
+        submitText.setTextColor(getResources().getColor(R.color.grey_black));
+        submitText.setBackground(getResources().getDrawable((R.color.light_gray)));
+    }
+    void submitTextEnabled(){
+        submitText.setEnabled(true);
+        submitText.setTextColor(getResources().getColor(R.color.white));
+        submitText.setBackground(getResources().getDrawable((R.color.colorPrimary)));
     }
 }

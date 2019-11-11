@@ -17,7 +17,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
@@ -29,6 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/not_available"
+                android:textStyle="bold"
                 android:textColor="@color/black" />
 
             <TextView
@@ -50,11 +50,22 @@
 
         </View>
 
+        <TextView
+            android:id="@+id/valueText"
+            android:layout_width="wrap_content"
+            android:layout_alignLeft="@+id/arrow"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="0" />
+
         <ImageView
             android:id="@+id/arrow"
+            android:paddingLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/label"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
