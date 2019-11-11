@@ -42,6 +42,7 @@ public class MessageReceiver extends FirebaseMessagingService {
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .setSound(defaultSoundUri)
+                .setSmallIcon(R.mipmap.appicon)
                 .build();
 
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
