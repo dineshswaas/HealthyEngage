@@ -7,7 +7,7 @@
     android:clickable="true"
     android:background="@color/white"
     android:orientation="vertical"
-    android:paddingBottom="8dp"
+
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
     android:paddingTop="8dp">
@@ -28,9 +28,9 @@
 
     <TextView
         android:id="@+id/date"
-        android:layout_width="35dp"
+        android:layout_width="30dp"
         android:layout_marginTop="8dp"
-        android:layout_height="35dp"
+        android:layout_height="30dp"
         android:background="@drawable/tp_default_date_bg"
         android:layout_gravity="center"
         android:gravity="center"
@@ -42,8 +42,8 @@
 
     <com.budiyev.android.circularprogressbar.CircularProgressBar
         android:id="@+id/donut_progress"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginTop="8dp"
         app:animateProgress="true"
         app:backgroundStrokeColor="@color/gray_non_pressed"
