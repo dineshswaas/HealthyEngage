@@ -12,6 +12,7 @@
 
 
         <LinearLayout
+            android:paddingLeft="10dp"
             android:id="@+id/interventionMainLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
