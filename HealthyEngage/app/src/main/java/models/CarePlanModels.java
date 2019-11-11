@@ -455,10 +455,59 @@ public class CarePlanModels implements Serializable{
 
 
 
-        public class CarePlanAssessment implements Serializable {
+        public static class CarePlanAssessment implements Serializable {
 
             String id,name,target_or_time,positve_label,negative_label,description,start_time,end_time,input_type,question,min,max,threshold,label_min,label_max,created_at,updated_at,is_deleted,careplan_id,organisation_id;
             int prompt_time;
+            String assessmentDate,careplanAssessmentId,lastSyncDate,patientId,userId,value;
+
+            public String getAssessmentDate() {
+                return assessmentDate;
+            }
+
+            public void setAssessmentDate(String assessmentDate) {
+                this.assessmentDate = assessmentDate;
+            }
+
+            public String getCareplanAssessmentId() {
+                return careplanAssessmentId;
+            }
+
+            public void setCareplanAssessmentId(String careplanAssessmentId) {
+                this.careplanAssessmentId = careplanAssessmentId;
+            }
+
+            public String getLastSyncDate() {
+                return lastSyncDate;
+            }
+
+            public void setLastSyncDate(String lastSyncDate) {
+                this.lastSyncDate = lastSyncDate;
+            }
+
+            public String getPatientId() {
+                return patientId;
+            }
+
+            public void setPatientId(String patientId) {
+                this.patientId = patientId;
+            }
+
+            public String getUserId() {
+                return userId;
+            }
+
+            public void setUserId(String userId) {
+                this.userId = userId;
+            }
+
+            public String getValue() {
+                return value;
+            }
+
+            public void setValue(String value) {
+                this.value = value;
+            }
 
             public String getPositve_label() {
                 return positve_label;

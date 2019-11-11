@@ -34,14 +34,23 @@ public interface APIServices {
 
 
 
-    @POST("api/PatientInterventions")
-    Call<APIResponseModels> updateCarePlanIntervention(@Header("Authorization") String value,
-                                                                       @Body CarePlanModels.CarePlanIntervention.InterventionFrequency carePlanModels);
 
     @POST("api/Users/patient/verifyMobile")
     Call<UserVerifyModel> patientVerifyMobile(@Body UserVerifyModel userVerifyModel);
 
     @POST("api/Users/patient/verify")
     Call<APIResponseModels<CarePlanModels>> checkPatientVerify(@Body UserVerifyModel userVerifyModel);
+
+
+
+    @POST("api/PatientInterventions")
+    Call<APIResponseModels> updateCarePlanIntervention(@Header("Authorization") String value,
+                                                       @Body CarePlanModels.CarePlanIntervention.InterventionFrequency carePlanModels);
+
+    @POST("api/PatientAssessments")
+    Call<APIResponseModels> updateCarePlanAssessment(@Header("Authorization") String value,
+                                                       @Body CarePlanModels.CarePlanAssessment patientAssessment);
+
+
 
 }

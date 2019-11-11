@@ -202,6 +202,35 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
         }
     }
 
+    /*Care Plan Assessment*/
+
+    public void updateAssessment(CarePlanModels.CarePlanAssessment patientAssessment){
+        if(NetworkUtils.isNetworkAvailable(mContext)){
+            Retrofit retrofit = RetrofitAPIBuilder.getInstance();
+            APIServices carePlanServices =retrofit.create(APIServices.class);
+            Call call =carePlanServices.updateCarePlanAssessment(PreferenceUtils.getAuthorizationKey(mContext),
+                    patientAssessment);
+            call.enqueue(new Callback<APIResponseModels>() {
+                @Override
+                public void onResponse(Response<APIResponseModels> response, Retrofit retrofit) {
+                    APIResponseModels apiResponseModels =response.body();
+                    if(apiResponseModels != null){
+                        if(apiResponseModels != null){
+                            getAPIResponseModel.getAPIResponseModelSuccess(apiResponseModels);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    getAPIResponseModel.getAPIResponseModelFailure(t.getMessage());
+                }
+            });
+
+        }
+    }
+
+
 
     public void setGetAPIResponseModel(GetAPIResponseModel getAPIResponseModel){
         this.getAPIResponseModel = getAPIResponseModel;

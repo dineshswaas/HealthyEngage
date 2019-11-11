@@ -1,6 +1,8 @@
 package com.swaas.healthyengage;
 
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -27,8 +29,12 @@ import com.zhouyou.view.seekbar.SignSeekBar;
 import java.util.ArrayList;
 import java.util.List;
 
+import Repositories.APIRepository;
+import models.APIResponseModels;
 import models.CarePlanModels;
 import utils.Constants;
+import utils.NetworkUtils;
+import utils.PreferenceUtils;
 
 import static java.security.AccessController.getContext;
 
@@ -46,6 +52,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
     TickSeekBar  tickSeekBar;
     TextView submitText;
     int  min=0,max=0;
+    String previousValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,9 +207,18 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
                     min = Integer.parseInt(carePlanAssessment.getMin());
                     max = Integer.parseInt(carePlanAssessment.getMax());
                 }
-                if(!TextUtils.isEmpty(assessment.getValue())){
-                    textEditText.setText(assessment.getValue());
-                    submitTextEnabled();
+
+                if(carePlanAssessment.getPatientAssessment() != null && carePlanAssessment.getPatientAssessment().size() > 0){
+                    for(CarePlanModels.CarePlanAssessment.PatientAssessment patientAssessment : carePlanAssessment.getPatientAssessment()){
+                        if(patientAssessment.getAssessment_date().split("T")[0].equalsIgnoreCase(carePlanAssessment.getAssessmentDate())){
+                            if(!TextUtils.isEmpty(patientAssessment.getValue())){
+                                textEditText.setText(patientAssessment.getValue());
+                                previousValue = patientAssessment.getValue();
+                                submitTextEnabled();
+                            }
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -243,6 +259,15 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
                         Toast.makeText(AssessmentDetailsActivity.this,
                                 String.valueOf(actualValue)+" exceeds the maximim allowed value ("+String.valueOf(max)+")",Toast.LENGTH_SHORT).show();
                     }else{
+                        carePlanAssessment.setValue(textEditText.getText().toString().trim());
+                        if(NetworkUtils.isNetworkAvailable(AssessmentDetailsActivity.this)){
+                            if(!TextUtils.isEmpty(previousValue) && previousValue.equalsIgnoreCase(textEditText.getText().toString().trim())){
+                                finish();
+                            }else{
+                                updateAssessmentValue();
+                            }
+
+                        }
 
                     }
                 }
@@ -250,6 +275,38 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         });
 
 
+
+    }
+
+    private void updateAssessmentValue() {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Updating assessment detail");
+        progressDialog.show();
+        APIRepository apiRepository = new APIRepository(this);
+        apiRepository.setGetAPIResponseModel(new APIRepository.GetAPIResponseModel() {
+            @Override
+            public void getAPIResponseModelSuccess(APIResponseModels apiResponseModels) {
+                progressDialog.dismiss();
+                if(apiResponseModels.isSync()){
+                    Intent intent = new Intent();
+                    setResult(100,intent);
+                    finish();
+                }else{
+                    Toast.makeText(AssessmentDetailsActivity.this,"Something went wrong",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void getAPIResponseModelFailure(String s) {
+                Toast.makeText(AssessmentDetailsActivity.this,"Something went wrong",Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
+        carePlanAssessment.setUserId(PreferenceUtils.getUserId(this));
+        carePlanAssessment.setPatientId(PreferenceUtils.getPatientId(this));
+        carePlanAssessment.setLastSyncDate(PreferenceUtils.getLastSyncDate(this));
+        apiRepository.updateAssessment(carePlanAssessment);
 
     }
 

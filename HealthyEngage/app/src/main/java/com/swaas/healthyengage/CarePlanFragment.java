@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -214,7 +215,6 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
 
 
-
         for(final CarePlanModels.CarePlanAssessment assessment : careplanAssessment){
             final View view = inflater.inflate(R.layout.assesment_items_view,null);
             final TextView assName = (TextView)view.findViewById(R.id.assesmentname);
@@ -227,24 +227,28 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
             }else{
                 assStartTime.setText(assessment.getStart_time());
             }
-
-            if(assessment.getPatientAssessment() != null){
-                CarePlanModels.CarePlanAssessment.PatientAssessment assessment1 = assessment.getPatientAssessment().get(0);
-                if(assessment1 != null){
-                    if(!TextUtils.isEmpty(assessment1.getValue())){
-                        valueText.setVisibility(View.VISIBLE);
-                        valueText.setText(assessment1.getValue());
+            if(assessment.getPatientAssessment() != null && assessment.getPatientAssessment().size() > 0){
+                for(CarePlanModels.CarePlanAssessment.PatientAssessment patientAssessment : assessment.getPatientAssessment()){
+                    if(patientAssessment.getAssessment_date().split("T")[0].equalsIgnoreCase(selectedDate)){
+                            if(!TextUtils.isEmpty(patientAssessment.getValue())){
+                                valueText.setVisibility(View.VISIBLE);
+                                valueText.setText(patientAssessment.getValue());
+                            }
+                            break;
+                        }
                     }
                 }
-            }
+
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try{
                         Intent intent = new Intent(getActivity(),AssessmentDetailsActivity.class);
+                        assessment.setAssessmentDate(selectedDate);
+                        assessment.setCareplanAssessmentId(assessment.getId());
                         intent.putExtra(Constants.INTENT_PARM,assessment);
-                        startActivity(intent);
+                        startActivityForResult(intent,100);
                     }catch (Exception e){
                         Log.d("parm",e.getMessage());
                     }
@@ -253,6 +257,16 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
             });
             assessmentMainLayout.addView(view);
         }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 100){
+            getCarePlanDetailsFromAPI(selectedDate);
+        }
+
 
     }
 
@@ -537,6 +551,9 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         for(final CarePlanModels.CarePlanIntervention intervention : carePlanList.get(0).getCareplanIntervention()) {
             totalFrequencyHeader = intervention.getFrequency() + totalFrequencyHeader;
         }
+        if(carePlanList.get(0).getCareplanAssessment() != null) {
+            totalFrequencyHeader = totalFrequencyHeader + carePlanList.get(0).getCareplanAssessment().size();
+        }
 
         for(final CarePlanModels.CarePlanIntervention intervention : carePlanList.get(0).getCareplanIntervention()) {
             interventionValueHeader = (double) 100 / totalFrequencyHeader;
@@ -556,6 +573,21 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
                 }
             }
         }
+
+        for(final CarePlanModels.CarePlanAssessment assessment : carePlanList.get(0).getCareplanAssessment()) {
+            for(CarePlanModels.CarePlanAssessment.PatientAssessment patientAssessment : assessment.getPatientAssessment()){
+                if(patientAssessment.getAssessment_date().split("T")[0].equalsIgnoreCase(date)){
+                    completionPercentageHeader = completionPercentageHeader+interventionValueHeader;
+                }
+            }
+
+        }
+        if((int) completionPercentageHeader > 100){
+            return 100;
+        }else if((int) completionPercentageHeader <0){
+            return 0;
+        }
+
         return (int) completionPercentageHeader;
     }
 
