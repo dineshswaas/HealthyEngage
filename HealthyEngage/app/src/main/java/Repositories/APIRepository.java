@@ -336,8 +336,8 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
     public void verifyOTP(UserVerifyModel userVerifyModel){
         if(NetworkUtils.isNetworkAvailable(mContext)){
             RequestQueue requestQueue = Volley.newRequestQueue(mContext);
-            String url = "https://api.authy.com/protected/json/phones/verification/start?via=sms&phone_number="+userVerifyModel.getMobileNo()+"" +
-                    "&country_code=91&verification_code="+userVerifyModel.getVerificationCode();
+            String url = "https://api.authy.com/protected/json/phones/verification/check?phone_number="+userVerifyModel.getMobileNo()+"" +
+                    "&country_code="+userVerifyModel.getCountry_code()+"&verification_code="+userVerifyModel.getVerificationCode();
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -357,15 +357,31 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d("par,",error.getMessage());
-                    getUserVerifyModel.getUserVerifyModelFailure(error.getMessage());
+                    String responseBody = null;
+                    try {
+                        responseBody = new String(error.networkResponse.data, "utf-8");
+                        JSONObject data = new JSONObject(responseBody);
+                        UserVerifyModel userVerifyModel = new UserVerifyModel();
+                        userVerifyModel.setMessage(data.getString("message"));
+                        userVerifyModel.setSuccess(data.getBoolean("success"));
+                        if(data.getString("error_code").equalsIgnoreCase("60000")){
+                            userVerifyModel.setSuccess(true);
+                        }
+                        getUserVerifyModel.getUserVerifyModelSuccess(userVerifyModel);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                        getUserVerifyModel.getUserVerifyModelFailure("Something went wrong.");
+                    } catch (JSONException e) {
+                        getUserVerifyModel.getUserVerifyModelFailure("Something went wrong.");
+                        e.printStackTrace();
+                    }
                 }
             }){
                 @Override
                 public Map getHeaders() throws AuthFailureError {
                     HashMap headers = new HashMap();
                     headers.put("Content-Type", "application/json");
-                    headers.put("X-Authy-API-Key", "yINoSYAbwIhZ11jNqGZ690BgbslJe7j2");
+                    headers.put(Constants.AUTHY_API_KEY, Constants.AUTHY_API_VALUE);
                     return headers;
                 }
             };

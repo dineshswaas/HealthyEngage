@@ -21,6 +21,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import Repositories.APIRepository;
@@ -81,6 +82,8 @@ public class OTPScreenActivity extends AppCompatActivity {
     });
         userVerifyModel.setMobileNo(PreferenceUtils.getLoginMobileNumber(this));
         userVerifyModel.setVerificationCode(otp);
+        String cCode = Locale.getDefault().getCountry();
+        userVerifyModel.setCountry_code(PreferenceUtils.GetCountryZipCode(this,cCode));
         apiRepository.verifyOTP(userVerifyModel);
     }
 
@@ -111,7 +114,8 @@ public class OTPScreenActivity extends AppCompatActivity {
     });
 
         userVerifyModel.setMobile_no(PreferenceUtils.getLoginMobileNumber(this));
-        userVerifyModel.setCountry_code("91");
+        String cCode = Locale.getDefault().getCountry();
+        userVerifyModel.setCountry_code(PreferenceUtils.GetCountryZipCode(this,cCode));
         userVerifyModel.setToken(FirebaseInstanceId.getInstance().getToken());
     apiRepository.getPatientDetails(userVerifyModel);
     }
