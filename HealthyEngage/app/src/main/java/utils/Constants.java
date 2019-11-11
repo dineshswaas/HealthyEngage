@@ -1,5 +1,7 @@
 package utils;
 
+import retrofit.http.PUT;
+
 public class Constants {
 
     // ***************************** Production ********************************************
@@ -30,5 +32,9 @@ public class Constants {
     public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
 
     public static final String SHARED_PREF = "ah_firebase";
+
+    public static final String COLOR_ORANGE="#F7941D";
+    public static final String COLOR_PURPLE="#A71930";
+
 
 }

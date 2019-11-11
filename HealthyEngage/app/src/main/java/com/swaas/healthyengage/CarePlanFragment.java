@@ -299,10 +299,21 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
                 frequency.setCareplanInterventionId(frequency.getCareplan_intervention_id());
                 frequency.setDay(DateHelper.getCurrentDate());
                 if(frequency.isIs_completed()){
-                    imagefreq.setBackground(getResources().getDrawable(R.drawable.bluecircle));
-                    //completionPercentage = completionPercentage+interventionValue;
+                    if(intervention.getColor().equalsIgnoreCase(Constants.COLOR_ORANGE)){
+                        imagefreq.setBackground(getResources().getDrawable(R.drawable.orangecircle));
+                    } else if(intervention.getColor().equalsIgnoreCase(Constants.COLOR_PURPLE)){
+                        imagefreq.setBackground(getResources().getDrawable(R.drawable.purplecircle));
+                    }else{
+                        imagefreq.setBackground(getResources().getDrawable(R.drawable.bluecircle));
+                    }
                 }else{
-                    imagefreq.setBackground(getResources().getDrawable(R.drawable.blueborder));
+                    if(intervention.getColor().equalsIgnoreCase(Constants.COLOR_ORANGE)){
+                        imagefreq.setBackground(getResources().getDrawable(R.drawable.orangeborder));
+                    } else if(intervention.getColor().equalsIgnoreCase(Constants.COLOR_PURPLE)){
+                        imagefreq.setBackground(getResources().getDrawable(R.drawable.purpleborder));
+                    }else{
+                        imagefreq.setBackground(getResources().getDrawable(R.drawable.blueborder));
+                    }
                 }
 
                 imagefreq.setOnClickListener(new View.OnClickListener() {
@@ -310,17 +321,29 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
                     public void onClick(View v) {
                         if(NetworkUtils.isNetworkAvailable(getActivity())){
                             if(frequency.isIs_completed()){
-                                //completionPercentage = completionPercentage - interventionValue;
                                 imagefreq.setBackground(getResources().getDrawable(R.drawable.blueborder));
                                 frequency.setIs_completed(false);
                                 frequency.setValue(false);
-                                //setCompletion((int)completionPercentage);
+                                if(intervention.getColor().equalsIgnoreCase(Constants.COLOR_ORANGE)){
+                                    imagefreq.setBackground(getResources().getDrawable(R.drawable.orangeborder));
+                                } else if(intervention.getColor().equalsIgnoreCase(Constants.COLOR_PURPLE)){
+                                    imagefreq.setBackground(getResources().getDrawable(R.drawable.purpleborder));
+                                }else{
+                                    imagefreq.setBackground(getResources().getDrawable(R.drawable.blueborder));
+                                }
+
                             }else{
-                                //completionPercentage = completionPercentage+interventionValue;
                                 imagefreq.setBackground(getResources().getDrawable(R.drawable.bluecircle));
                                 frequency.setIs_completed(true);
                                 frequency.setValue(true);
-                                //setCompletion((int)completionPercentage);
+                                if(intervention.getColor().equalsIgnoreCase(Constants.COLOR_ORANGE)){
+                                    imagefreq.setBackground(getResources().getDrawable(R.drawable.orangecircle));
+                                } else if(intervention.getColor().equalsIgnoreCase(Constants.COLOR_PURPLE)){
+                                    imagefreq.setBackground(getResources().getDrawable(R.drawable.purplecircle));
+                                }else{
+                                    imagefreq.setBackground(getResources().getDrawable(R.drawable.bluecircle));
+                                }
+
                             }
                             sendUpdateInterventionDetails(frequency);
                         }
