@@ -69,7 +69,8 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
                     getCarePlanModelDetails.getCarePlanSuccess(apiResponseModels.getCareplan(),apiResponseModels.getLastSyncDate());
                 }
             }else{
-                getCarePlanModelDetails.getCarePlanFailure("No Careplan assigned to this patient");
+                getCarePlanModelDetails.getCarePlanFailure("No Care plan is assigned to this patient");
+                PreferenceUtils.clearAllData(mContext);
             }
             }
 

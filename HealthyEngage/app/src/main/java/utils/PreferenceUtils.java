@@ -146,4 +146,16 @@ public class PreferenceUtils {
         editor.putString(LOGIN_MOBILE_NUMBER, value);
         editor.commit();
     }
+
+
+    public static void clearAllData(Context mContext){
+        PreferenceUtils.setCarePlanList(mContext,null);
+        PreferenceUtils.setUserId(mContext,null);
+        PreferenceUtils.setLoginMobileNumber(mContext,null);
+        PreferenceUtils.setPatientId(mContext,null);
+        PreferenceUtils.setDelegateId(mContext,null);
+        PreferenceUtils.setCarePlanId(mContext,null);
+    }
+
+
 }

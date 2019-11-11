@@ -117,8 +117,12 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
             @Override
             public void getCarePlanFailure(String s) {
-                Toast.makeText(getActivity(),s,Toast.LENGTH_LONG).show();
-                hideProgress();
+                if(s.equalsIgnoreCase("No Care plan is assigned to this patient")){
+                    startActivity(new Intent(getActivity(),TimeOutActivity.class));
+                }else{
+                    Toast.makeText(getActivity(),s,Toast.LENGTH_LONG).show();
+                    hideProgress();
+                }
             }
         });
         CarePlanModels carePlanModels = new CarePlanModels();
