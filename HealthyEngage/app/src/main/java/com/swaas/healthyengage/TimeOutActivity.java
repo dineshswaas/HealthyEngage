@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
+import java.util.Locale;
+
 import utils.PreferenceUtils;
 
 public class TimeOutActivity extends AppCompatActivity {
@@ -21,6 +23,7 @@ public class TimeOutActivity extends AppCompatActivity {
                 !TextUtils.isEmpty(PreferenceUtils.getUserId(this))){
             startActivity(new Intent(this, HomePageActivity.class));
         }
+
     }
 
     public void gotonext(View view) {

@@ -80,7 +80,7 @@ public class OTPScreenActivity extends AppCompatActivity {
         }
     });
         userVerifyModel.setMobileNo(PreferenceUtils.getLoginMobileNumber(this));
-        userVerifyModel.setVerificationCode(otp.trim());
+        userVerifyModel.setVerificationCode(otp);
         apiRepository.verifyOTP(userVerifyModel);
     }
 

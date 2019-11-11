@@ -2,8 +2,10 @@ package utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.telephony.TelephonyManager;
 
 import com.google.gson.Gson;
+import com.swaas.healthyengage.R;
 
 import java.util.List;
 
@@ -157,5 +159,21 @@ public class PreferenceUtils {
         PreferenceUtils.setCarePlanId(mContext,null);
     }
 
+    public static String GetCountryZipCode(Context context,String cCode){
+        String CountryID="";
+        String CountryZipCode="";
 
+        TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        //getNetworkCountryIso
+       // CountryID= manager.getSimCountryIso().toUpperCase();
+        String[] rl=context.getResources().getStringArray(R.array.CountryCodes);
+        for(int i=0;i<rl.length;i++){
+            String[] g=rl[i].split(",");
+            if(g[1].trim().equals(cCode.trim())){
+                CountryZipCode=g[0];
+                break;
+            }
+        }
+        return CountryZipCode;
+    }
 }

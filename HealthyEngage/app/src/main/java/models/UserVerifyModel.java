@@ -8,6 +8,7 @@ public class UserVerifyModel<T> {
     int seconds_to_expire;
     private Error<T> error;
 
+
     public Error<T> getError() {
         return error;
     }

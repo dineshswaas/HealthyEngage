@@ -159,6 +159,9 @@ public class LoginWithMobileActivity extends AppCompatActivity {
                 progressBar.hide();
             }
         });
+
+        String cCode = Locale.getDefault().getCountry();
+        userVerifyModel.setCountry_code(PreferenceUtils.GetCountryZipCode(this,cCode));
         apiRepository.sendOTPToMobile(userVerifyModel);
 
 

@@ -275,7 +275,8 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
     public void sendOTPToMobile(UserVerifyModel userVerifyModel){
         if(NetworkUtils.isNetworkAvailable(mContext)){
             RequestQueue requestQueue = Volley.newRequestQueue(mContext);
-            String url = "https://api.authy.com/protected/json/phones/verification/start?via=sms&phone_number="+userVerifyModel.getMobileNo()+"&country_code=91&locale=en";
+            String url = "https://api.authy.com/protected/json/phones/verification/start?via=sms&phone_number="
+                    +userVerifyModel.getMobileNo()+"&country_code="+userVerifyModel.getCountry_code()+"&locale=en";
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
