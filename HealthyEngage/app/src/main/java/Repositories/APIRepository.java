@@ -318,6 +318,7 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
                         userVerifyModel.setSuccess(jsonResponse.getBoolean("success"));
                         getUserVerifyModel.getUserVerifyModelSuccess(userVerifyModel);
                     } catch (JSONException e) {
+                        getUserVerifyModel.getUserVerifyModelFailure("Verification code is incorrect");
                         e.printStackTrace();
                     }
 

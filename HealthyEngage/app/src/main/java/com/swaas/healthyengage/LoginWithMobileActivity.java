@@ -72,8 +72,8 @@ public class LoginWithMobileActivity extends AppCompatActivity {
                 UserVerifyModel userVerifyModel = apiResponseModels;
                 if(userVerifyModel.isStatus()){
                     PreferenceUtils.setLoginMobileNumber(LoginWithMobileActivity.this,editText.getText().toString().trim());
-                    //sendOTPToPatient(editText.getText().toString().trim());
-                    getPatientDetails();
+                    sendOTPToPatient(editText.getText().toString().trim());
+                    //getPatientDetails();
                 }else{
                     Toast.makeText(LoginWithMobileActivity.this,"Something went wrong.",Toast.LENGTH_LONG).show();
                     PreferenceUtils.setLoginMobileNumber(LoginWithMobileActivity.this,"");
@@ -103,7 +103,7 @@ public class LoginWithMobileActivity extends AppCompatActivity {
             public void getAPIResponseModelSuccess(APIResponseModels apiResponseModels) {
                 if(apiResponseModels != null){
                     progressBar.hide();
-                    openOrCreateDatabaseCustom();
+                    //openOrCreateDatabaseCustom();
                     APIResponseModels.AccessToken accessToken = apiResponseModels.getAccessToken();
                     PreferenceUtils.setAuthorizationKey(LoginWithMobileActivity.this,accessToken.getId());
                     PreferenceUtils.setUserId(LoginWithMobileActivity.this,accessToken.getUserId());
