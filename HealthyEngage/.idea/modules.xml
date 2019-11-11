@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/HealthyEngage.iml" filepath="$PROJECT_DIR$/HealthyEngage.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/bottom-nav-bar/bottom-nav-bar.iml" filepath="$PROJECT_DIR$/bottom-nav-bar/bottom-nav-bar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bubbleseekbar/bubbleseekbar.iml" filepath="$PROJECT_DIR$/bubbleseekbar/bubbleseekbar.iml" />
     </modules>
   </component>
 </project>

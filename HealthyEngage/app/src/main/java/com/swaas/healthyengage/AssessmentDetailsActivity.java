@@ -4,6 +4,7 @@ package com.swaas.healthyengage;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,13 +19,17 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.warkiz.tickseekbar.OnSeekChangeListener;
+import com.warkiz.tickseekbar.SeekParams;
 import com.warkiz.tickseekbar.TextPosition;
 import com.warkiz.tickseekbar.TickMarkType;
 import com.warkiz.tickseekbar.TickSeekBar;
+import com.xw.repo.BubbleSeekBar;
 import com.zhouyou.view.seekbar.SignSeekBar;
 
 import java.util.ArrayList;
@@ -53,7 +58,9 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
     TickSeekBar  tickSeekBar;
     TextView submitText;
     int  min=0,max=0;
-    String previousValue,pickerSelectedValue;
+    String previousValue,selectedValue;
+    SeekBar seekBar;
+    BubbleSeekBar demo_3_seek_bar_2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,26 +123,10 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
 
     private void onBindSliderDetails() {
 
-        tickSeekBar = TickSeekBar
-                .with(this)
-                .max(200)
-                .min(10.2f)
-                .progressValueFloat(true)
-                .progress(33)
-                .tickCount(Integer.parseInt(carePlanAssessment.getMax()) + 1)
-                .showTickMarksType(TickMarkType.DIVIDER)
-                .tickMarksColor(getResources().getColor(R.color.blue_non_pressed))
-                .tickMarksSize(6)//dp
-                .tickTextsSize(13)//sp
-                .showTickTextsPosition(TextPosition.ABOVE)
-                .tickTextsColorStateList(getResources().getColorStateList(R.color.black))
-                .thumbColor(Color.parseColor("#ff0000"))
-                .thumbSize(14)
-                .trackProgressColor(getResources().getColor(R.color.interventionblue))
-                .trackProgressSize(4)
-                .trackBackgroundColor(getResources().getColor(R.color.draft_grey))
-                .trackBackgroundSize(2)
-                .build();
+
+
+
+
 
         if(!TextUtils.isEmpty(carePlanAssessment.getQuestion())){
             sliderquestion.setText(carePlanAssessment.getQuestion());
@@ -148,6 +139,89 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             maxlabel.setText(carePlanAssessment.getLabel_max());
         }
 
+
+        if(carePlanAssessment.getPatientAssessment() != null){
+            CarePlanModels.CarePlanAssessment.PatientAssessment assessment = carePlanAssessment.getPatientAssessment().get(0);
+            if(assessment != null){
+                if(carePlanAssessment.getPatientAssessment() != null && carePlanAssessment.getPatientAssessment().size() > 0){
+                    for(CarePlanModels.CarePlanAssessment.PatientAssessment patientAssessment : carePlanAssessment.getPatientAssessment()){
+                        if(patientAssessment.getAssessment_date().split("T")[0].equalsIgnoreCase(carePlanAssessment.getAssessmentDate())){
+                            if(!TextUtils.isEmpty(patientAssessment.getValue())){
+                                previousValue = patientAssessment.getValue();
+                                if(Integer.parseInt(patientAssessment.getValue()) > 0){
+                                    selectedValue = patientAssessment.getValue();
+                                }
+                                submitTextEnabled();
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if(TextUtils.isEmpty(selectedValue)){
+           selectedValue = carePlanAssessment.getMin();
+        }
+
+
+        demo_3_seek_bar_2.getConfigBuilder()
+                .min(Integer.parseInt(carePlanAssessment.getMin()))
+                .max(Integer.parseInt(carePlanAssessment.getMax()))
+                .progress(Integer.parseInt(selectedValue))
+                .sectionCount(Integer.parseInt(carePlanAssessment.getMax()) - Integer.parseInt(carePlanAssessment.getMin()))
+                .trackColor(ContextCompat.getColor(AssessmentDetailsActivity.this, R.color.grey_non_pressed))
+                .secondTrackColor(ContextCompat.getColor(AssessmentDetailsActivity.this, R.color.colorPrimary))
+                .thumbColor(ContextCompat.getColor(AssessmentDetailsActivity.this, R.color.colorPrimary))
+                .showSectionText()
+                .sectionTextColor(ContextCompat.getColor(AssessmentDetailsActivity.this, R.color.draft_grey))
+                .sectionTextSize(18)
+                .showThumbText()
+                .touchToSeek()
+                .thumbTextColor(ContextCompat.getColor(AssessmentDetailsActivity.this, R.color.dark_red))
+                .thumbTextSize(18)
+                .bubbleColor(ContextCompat.getColor(AssessmentDetailsActivity.this, R.color.dark_red))
+                .bubbleTextSize(18)
+                .showSectionMark()
+                .seekBySection()
+                .autoAdjustSectionMark()
+                .sectionTextPosition(BubbleSeekBar.TextPosition.BELOW_SECTION_MARK)
+                .build();
+
+
+        demo_3_seek_bar_2.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListenerAdapter() {
+            @Override
+            public void onProgressChanged(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat, boolean fromUser) {
+                super.onProgressChanged(bubbleSeekBar, progress, progressFloat, fromUser);
+            }
+
+            @Override
+            public void getProgressOnActionUp(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+                super.getProgressOnActionUp(bubbleSeekBar, progress, progressFloat);
+            }
+
+            @Override
+            public void getProgressOnFinally(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat, boolean fromUser) {
+                super.getProgressOnFinally(bubbleSeekBar, progress, progressFloat, fromUser);
+                selectedValue = String.valueOf(progress);
+                submitTextEnabled();
+            }
+        });
+
+        submitText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(NetworkUtils.isNetworkAvailable(AssessmentDetailsActivity.this)){
+                    if(!TextUtils.isEmpty(previousValue) && previousValue.equalsIgnoreCase(selectedValue)){
+                        finish();
+                    }else{
+                        carePlanAssessment.setValue(selectedValue);
+                        updateAssessmentValue();
+                    }
+
+                }
+            }
+        });
 
     }
 
@@ -172,9 +246,9 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             pickerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    pickerSelectedValue = pickerList.get(position);
-                    if(pickerSelectedValue.equalsIgnoreCase("Select an answer")){
-                        pickerSelectedValue ="";
+                    selectedValue = pickerList.get(position);
+                    if(selectedValue.equalsIgnoreCase("Select an answer")){
+                        selectedValue ="";
                         submitTextDisabled();
                     }else{
                         submitTextEnabled();
@@ -214,10 +288,10 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if(NetworkUtils.isNetworkAvailable(AssessmentDetailsActivity.this)){
-                    if(!TextUtils.isEmpty(previousValue) && previousValue.equalsIgnoreCase(pickerSelectedValue)){
+                    if(!TextUtils.isEmpty(previousValue) && previousValue.equalsIgnoreCase(selectedValue)){
                         finish();
                     }else{
-                        carePlanAssessment.setValue(pickerSelectedValue);
+                        carePlanAssessment.setValue(selectedValue);
                         updateAssessmentValue();
                     }
 
@@ -453,6 +527,8 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         maxlabel = (TextView)findViewById(R.id.maxlabel);
         buttonlayout = (RelativeLayout)findViewById(R.id.buttonlayout);
         submitText = (TextView)findViewById(R.id.submitText);
+        seekBar = (SeekBar)findViewById(R.id.seekbar);
+        demo_3_seek_bar_2 = (BubbleSeekBar)findViewById(R.id.demo_3_seek_bar_2);
 
     }
 
