@@ -326,20 +326,54 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         if(carePlanAssessment.getPatientAssessment() != null){
             CarePlanModels.CarePlanAssessment.PatientAssessment assessment = carePlanAssessment.getPatientAssessment().get(0);
             if(assessment != null){
-                if(!TextUtils.isEmpty(assessment.getValue())){
-                    if(Integer.parseInt(assessment.getValue()) > 0){
-                        rpositiveButton.setChecked(true);
-                    }else{
-                        rnegativeButton.setChecked(true);
+                if(carePlanAssessment.getPatientAssessment() != null && carePlanAssessment.getPatientAssessment().size() > 0){
+                    for(CarePlanModels.CarePlanAssessment.PatientAssessment patientAssessment : carePlanAssessment.getPatientAssessment()){
+                        if(patientAssessment.getAssessment_date().split("T")[0].equalsIgnoreCase(carePlanAssessment.getAssessmentDate())){
+                            if(!TextUtils.isEmpty(patientAssessment.getValue())){
+                                previousValue = patientAssessment.getValue();
+                                if(Integer.parseInt(patientAssessment.getValue()) > 0){
+                                    rpositiveButton.setChecked(true);
+                                }else{
+                                    rnegativeButton.setChecked(true);
+                                }
+                                submitTextEnabled();
+                            }
+                            break;
+                        }
                     }
                 }
             }
 
         }
+
+
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                submitTextEnabled();
+            }
+        });
+
+
+
+        submitText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(rpositiveButton.isChecked() || rnegativeButton.isChecked()){
+                    if(rpositiveButton.isChecked()){
+                        carePlanAssessment.setValue("1");
+                    }else if(rnegativeButton.isChecked()){
+                        carePlanAssessment.setValue("0");
+                    }
+                    if(NetworkUtils.isNetworkAvailable(AssessmentDetailsActivity.this)){
+                        if(!TextUtils.isEmpty(previousValue) && previousValue.equalsIgnoreCase(carePlanAssessment.getValue())){
+                            finish();
+                        }else{
+                            updateAssessmentValue();
+                        }
+
+                    }
+                }
 
             }
         });
