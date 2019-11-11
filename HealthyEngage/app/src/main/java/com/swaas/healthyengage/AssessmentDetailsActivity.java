@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -52,7 +53,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
     TickSeekBar  tickSeekBar;
     TextView submitText;
     int  min=0,max=0;
-    String previousValue;
+    String previousValue,pickerSelectedValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +82,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
 
 
 
-
+        submitTextDisabled();
         if(carePlanAssessment.getInput_type().equalsIgnoreCase(Constants.INPUT_TEXT)){
             textParentLayout.setVisibility(View.VISIBLE);
             booleanParentView.setVisibility(View.GONE);
@@ -155,8 +156,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         if(!TextUtils.isEmpty(carePlanAssessment.getQuestion())){
             pickerquestion.setText(carePlanAssessment.getQuestion());
         }
-
-
+        submitTextDisabled();
         if(!TextUtils.isEmpty(carePlanAssessment.getMin()) && !TextUtils.isEmpty(carePlanAssessment.getMax())){
             int min = Integer.parseInt(carePlanAssessment.getMin());
             int max = Integer.parseInt(carePlanAssessment.getMax());
@@ -168,17 +168,63 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_dropdown_item,pickerList);
             pickerSpinner.setAdapter(adapter);
-            if(carePlanAssessment.getPatientAssessment() != null){
-                CarePlanModels.CarePlanAssessment.PatientAssessment assessment = carePlanAssessment.getPatientAssessment().get(0);
-                if(assessment != null){
-                    if(!TextUtils.isEmpty(assessment.getValue())){
-                        if(Integer.parseInt(assessment.getValue()) > 0){
-                            pickerSpinner.setSelection(getIndex(pickerSpinner, assessment.getValue()));
+
+            pickerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    pickerSelectedValue = pickerList.get(position);
+                    if(pickerSelectedValue.equalsIgnoreCase("Select an answer")){
+                        pickerSelectedValue ="";
+                        submitTextDisabled();
+                    }else{
+                        submitTextEnabled();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+        }
+
+        if(carePlanAssessment.getPatientAssessment() != null){
+            CarePlanModels.CarePlanAssessment.PatientAssessment assessment = carePlanAssessment.getPatientAssessment().get(0);
+            if(assessment != null){
+                if(carePlanAssessment.getPatientAssessment() != null && carePlanAssessment.getPatientAssessment().size() > 0){
+                    for(CarePlanModels.CarePlanAssessment.PatientAssessment patientAssessment : carePlanAssessment.getPatientAssessment()){
+                        if(patientAssessment.getAssessment_date().split("T")[0].equalsIgnoreCase(carePlanAssessment.getAssessmentDate())){
+                            if(!TextUtils.isEmpty(patientAssessment.getValue())){
+                                previousValue = patientAssessment.getValue();
+                                if(Integer.parseInt(patientAssessment.getValue()) > 0){
+                                    pickerSpinner.setSelection(getIndex(pickerSpinner, patientAssessment.getValue()));
+                                }
+                                submitTextEnabled();
+                            }
+                            break;
                         }
                     }
                 }
             }
         }
+
+        submitText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(NetworkUtils.isNetworkAvailable(AssessmentDetailsActivity.this)){
+                    if(!TextUtils.isEmpty(previousValue) && previousValue.equalsIgnoreCase(pickerSelectedValue)){
+                        finish();
+                    }else{
+                        carePlanAssessment.setValue(pickerSelectedValue);
+                        updateAssessmentValue();
+                    }
+
+                }
+            }
+        });
+
 
 
 
