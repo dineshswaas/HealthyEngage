@@ -23,6 +23,11 @@ allprojects {
         google()
         maven {url "https://maven.goolge.com"}
     }
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:deprecation"
+        }
+    }
 }
 
 task clean(type: Delete) {
