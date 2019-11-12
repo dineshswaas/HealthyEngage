@@ -8,4 +8,12 @@
         <item name="colorAccent">@color/interventionblue</item>
     </style>
 
+    <style name="SideTheme" parent="@android:style/Theme.DeviceDefault.Light.Dialog">
+        <item name="android:windowAnimationStyle">@style/SideTheme1</item>
+    </style>
+    <style name="SideTheme1">
+        <item name="android:windowEnterAnimation">@anim/side_in</item>
+        <item name="android:windowExitAnimation">@anim/side_out</item>
+    </style>
+
 </resources>

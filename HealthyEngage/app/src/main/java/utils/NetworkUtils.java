@@ -8,6 +8,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
+import Alerts.IOSDialog;
+import Alerts.IOSDialogBuilder;
+import Alerts.IOSDialogClickListener;
+
 public class NetworkUtils {
 
     public static boolean isNetworkAvailable(final Context ctx) {
@@ -24,7 +28,22 @@ public class NetworkUtils {
         } else {
             if (ctx != null &&!((Activity) ctx).isFinishing()) {//crashlytics #2171
                 //showNewAlertDialog(ctx);
-                Toast.makeText(ctx,"Network is disabled in your device. Would you like to enable it ?",Toast.LENGTH_LONG).show();
+                //Toast.makeText(ctx,"Network is disabled in your device. Would you like to enable it ?",Toast.LENGTH_LONG).show();
+                new IOSDialogBuilder(ctx)
+                        .setTitle("Network Alert")
+                        .setSubtitle("Network is disabled in your device. Would you like to enable it ?")
+                        .setBoldPositiveLabel(false)
+                        .setCancelable(false)
+                        .setSingleButtonView(true)
+                        .setPositiveListener("",null)
+                        .setNegativeListener("",null)
+                        .setSinglePositiveListener("OK", new IOSDialogClickListener() {
+                            @Override
+                            public void onClick(IOSDialog dialog) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .build().show();
             }
             return false;
         }

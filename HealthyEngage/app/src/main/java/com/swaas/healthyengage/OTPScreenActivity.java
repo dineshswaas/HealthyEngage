@@ -24,6 +24,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import Alerts.IOSDialog;
+import Alerts.IOSDialogBuilder;
+import Alerts.IOSDialogClickListener;
 import Repositories.APIRepository;
 import models.APIResponseModels;
 import models.UserVerifyModel;
@@ -51,7 +54,7 @@ public class OTPScreenActivity extends AppCompatActivity {
                     sendOTPVerification(editText.getText().toString().trim());
                 }
             }else{
-                Toast.makeText(this,"Enter your verification code",Toast.LENGTH_SHORT).show();
+                showAlertMessage("Enter your verification code");
             }
         }
 
@@ -70,13 +73,13 @@ public class OTPScreenActivity extends AppCompatActivity {
                 getPatientDetails();
             }else{
                 progressDialog.hide();
-                Toast.makeText(OTPScreenActivity.this,apiResponseModels.getMessage(),Toast.LENGTH_SHORT).show();
+                showAlertMessage(apiResponseModels.getMessage());
             }
         }
 
         @Override
         public void getUserVerifyModelFailure(String s) {
-            Toast.makeText(OTPScreenActivity.this,"Something went wrong",Toast.LENGTH_SHORT).show();
+            showAlertMessage("Something went wrong");
             progressDialog.hide();
         }
     });
@@ -119,4 +122,24 @@ public class OTPScreenActivity extends AppCompatActivity {
         userVerifyModel.setToken(FirebaseInstanceId.getInstance().getToken());
     apiRepository.getPatientDetails(userVerifyModel);
     }
+
+    void showAlertMessage(String message){
+        new IOSDialogBuilder(this)
+                .setTitle("Alert")
+                .setSubtitle(message)
+                .setBoldPositiveLabel(false)
+                .setCancelable(false)
+                .setSingleButtonView(true)
+                .setPositiveListener("",null)
+                .setNegativeListener("",null)
+                .setSinglePositiveListener("OK", new IOSDialogClickListener() {
+                    @Override
+                    public void onClick(IOSDialog dialog) {
+                        dialog.dismiss();
+                    }
+                })
+                .build().show();
+
+    }
+
 }

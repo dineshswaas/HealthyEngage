@@ -33,6 +33,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import Alerts.IOSDialog;
+import Alerts.IOSDialogBuilder;
+import Alerts.IOSDialogClickListener;
 import Repositories.APIRepository;
 import models.APIResponseModels;
 import models.CarePlanModels;
@@ -119,9 +122,9 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
             @Override
             public void getCarePlanFailure(String s) {
                 if(s.equalsIgnoreCase("No Care plan is assigned to this patient")){
-                    startActivity(new Intent(getActivity(),TimeOutActivity.class));
+                    showAlertMessage("No Care plan is assigned to this patient");
                 }else{
-                    Toast.makeText(getActivity(),s,Toast.LENGTH_LONG).show();
+                    showAlertMessage(s);
                     hideProgress();
                 }
             }
@@ -439,7 +442,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     private void sendUpdateInterventionDetails(CarePlanModels.CarePlanIntervention.InterventionFrequency frequency) {
 
         APIRepository apiRepository = new APIRepository(getActivity());
-
+        showProgressBar("please wait..");
         apiRepository.setGetAPIResponseModel(new APIRepository.GetAPIResponseModel() {
             @Override
             public void getAPIResponseModelSuccess(APIResponseModels apiResponseModels) {
@@ -458,6 +461,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
             @Override
             public void getAPIResponseModelFailure(String s) {
+                hideProgress();
                 Toast.makeText(getActivity(),"Something went wrong",Toast.LENGTH_SHORT);
             }
         });
@@ -543,65 +547,22 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     }
 
 
-    int  calculateCompletionValue(String date){
-        int totalFrequencyHeader = 0;
-        double completionPercentageHeader=0;
-        double interventionValueHeader = 0;
-
-        for(final CarePlanModels.CarePlanIntervention intervention : carePlanList.get(0).getCareplanIntervention()) {
-            totalFrequencyHeader = intervention.getFrequency() + totalFrequencyHeader;
-        }
-        if(carePlanList.get(0).getCareplanAssessment() != null) {
-            totalFrequencyHeader = totalFrequencyHeader + carePlanList.get(0).getCareplanAssessment().size();
-        }
-
-        for(final CarePlanModels.CarePlanIntervention intervention : carePlanList.get(0).getCareplanIntervention()) {
-            interventionValueHeader = (double) 100 / totalFrequencyHeader;
-            for (final CarePlanModels.CarePlanIntervention.InterventionFrequency frequency : intervention.getInterventionFrequency()) {
-                for (CarePlanModels.CarePlanIntervention.InterventionDay interventionDay : intervention.getInterventionDay()) {
-                    if (interventionDay.getDay().split("T")[0].equalsIgnoreCase(date)) {
-                        if (interventionDay.getPatientIntervention() != null && interventionDay.getPatientIntervention().size() > 0) {
-                            for (CarePlanModels.CarePlanIntervention.InterventionDay.PatientIntervention patientIntervention : interventionDay.getPatientIntervention()) {
-                                if (frequency.getId().equalsIgnoreCase(patientIntervention.getIntervention_frequency_id())) {
-                                    completionPercentageHeader = completionPercentageHeader+interventionValueHeader;
-
-                                }
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-
-        for(final CarePlanModels.CarePlanAssessment assessment : carePlanList.get(0).getCareplanAssessment()) {
-            for(CarePlanModels.CarePlanAssessment.PatientAssessment patientAssessment : assessment.getPatientAssessment()){
-                if(patientAssessment.getAssessment_date().split("T")[0].equalsIgnoreCase(date)){
-                    completionPercentageHeader = completionPercentageHeader+interventionValueHeader;
-                }
-            }
-
-        }
-        if((int) completionPercentageHeader > 100){
-            return 100;
-        }else if((int) completionPercentageHeader <0){
-            return 0;
-        }
-
-        return (int) completionPercentageHeader;
-    }
 
     private void bindCalenderAdapter() {
         carePlanCalenderRecyclerView.setLayoutManager(new LinearLayoutManager(carePlanCalenderRecyclerView.getContext(), LinearLayoutManager.HORIZONTAL, false));
         carePlanAdapter = new CarePlanAdapter(CarePlanFragment.this, tpHeaderModelList);
         carePlanAdapter.setOnTpDateClickListener(this);
         carePlanCalenderRecyclerView.setAdapter(carePlanAdapter);
-        //carePlanCalenderRecyclerView.scrollToPosition(currentDatePosition);
+        moveToToday(selectedItemposition);
 
     }
 
-    void moveToToday(){
-        carePlanCalenderRecyclerView.scrollToPosition(currentDatePosition);
+    void moveToToday(int selectedItemposition){
+        try {
+            carePlanCalenderRecyclerView.scrollToPosition(selectedItemposition);
+        }catch (Exception e){
+         Log.d("parm ",e.getMessage());
+        }
     }
 
 
@@ -709,6 +670,77 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
 /*        tpHeaderModelList.get(selectedItemposition).setProgressValue((int) Math.round(value));
         carePlanAdapter.notifyItemChanged(selectedItemposition);*/
+
+    }
+    int  calculateCompletionValue(String date){
+        int totalFrequencyHeader = 0;
+        double completionPercentageHeader=0;
+        double interventionValueHeader = 0;
+
+        for(final CarePlanModels.CarePlanIntervention intervention : carePlanList.get(0).getCareplanIntervention()) {
+            totalFrequencyHeader = intervention.getFrequency() + totalFrequencyHeader;
+        }
+        if(carePlanList.get(0).getCareplanAssessment() != null) {
+            totalFrequencyHeader = totalFrequencyHeader + carePlanList.get(0).getCareplanAssessment().size();
+        }
+
+        for(final CarePlanModels.CarePlanIntervention intervention : carePlanList.get(0).getCareplanIntervention()) {
+            interventionValueHeader = (double) 100 / totalFrequencyHeader;
+            for (final CarePlanModels.CarePlanIntervention.InterventionFrequency frequency : intervention.getInterventionFrequency()) {
+                for (CarePlanModels.CarePlanIntervention.InterventionDay interventionDay : intervention.getInterventionDay()) {
+                    if (interventionDay.getDay().split("T")[0].equalsIgnoreCase(date)) {
+                        if (interventionDay.getPatientIntervention() != null && interventionDay.getPatientIntervention().size() > 0) {
+                            for (CarePlanModels.CarePlanIntervention.InterventionDay.PatientIntervention patientIntervention : interventionDay.getPatientIntervention()) {
+                                if (frequency.getId().equalsIgnoreCase(patientIntervention.getIntervention_frequency_id())) {
+                                    completionPercentageHeader = completionPercentageHeader+interventionValueHeader;
+
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        for(final CarePlanModels.CarePlanAssessment assessment : carePlanList.get(0).getCareplanAssessment()) {
+            for(CarePlanModels.CarePlanAssessment.PatientAssessment patientAssessment : assessment.getPatientAssessment()){
+                if(patientAssessment.getAssessment_date().split("T")[0].equalsIgnoreCase(date)){
+                    completionPercentageHeader = completionPercentageHeader+interventionValueHeader;
+                }
+            }
+
+        }
+        if((int) completionPercentageHeader > 100){
+            return 100;
+        }else if((int) completionPercentageHeader <0){
+            return 0;
+        }
+
+        return (int) completionPercentageHeader;
+    }
+    void showAlertMessage(final String message){
+        new IOSDialogBuilder(getActivity())
+                .setTitle("Alert")
+                .setSubtitle(message)
+                .setBoldPositiveLabel(false)
+                .setCancelable(false)
+                .setSingleButtonView(true)
+                .setPositiveListener("",null)
+                .setNegativeListener("",null)
+                .setSinglePositiveListener("OK", new IOSDialogClickListener() {
+                    @Override
+                    public void onClick(IOSDialog dialog) {
+                        if(message.equalsIgnoreCase("No Care plan is assigned to this patient")){
+                            dialog.dismiss();
+                            startActivity(new Intent(getActivity(),TimeOutActivity.class));
+                        }else{
+                            dialog.dismiss();
+                        }
+
+                    }
+                })
+                .build().show();
 
     }
 

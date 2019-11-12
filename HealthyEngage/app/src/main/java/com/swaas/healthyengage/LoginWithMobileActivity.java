@@ -30,6 +30,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import Alerts.IOSDialog;
+import Alerts.IOSDialogBuilder;
+import Alerts.IOSDialogClickListener;
 import DataBase.DatabaseHandler;
 import Repositories.APIRepository;
 import models.APIResponseModels;
@@ -55,7 +58,7 @@ public class LoginWithMobileActivity extends AppCompatActivity {
             if(!TextUtils.isEmpty(editText.getText().toString().trim())){
                 verifyEnteredMobile(editText.getText().toString().trim());
             }else{
-                Toast.makeText(this,"Enter your mobile number.",Toast.LENGTH_LONG).show();
+                showAlertMessage("Enter your registered mobile number");
             }
         }
 
@@ -75,7 +78,7 @@ public class LoginWithMobileActivity extends AppCompatActivity {
                     sendOTPToPatient(editText.getText().toString().trim());
                     //getPatientDetails();
                 }else{
-                    Toast.makeText(LoginWithMobileActivity.this,"Something went wrong.",Toast.LENGTH_LONG).show();
+                    showAlertMessage("Something went wrong.please try again");
                     PreferenceUtils.setLoginMobileNumber(LoginWithMobileActivity.this,"");
                 }
 
@@ -83,7 +86,7 @@ public class LoginWithMobileActivity extends AppCompatActivity {
 
             @Override
             public void getUserVerifyModelFailure(String s) {
-                Toast.makeText(LoginWithMobileActivity.this,s,Toast.LENGTH_LONG).show();
+                showAlertMessage(s);
                 progressBar.hide();
             }
         });
@@ -95,44 +98,7 @@ public class LoginWithMobileActivity extends AppCompatActivity {
 
 
 
-    private void getPatientDetails() {
 
-        APIRepository apiRepository = new APIRepository(this);
-        apiRepository.setGetAPIResponseModel(new APIRepository.GetAPIResponseModel() {
-            @Override
-            public void getAPIResponseModelSuccess(APIResponseModels apiResponseModels) {
-                if(apiResponseModels != null){
-                    progressBar.hide();
-                    //openOrCreateDatabaseCustom();
-                    APIResponseModels.AccessToken accessToken = apiResponseModels.getAccessToken();
-                    PreferenceUtils.setAuthorizationKey(LoginWithMobileActivity.this,accessToken.getId());
-                    PreferenceUtils.setUserId(LoginWithMobileActivity.this,accessToken.getUserId());
-                    PreferenceUtils.setCarePlanId(LoginWithMobileActivity.this,apiResponseModels.getCareplanId());
-                    PreferenceUtils.setPatientId(LoginWithMobileActivity.this,apiResponseModels.getPatientId());
-                    PreferenceUtils.setDelegateId(LoginWithMobileActivity.this,apiResponseModels.getDelegateId());
-                    PreferenceUtils.setLastSyncDate(LoginWithMobileActivity.this,apiResponseModels.getLastSyncDate());
-                    startActivity(new Intent(LoginWithMobileActivity.this,HomePageActivity.class));
-                }
-            }
-
-            @Override
-            public void getAPIResponseModelFailure(String s) {
-                progressBar.hide();
-                Toast.makeText(LoginWithMobileActivity.this,"Something went wrong",Toast.LENGTH_SHORT).show();
-            }
-        });
-        UserVerifyModel userVerifyModel = new UserVerifyModel();
-        userVerifyModel.setMobile_no(PreferenceUtils.getLoginMobileNumber(this));
-        userVerifyModel.setCountry_code("91");
-        userVerifyModel.setToken(FirebaseInstanceId.getInstance().getToken());
-        apiRepository.getPatientDetails(userVerifyModel);
-    }
-
-    private void openOrCreateDatabaseCustom() {
-        DatabaseHandler databaseHandler = new DatabaseHandler(this);
-        database = databaseHandler.getWritableDatabase();
-        databaseHandler.onCreate(database);
-    }
 
 
     private void sendOTPToPatient(String mobileNumber) {
@@ -148,14 +114,16 @@ public class LoginWithMobileActivity extends AppCompatActivity {
                     PreferenceUtils.setUuid(LoginWithMobileActivity.this,apiResponseModels.getUuid());
                     startActivity(new Intent(LoginWithMobileActivity.this,OTPScreenActivity.class));
                 }else{
-                    Toast.makeText(LoginWithMobileActivity.this,"Account suspended: too many attempts",Toast.LENGTH_SHORT).show();
+                    showAlertMessage("Account suspended: too many attempts");
+                   // Toast.makeText(LoginWithMobileActivity.this,"Account suspended: too many attempts",Toast.LENGTH_SHORT).show();
                     progressBar.hide();
                 }
             }
 
             @Override
             public void getUserVerifyModelFailure(String s) {
-                Toast.makeText(LoginWithMobileActivity.this,s,Toast.LENGTH_SHORT).show();
+                showAlertMessage(s);
+                //Toast.makeText(LoginWithMobileActivity.this,s,Toast.LENGTH_SHORT).show();
                 progressBar.hide();
             }
         });
@@ -164,7 +132,27 @@ public class LoginWithMobileActivity extends AppCompatActivity {
         userVerifyModel.setCountry_code(PreferenceUtils.GetCountryZipCode(this,cCode));
         apiRepository.sendOTPToMobile(userVerifyModel);
 
+    }
+
+
+    void showAlertMessage(String message){
+        new IOSDialogBuilder(this)
+                .setTitle("Alert")
+                .setSubtitle(message)
+                .setBoldPositiveLabel(false)
+                .setCancelable(false)
+                .setSingleButtonView(true)
+                .setPositiveListener("",null)
+                .setNegativeListener("",null)
+                .setSinglePositiveListener("OK", new IOSDialogClickListener() {
+                    @Override
+                    public void onClick(IOSDialog dialog) {
+                        dialog.dismiss();
+                    }
+                })
+                .build().show();
 
     }
+
 
 }
