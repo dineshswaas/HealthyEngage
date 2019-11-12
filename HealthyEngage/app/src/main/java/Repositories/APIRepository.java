@@ -338,7 +338,7 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
             RequestQueue requestQueue = Volley.newRequestQueue(mContext);
             String url = "https://api.authy.com/protected/json/phones/verification/check?phone_number="+userVerifyModel.getMobileNo()+"" +
                     "&country_code="+userVerifyModel.getCountry_code()+"&verification_code="+userVerifyModel.getVerificationCode();
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new com.android.volley.Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     JSONObject jsonResponse = null;
