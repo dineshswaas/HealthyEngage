@@ -63,6 +63,13 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
         if(!TextUtils.isEmpty(PreferenceUtils.getDelegateId(getActivity()))){
             addDelegate.setVisibility(View.INVISIBLE);
         }
+
+        addDelegate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),AddDelegateActivity.class));
+            }
+        });
     }
 
     private void getConnectDetails() {

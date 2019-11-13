@@ -12,6 +12,16 @@ public class ConnectAPIModel<T> implements Serializable {
     Organisation<T> organisation;
     List<Delegates> delegates;
 
+    List<RelationshipCategoryModel> relationshipCategory;
+
+    public List<RelationshipCategoryModel> getRelationshipCategory() {
+        return relationshipCategory;
+    }
+
+    public void setRelationshipCategory(List<RelationshipCategoryModel> relationshipCategory) {
+        this.relationshipCategory = relationshipCategory;
+    }
+
     public List<Delegates> getDelegates() {
         return delegates;
     }
@@ -418,6 +428,9 @@ public class ConnectAPIModel<T> implements Serializable {
     public class Delegates {
         String id,first_name,last_name,patient_id,delegate_id,relationship_category_id;
         RelationshipCategory<T> relationshipCategory;
+
+
+
         boolean is_active;
 
         public boolean isIs_active() {
@@ -512,6 +525,10 @@ public class ConnectAPIModel<T> implements Serializable {
 
             public void setName(String name) {
                 this.name = name;
+            }
+            @Override
+            public String toString() {
+                return name;
             }
         }
 

@@ -8,6 +8,7 @@ import models.PatientMessageModels;
 import models.UserVerifyModel;
 import retrofit.Call;
 import retrofit.http.Body;
+import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.Path;
@@ -52,6 +53,8 @@ public interface APIServices {
     Call<APIResponseModels> updateCarePlanAssessment(@Header("Authorization") String value,
                                                        @Body CarePlanModels.CarePlanAssessment patientAssessment);
 
+    @GET("api/RelationshipCategories")
+    Call<ConnectAPIModel<ConnectAPIModel>> getRelationDetails(@Header("Authorization") String value);
 
 
 }

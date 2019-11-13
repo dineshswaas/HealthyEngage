@@ -162,6 +162,32 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
     }
 
 
+    public void getRelationDetails(){
+        if(NetworkUtils.isNetworkAvailable(mContext)){
+            Retrofit retrofit = RetrofitAPIBuilder.getInstance();
+            APIServices carePlanServices =retrofit.create(APIServices.class);
+            Call call =carePlanServices.getRelationDetails(PreferenceUtils.getAuthorizationKey(mContext));
+            call.enqueue(new Callback<ConnectAPIModel<ConnectAPIModel>>() {
+                @Override
+                public void onResponse(Response<ConnectAPIModel<ConnectAPIModel>> response, Retrofit retrofit) {
+                    ConnectAPIModel apiResponseModels =response.body();
+                    if(apiResponseModels != null){
+                        if(apiResponseModels != null){
+                            getCareTakersDetails.getCareTakersSuccess(apiResponseModels);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    getCareTakersDetails.getCareTakersFailure(t.getMessage());
+                }
+            });
+
+        }
+    }
+
+
     public void setGetCareTakersDetails(GetCareTakersDetails getCareTakersDetails){
         this.getCareTakersDetails = getCareTakersDetails;
     }
