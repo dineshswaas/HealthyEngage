@@ -9,6 +9,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -33,15 +35,19 @@ class ConnectAdapter extends RecyclerView.Adapter<ConnectAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.connect_list_items,null);
-
+        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(lp);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        ConnectAPIModel connectAPIModel = connectAPIModelList.get(position);
+        final ConnectAPIModel connectAPIModel = connectAPIModelList.get(position);
         if(!TextUtils.isEmpty(connectAPIModel.getHeaderText())){
-            holder.headerText.setVisibility(View.VISIBLE);
+            holder.headerLayout.setVisibility(View.VISIBLE);
+            holder.headerText.setText(connectAPIModel.getHeaderText());
+            holder.assessmentMainLayout.setVisibility(View.GONE);
+/*
             holder.headerText.setText(connectAPIModel.getHeaderText());
 
                 String trimLetter = connectAPIModel.getFirst_name().trim().charAt(0) +""+connectAPIModel.getLast_name().trim().charAt(0);
@@ -51,15 +57,20 @@ class ConnectAdapter extends RecyclerView.Adapter<ConnectAdapter.ViewHolder> {
                 if(!TextUtils.isEmpty(connectAPIModel.getShift_start_time()) && !TextUtils.isEmpty(connectAPIModel.getShift_end_time())){
                     holder.assesmentnameSubName.setText(connectAPIModel.getShift_start_time() +" - "+connectAPIModel.getShift_end_time());
                 }
+*/
 
         }else{
-                holder.headerText.setVisibility(View.GONE);
+                holder.headerLayout.setVisibility(View.GONE);
+                holder.assessmentMainLayout.setVisibility(View.VISIBLE);
                 String trimLetter = connectAPIModel.getFirst_name().trim().charAt(0) +""+ connectAPIModel.getLast_name().trim().charAt(0);
                 holder.firstletter.setText(trimLetter);
                 holder.assesmentname.setText(connectAPIModel.getFirst_name() +"  " +connectAPIModel.getLast_name());
                 holder.assesmentnameSubName.setText(connectAPIModel.getMobile_no());
                 if(!TextUtils.isEmpty(connectAPIModel.getShift_start_time()) && !TextUtils.isEmpty(connectAPIModel.getShift_end_time())){
                     holder.assesmentnameSubName.setText(connectAPIModel.getShift_start_time() +" - "+connectAPIModel.getShift_end_time());
+                }
+                if(!TextUtils.isEmpty(connectAPIModel.getRelationName())){
+                    holder.assesmentnameSubName.setText(connectAPIModel.getRelationName());
                 }
 
         }
@@ -68,8 +79,10 @@ class ConnectAdapter extends RecyclerView.Adapter<ConnectAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onCareClick != null){
-                    onCareClick.onCareClick(position);
+                if(TextUtils.isEmpty(connectAPIModel.getHeaderText())){
+                    if(onCareClick != null){
+                        onCareClick.onCareClick(position);
+                    }
                 }
             }
         });
@@ -85,13 +98,16 @@ class ConnectAdapter extends RecyclerView.Adapter<ConnectAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView headerText,assesmentname,assesmentnameSubName,firstletter;
-
+        RelativeLayout assessmentMainLayout;
+        LinearLayout headerLayout;
         public ViewHolder(View itemView) {
             super(itemView);
             assesmentname = (TextView)itemView.findViewById(R.id.assesmentname);
             assesmentnameSubName = (TextView)itemView.findViewById(R.id.assesmentnameSubName);
             firstletter = (TextView)itemView.findViewById(R.id.firstletter);
             headerText = (TextView)itemView.findViewById(R.id.headerText);
+            assessmentMainLayout = (RelativeLayout)itemView.findViewById(R.id.assessmentMainLayout);
+            headerLayout = (LinearLayout)itemView.findViewById(R.id.headerLayout);
         }
     }
 

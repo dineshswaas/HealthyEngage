@@ -25,13 +25,17 @@ public class CareTakersDetailsActivity extends AppCompatActivity {
 
         connectAPIModel = (ConnectAPIModel) getIntent().getSerializableExtra(Constants.INTENT_PARM);
         firstheaderletter.setText(connectAPIModel.getFirst_name().charAt(0) +" "+connectAPIModel.getLast_name().charAt(0));
-        name.setText(connectAPIModel.getFirst_name()+""+connectAPIModel.getLast_name());
+        name.setText(connectAPIModel.getFirst_name()+" "+connectAPIModel.getLast_name());
         if(TextUtils.isEmpty(connectAPIModel.getEmergency_number())){
             phonenumber.setText(connectAPIModel.getMobile_no());
         }else{
             phonenumber.setText(connectAPIModel.getEmergency_number());
         }
-
+        if(connectAPIModel.isIs_Delegate()){
+            findViewById(R.id.textMainLayout).setVisibility(View.GONE);
+            findViewById(R.id.secondDivider).setVisibility(View.GONE);
+            findViewById(R.id.emailMainLayout).setVisibility(View.GONE);
+        }
         textnumber.setText(connectAPIModel.getMobile_no());
         emailtext.setText(connectAPIModel.getEmail());
 

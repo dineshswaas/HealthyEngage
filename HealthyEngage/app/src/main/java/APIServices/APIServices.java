@@ -30,7 +30,8 @@ public interface APIServices {
 
     @POST("api/Patients/{id}/careTakers")
     Call<ConnectAPIModel<ConnectAPIModel>> getCareTakers(@Header("Authorization") String value,
-                                                         @Path("id") String id);
+                                                         @Path("id") String id,
+                                                         @Body ConnectAPIModel apiModel);
 
 
 

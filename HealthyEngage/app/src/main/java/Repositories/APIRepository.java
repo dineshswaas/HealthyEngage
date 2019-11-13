@@ -135,12 +135,12 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
 
     /*Connect */
 
-    public void getCareTakers(){
+    public void getCareTakers(ConnectAPIModel connectAPIModel){
         if(NetworkUtils.isNetworkAvailable(mContext)){
             Retrofit retrofit = RetrofitAPIBuilder.getInstance();
             APIServices carePlanServices =retrofit.create(APIServices.class);
             Call call =carePlanServices.getCareTakers(PreferenceUtils.getAuthorizationKey(mContext),
-                    PreferenceUtils.getPatientId(mContext));
+                    PreferenceUtils.getPatientId(mContext),connectAPIModel);
             call.enqueue(new Callback<ConnectAPIModel<ConnectAPIModel>>() {
                 @Override
                 public void onResponse(Response<ConnectAPIModel<ConnectAPIModel>> response, Retrofit retrofit) {

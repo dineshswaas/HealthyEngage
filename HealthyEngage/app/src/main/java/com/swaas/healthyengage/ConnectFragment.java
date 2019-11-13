@@ -2,15 +2,18 @@ package com.swaas.healthyengage;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -19,7 +22,9 @@ import java.util.List;
 
 import Repositories.APIRepository;
 import models.ConnectAPIModel;
+import models.Delegates;
 import utils.Constants;
+import utils.PreferenceUtils;
 
 /**
  * Created by Adib on 13-Apr-17.
@@ -35,6 +40,7 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
     ConnectAdapter connectAdapter;
     List<ConnectAPIModel> connectAPIModelList;
     View mView;
+    LinearLayout addDelegate;
     public static ConnectFragment newInstance() {
         return new ConnectFragment();
     }
@@ -52,7 +58,11 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
     private void initializeViews() {
         firstletter = (TextView)mView.findViewById(R.id.firstletter);
         loginname = (TextView)mView.findViewById(R.id.loginname);
+        addDelegate = (LinearLayout)mView.findViewById(R.id.addDelegate);
         connectRecycler = (RecyclerView)mView.findViewById(R.id.connectRecycler);
+        if(!TextUtils.isEmpty(PreferenceUtils.getDelegateId(getActivity()))){
+            addDelegate.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void getConnectDetails() {
@@ -72,12 +82,22 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
                 Log.d("parmconnect",s);
             }
         });
-        apiRepository.getCareTakers();
+        ConnectAPIModel connectAPIModel = new ConnectAPIModel();
+        if(!TextUtils.isEmpty(PreferenceUtils.getDelegateId(getActivity()))){
+            connectAPIModel.setIs_patient(false);
+        }else{
+            connectAPIModel.setIs_patient(true);
+        }
+
+        apiRepository.getCareTakers(connectAPIModel);
 
     }
 
     private void onBindConnectList(ConnectAPIModel connectAPI) {
         connectAPIModelList = new ArrayList<>();
+        ConnectAPIModel header_1 = new ConnectAPIModel();
+        header_1.setHeaderText("CARE TEAM");
+        connectAPIModelList.add(header_1);
         ConnectAPIModel.Author author = connectAPI.getAuthor();
         if(author != null){
             ConnectAPIModel connectAPIModel = new ConnectAPIModel();
@@ -89,7 +109,6 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
             connectAPIModel.setGender(author.getGender());
             connectAPIModel.setCountry_code(author.getCountry_code());
             connectAPIModel.setFromPatient(false);
-            connectAPIModel.setHeaderText("CARE TEAM");
             connectAPIModelList.add(connectAPIModel);
         }
 
@@ -124,7 +143,10 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
         }
 
 
-        if(connectAPI.getPatient() != null){
+        if(connectAPI.getPatient() != null && !TextUtils.isEmpty(connectAPI.getMobile_no()) && !TextUtils.isEmpty(connectAPI.getFirst_name())){
+            ConnectAPIModel header_2 = new ConnectAPIModel();
+            header_2.setHeaderText("MY PATIENT");
+            connectAPIModelList.add(header_2);
             ConnectAPIModel.Patient patient = connectAPI.getPatient();
             ConnectAPIModel connectAPIModel = new ConnectAPIModel();
             connectAPIModel.setId(patient.getId());;
@@ -135,9 +157,38 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
             connectAPIModel.setGender(patient.getGender());
             connectAPIModel.setCountry_code(patient.getCountry_code());
             connectAPIModel.setFromPatient(true);
-            connectAPIModel.setHeaderText("MY PATIENT");
             connectAPIModelList.add(connectAPIModel);
         }
+
+        if(connectAPI.getDelegates() != null && connectAPI.getDelegates().size() > 0){
+            List<ConnectAPIModel.Delegates> delegatesList = new ArrayList<>(connectAPI.getDelegates());
+            ConnectAPIModel header_3 = new ConnectAPIModel();
+            header_3.setHeaderText("MY DELEGATES");
+            connectAPIModelList.add(header_3);
+            for(ConnectAPIModel.Delegates delegates :delegatesList){
+                    ConnectAPIModel connectAPIModel = new ConnectAPIModel();
+                    connectAPIModel.setId(delegates.getId());;
+                    connectAPIModel.setFirst_name(delegates.getFirst_name());
+                    connectAPIModel.setLast_name(delegates.getLast_name());
+                    ConnectAPIModel.Delegates.RelationshipCategory relationshipCategories = delegates.getRelationshipCategory();
+                    if(relationshipCategories != null){
+                        if(!delegates.isIs_active()){
+                            connectAPIModel.setRelationName(relationshipCategories.getName() +" (Awaiting Confirmation)");
+                        }
+
+                    }
+                    Delegates delegateForMobile = delegates.getDelegates();
+                    connectAPIModel.setMobile_no(delegateForMobile.getUser().getMobile_no());
+                    connectAPIModel.setCountry_code(delegateForMobile.getUser().getCountry_code());
+                    connectAPIModel.setIs_Delegate(true);
+                    connectAPIModel.setFromPatient(false);
+                    connectAPIModelList.add(connectAPIModel);
+
+            }
+
+        }
+
+
 
 
         connectRecycler.setLayoutManager(new LinearLayoutManager(connectRecycler.getContext(), LinearLayoutManager.VERTICAL, false));

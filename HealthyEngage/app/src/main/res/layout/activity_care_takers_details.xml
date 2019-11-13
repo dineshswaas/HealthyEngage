@@ -102,15 +102,6 @@
 
 
 
-            <ImageView
-                android:id="@+id/arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/label"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
 
 
         </RelativeLayout>
@@ -163,19 +154,10 @@
 
 
 
-            <ImageView
-                android:id="@+id/arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/label"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
-
 
         </RelativeLayout>
         <View
+            android:id="@+id/secondDivider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/gray_non_pressed">

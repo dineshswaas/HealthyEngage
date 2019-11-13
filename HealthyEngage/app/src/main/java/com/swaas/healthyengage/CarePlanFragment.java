@@ -37,6 +37,7 @@ import Alerts.IOSDialog;
 import Alerts.IOSDialogBuilder;
 import Alerts.IOSDialogClickListener;
 import Repositories.APIRepository;
+import Services.SessionExpiredServices;
 import models.APIResponseModels;
 import models.CarePlanModels;
 import models.InterventionElements;
@@ -96,7 +97,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
         selectedDate = DateHelper.getCurrentDate();
         getCarePlanDetailsFromAPI(DateHelper.getCurrentDate());
-
+        //SessionExpiredServices.timer.start();
         return mView;
     }
 
@@ -618,8 +619,6 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
 
     public interface OnFragmentInteractionListener {
     }
-
-
 
 
 
