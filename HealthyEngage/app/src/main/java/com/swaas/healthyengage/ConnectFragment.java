@@ -39,6 +39,7 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
     RecyclerView connectRecycler;
     ConnectAdapter connectAdapter;
     List<ConnectAPIModel> connectAPIModelList;
+    int Request_code=91;
     View mView;
     LinearLayout addDelegate;
     public static ConnectFragment newInstance() {
@@ -67,7 +68,8 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
         addDelegate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),AddDelegateActivity.class));
+                Intent intent = new Intent(getActivity(),AddDelegateActivity.class);
+                startActivityForResult(intent,Request_code);
             }
         });
     }
@@ -222,5 +224,14 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
         intent.putExtra(Constants.INTENT_PARM, (Serializable) connectAPIModelList.get(position));
         startActivity(intent);
 
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == Request_code){
+            getConnectDetails();
+        }
     }
 }

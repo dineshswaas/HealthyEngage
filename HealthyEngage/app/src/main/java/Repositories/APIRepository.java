@@ -28,6 +28,7 @@ import APIServices.RetrofitAPIBuilder;
 import models.APIResponseModels;
 import models.CarePlanModels;
 import models.ConnectAPIModel;
+import models.Delegates;
 import models.PatientMessageAPIModel;
 import models.PatientMessageModels;
 import models.UserVerifyModel;
@@ -47,6 +48,7 @@ public class APIRepository {
     private GetCareTakersDetails getCareTakersDetails;
     private GetAPIResponseModel getAPIResponseModel;
     private GetUserVerifyModel getUserVerifyModel;
+    private GetDelegateDetails getDelegateDetails;
   public APIRepository(Context context){
     this.mContext = context;
   }
@@ -443,6 +445,35 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
     }
 
 
+
+    public void submitDelegate(Delegates delegates){
+        if(NetworkUtils.isNetworkAvailable(mContext)){
+            Retrofit retrofit = RetrofitAPIBuilder.getInstance();
+            APIServices carePlanServices =retrofit.create(APIServices.class);
+            Call call =carePlanServices.addDelegate(PreferenceUtils.getAuthorizationKey(mContext),delegates);
+            call.enqueue(new Callback<APIResponseModels>() {
+                @Override
+                public void onResponse(Response<APIResponseModels> response, Retrofit retrofit) {
+                    APIResponseModels apiResponseModels =response.body();
+                    getAPIResponseModel.getAPIResponseModelSuccess(apiResponseModels);
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    getAPIResponseModel.getAPIResponseModelFailure(t.getMessage());
+                }
+            });
+
+        }
+    }
+
+    public void setGetDelegateDetails( GetDelegateDetails getDelegateDetails){
+        this.getDelegateDetails = getDelegateDetails;
+    }
+    public interface GetDelegateDetails{
+        void getSuccess(Delegates delegates);
+        void getFailure(String s);
+    }
 
     public void setGetUserVerifyModel(GetUserVerifyModel getUserVerifyModel){
         this.getUserVerifyModel = getUserVerifyModel;

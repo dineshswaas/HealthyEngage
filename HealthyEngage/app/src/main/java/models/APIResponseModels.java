@@ -8,9 +8,59 @@ public class APIResponseModels<T> {
 
 
     private List<T> careplan;
-    private  Error<T> error;
+    private  Error error;
     String day,mobileNo,country_code,mobile_no,token,careplanId,patientId,delegateId,lastSyncDate;
     boolean sync,status;
+    Delegates delegates;
+    String first_name,last_name,patient_id,delegate_id,relationship_category_id;
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    public String getPatient_id() {
+        return patient_id;
+    }
+
+    public void setPatient_id(String patient_id) {
+        this.patient_id = patient_id;
+    }
+
+    public String getDelegate_id() {
+        return delegate_id;
+    }
+
+    public void setDelegate_id(String delegate_id) {
+        this.delegate_id = delegate_id;
+    }
+
+    public String getRelationship_category_id() {
+        return relationship_category_id;
+    }
+
+    public void setRelationship_category_id(String relationship_category_id) {
+        this.relationship_category_id = relationship_category_id;
+    }
+
+    public Delegates getDelegates() {
+        return delegates;
+    }
+
+    public void setDelegates(Delegates delegates) {
+        this.delegates = delegates;
+    }
 
     public boolean isSync() {
         return sync;
@@ -32,15 +82,15 @@ public class APIResponseModels<T> {
 
 
 
-    public Error<T> getError() {
+    public Error getError() {
         return error;
     }
 
-    public void setError(Error<T> error) {
+    public void setError(Error error) {
         this.error = error;
     }
 
-    public class Error<T> {
+    public class Error {
     int statusCode;
     String name,message;
 

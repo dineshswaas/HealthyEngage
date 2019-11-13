@@ -3,6 +3,7 @@ package com.swaas.healthyengage;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,7 +12,7 @@ import utils.Constants;
 
 public class CareTakersDetailsActivity extends AppCompatActivity {
 
-    TextView firstheaderletter,name,phonenumber,textnumber,emailtext;
+    TextView firstheaderletter,name,phonenumber,textnumber,emailtext,others;
     ConnectAPIModel connectAPIModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +25,15 @@ public class CareTakersDetailsActivity extends AppCompatActivity {
     private void getIntentData() {
 
         connectAPIModel = (ConnectAPIModel) getIntent().getSerializableExtra(Constants.INTENT_PARM);
-        firstheaderletter.setText(connectAPIModel.getFirst_name().charAt(0) +" "+connectAPIModel.getLast_name().charAt(0));
-        name.setText(connectAPIModel.getFirst_name()+" "+connectAPIModel.getLast_name());
+        if(TextUtils.isEmpty(connectAPIModel.getLast_name())){
+            firstheaderletter.setText(connectAPIModel.getFirst_name().trim().charAt(0)+"");
+            name.setText(connectAPIModel.getFirst_name());
+        }else{
+            firstheaderletter.setText(connectAPIModel.getFirst_name().charAt(0) +" "+connectAPIModel.getLast_name().charAt(0));
+            name.setText(connectAPIModel.getFirst_name()+" "+connectAPIModel.getLast_name());
+        }
+
+
         if(TextUtils.isEmpty(connectAPIModel.getEmergency_number())){
             phonenumber.setText(connectAPIModel.getMobile_no());
         }else{
@@ -38,17 +46,22 @@ public class CareTakersDetailsActivity extends AppCompatActivity {
         }
         textnumber.setText(connectAPIModel.getMobile_no());
         emailtext.setText(connectAPIModel.getEmail());
+        if(connectAPIModel.isIs_Delegate()){
+            others.setText(connectAPIModel.getRelationName());
+        }
 
     }
 
     private void initializeViews() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Connect");
         firstheaderletter = (TextView)findViewById(R.id.firstheaderletter);
         name = (TextView)findViewById(R.id.name);
         phonenumber = (TextView)findViewById(R.id.phonenumber);
         textnumber = (TextView)findViewById(R.id.textnumber);
         emailtext = (TextView)findViewById(R.id.emailtext);
+        others = (TextView)findViewById(R.id.others);
 
     }
     @Override
@@ -61,5 +74,12 @@ public class CareTakersDetailsActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+
     }
 }

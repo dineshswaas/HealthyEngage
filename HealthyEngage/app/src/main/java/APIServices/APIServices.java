@@ -3,6 +3,7 @@ package APIServices;
 import models.APIResponseModels;
 import models.CarePlanModels;
 import models.ConnectAPIModel;
+import models.Delegates;
 import models.PatientMessageAPIModel;
 import models.PatientMessageModels;
 import models.UserVerifyModel;
@@ -55,6 +56,10 @@ public interface APIServices {
 
     @GET("api/RelationshipCategories")
     Call<ConnectAPIModel<ConnectAPIModel>> getRelationDetails(@Header("Authorization") String value);
+
+    @POST("api/Delegates")
+    Call<APIResponseModels> addDelegate(@Header("Authorization") String value,
+                                                                 @Body Delegates delegates);
 
 
 }

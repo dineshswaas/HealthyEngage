@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
@@ -98,6 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
+                android:layout_centerVertical="true"
                 android:textColor="@color/black"
                 android:text="Releationship" />
 
@@ -107,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/relationtext"
                 android:layout_alignParentRight="true"
-                android:layout_gravity="center_vertical|center"
+                android:layout_centerVertical="true"
                 android:drawSelectorOnTop="true"
                 android:layout_marginLeft="10dp"
                 android:popupBackground="@color/white"
@@ -120,5 +121,24 @@
 
 </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/buttonlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
 
-</LinearLayout>
+
+        <TextView
+            android:id="@+id/submitText"
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Done"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
+</RelativeLayout>

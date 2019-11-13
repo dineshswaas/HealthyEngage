@@ -1,10 +1,68 @@
 package models;
 
-public class Delegates<T> {
+public class Delegates {
 
     String id,user_id;
-    User<T> user;
+    User user;
+    String first_name,last_name,patient_id,delegate_id,relationship_category_id,mobile_no,country_code;
 
+
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    public String getPatient_id() {
+        return patient_id;
+    }
+
+    public void setPatient_id(String patient_id) {
+        this.patient_id = patient_id;
+    }
+
+    public String getDelegate_id() {
+        return delegate_id;
+    }
+
+    public void setDelegate_id(String delegate_id) {
+        this.delegate_id = delegate_id;
+    }
+
+    public String getRelationship_category_id() {
+        return relationship_category_id;
+    }
+
+    public void setRelationship_category_id(String relationship_category_id) {
+        this.relationship_category_id = relationship_category_id;
+    }
+
+    public String getMobile_no() {
+        return mobile_no;
+    }
+
+    public void setMobile_no(String mobile_no) {
+        this.mobile_no = mobile_no;
+    }
+
+    public String getCountry_code() {
+        return country_code;
+    }
+
+    public void setCountry_code(String country_code) {
+        this.country_code = country_code;
+    }
 
     public String getId() {
         return id;
@@ -22,15 +80,15 @@ public class Delegates<T> {
         this.user_id = user_id;
     }
 
-    public User<T> getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(User<T> user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public class User<T>{
+    public class User{
         String id,email,mobile_no,gender,country_code;
 
         public String getId() {

@@ -2,6 +2,7 @@ package com.swaas.healthyengage;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,26 +14,33 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import Alerts.IOSDialog;
 import Alerts.IOSDialogBuilder;
 import Alerts.IOSDialogClickListener;
 import Repositories.APIRepository;
+import models.APIResponseModels;
 import models.ConnectAPIModel;
+import models.Delegates;
 import models.RelationshipCategoryModel;
 import utils.NetworkUtils;
+import utils.PreferenceUtils;
 
 public class AddDelegateActivity extends AppCompatActivity {
 
@@ -41,8 +49,12 @@ public class AddDelegateActivity extends AppCompatActivity {
     ImageView contactImage;
     int PICK_CONTACT = 121;
     int REQUEST_MULTIPLE_PERMISSIONS = 123;
+    int Request_code=91;
     ArrayAdapter adapter;
-
+    RelationshipCategoryModel relationshipCategoryModel = new RelationshipCategoryModel();
+    List<RelationshipCategoryModel> relationshipCategoryModelList;
+    RelativeLayout buttonlayout;
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +71,7 @@ public class AddDelegateActivity extends AppCompatActivity {
         apiRepository.setGetCareTakersDetails(new APIRepository.GetCareTakersDetails() {
             @Override
             public void getCareTakersSuccess(ConnectAPIModel connectAPIModel) {
-                List<RelationshipCategoryModel> relationshipCategoryModelList = connectAPIModel.getRelationshipCategory();
+                relationshipCategoryModelList = connectAPIModel.getRelationshipCategory();
                 adapter = new ArrayAdapter<RelationshipCategoryModel>
                         (AddDelegateActivity.this, android.R.layout.simple_spinner_dropdown_item, relationshipCategoryModelList);
                 relationSpinner.setAdapter(adapter);
@@ -71,6 +83,19 @@ public class AddDelegateActivity extends AppCompatActivity {
             }
         });
         apiRepository.getRelationDetails();
+
+
+        relationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                relationshipCategoryModel = relationshipCategoryModelList.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void initializeViews() {
@@ -79,8 +104,10 @@ public class AddDelegateActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Add Delegate");
         mobileEd = (EditText)findViewById(R.id.mobileEd);
         nameEd = (EditText)findViewById(R.id.nameEd);
+        progressDialog = new ProgressDialog(this);
         relationSpinner = (Spinner)findViewById(R.id.relationSpinner);
         contactImage = (ImageView)findViewById(R.id.contactimage);
+        buttonlayout = (RelativeLayout)findViewById(R.id.buttonlayout);
         contactImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,8 +152,56 @@ public class AddDelegateActivity extends AppCompatActivity {
             }
         });
 
+
+        buttonlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(NetworkUtils.isNetworkAvailable(AddDelegateActivity.this)){
+                    submitApiCall();
+                }
+
+            }
+        });
+
     }
 
+    private void submitApiCall() {
+        progressDialog.setMessage("Adding new delegate");
+        progressDialog.show();
+        APIRepository apiRepository = new APIRepository(AddDelegateActivity.this);
+        apiRepository.setGetAPIResponseModel(new APIRepository.GetAPIResponseModel() {
+            @Override
+            public void getAPIResponseModelSuccess(APIResponseModels apiResponseModels) {
+                progressDialog.dismiss();
+                if(apiResponseModels!= null){
+                    setResult(Request_code);
+                    finish();
+                }else{
+                    showAlertMessage("Delegate mobile number already exists");
+                }
+            }
+
+            @Override
+            public void getAPIResponseModelFailure(String s) {
+                showAlertMessage("Something went wrong");
+                progressDialog.dismiss();
+            }
+        });
+        Delegates delegates = new Delegates();
+        delegates.setPatient_id(PreferenceUtils.getPatientId(AddDelegateActivity.this));
+        if(nameEd.getText().toString().contains(" ")){
+            delegates.setFirst_name(nameEd.getText().toString().split(" ")[0]);
+            delegates.setLast_name(nameEd.getText().toString().split(" ")[1]);
+        }else{
+            delegates.setFirst_name(nameEd.getText().toString().trim());
+            delegates.setLast_name("");
+        }
+        delegates.setMobile_no(mobileEd.getText().toString());
+        String cCode = Locale.getDefault().getCountry();
+        delegates.setCountry_code(PreferenceUtils.GetCountryZipCode(AddDelegateActivity.this,cCode));
+        delegates.setRelationship_category_id(relationshipCategoryModel.getId());
+        apiRepository.submitDelegate(delegates);
+    }
 
 
     @Override
@@ -143,15 +218,25 @@ public class AddDelegateActivity extends AppCompatActivity {
 
 
 
+    void showAlertMessage(String message){
+        new IOSDialogBuilder(this)
+                .setTitle("Alert")
+                .setSubtitle(message)
+                .setBoldPositiveLabel(false)
+                .setCancelable(false)
+                .setSingleButtonView(true)
+                .setPositiveListener("",null)
+                .setNegativeListener("",null)
+                .setSinglePositiveListener("OK", new IOSDialogClickListener() {
+                    @Override
+                    public void onClick(IOSDialog dialog) {
+                        dialog.dismiss();
+                    }
+                })
+                .build().show();
 
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(AddDelegateActivity.this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
     }
+
 
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);

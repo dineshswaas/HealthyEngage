@@ -62,8 +62,14 @@ class ConnectAdapter extends RecyclerView.Adapter<ConnectAdapter.ViewHolder> {
         }else{
                 holder.headerLayout.setVisibility(View.GONE);
                 holder.assessmentMainLayout.setVisibility(View.VISIBLE);
-                String trimLetter = connectAPIModel.getFirst_name().trim().charAt(0) +""+ connectAPIModel.getLast_name().trim().charAt(0);
-                holder.firstletter.setText(trimLetter);
+                if(TextUtils.isEmpty(connectAPIModel.getLast_name())){
+                    String trimLetter = connectAPIModel.getFirst_name().trim().charAt(0)+"";
+                    holder.firstletter.setText(trimLetter);
+                }else{
+                    String trimLetter = connectAPIModel.getFirst_name().trim().charAt(0) +""+ connectAPIModel.getLast_name().trim().charAt(0);
+                    holder.firstletter.setText(trimLetter);
+                }
+
                 holder.assesmentname.setText(connectAPIModel.getFirst_name() +"  " +connectAPIModel.getLast_name());
                 holder.assesmentnameSubName.setText(connectAPIModel.getMobile_no());
                 if(!TextUtils.isEmpty(connectAPIModel.getShift_start_time()) && !TextUtils.isEmpty(connectAPIModel.getShift_end_time())){
