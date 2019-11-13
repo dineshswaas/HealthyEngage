@@ -156,9 +156,18 @@ public class AddDelegateActivity extends AppCompatActivity {
         buttonlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(NetworkUtils.isNetworkAvailable(AddDelegateActivity.this)){
-                    submitApiCall();
+                if(TextUtils.isEmpty(nameEd.getText().toString())){
+                    showAlertMessage("Enter delegate name");
+                }else if(TextUtils.isEmpty(mobileEd.getText().toString())){
+                    showAlertMessage("Enter delegate mobile number");
+                } else if(relationshipCategoryModel == null){
+                    showAlertMessage("select delegate relationship");
+                }else{
+                    if(NetworkUtils.isNetworkAvailable(AddDelegateActivity.this)){
+                        submitApiCall();
+                    }
                 }
+
 
             }
         });

@@ -230,7 +230,7 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == Request_code){
+        if(resultCode == Request_code){
             getConnectDetails();
         }
     }
