@@ -20,11 +20,15 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
+import Alerts.IOSDialog;
+import Alerts.IOSDialogBuilder;
+import Alerts.IOSDialogClickListener;
+
 import static utils.Constants.NOTIFICATION_ID;
 
 public class MessageReceiver extends FirebaseMessagingService {
 
-    public static final String ANDROID_CHANNEL_ID = "com.testandroid.pushnotifications.ANDROID";
+    public static final String ANDROID_CHANNEL_ID = "com.healthyengage.pushnotifications.ANDROID";
     public static final String ANDROID_CHANNEL_NAME = "ANDROID CHANNEL";
     private NotificationManager mManager;
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -73,6 +77,8 @@ public class MessageReceiver extends FirebaseMessagingService {
                 .setContentText(body)
                 .setSmallIcon(android.R.drawable.stat_notify_more)
                 .setAutoCancel(true);
+
+
     }
 
     @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.O)
@@ -100,6 +106,25 @@ public class MessageReceiver extends FirebaseMessagingService {
             mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
         return mManager;
+    }
+    void showAlertMessage(final String message,String title){
+        new IOSDialogBuilder(GlobalApplication.sThis)
+                .setTitle(title)
+                .setSubtitle(message)
+                .setBoldPositiveLabel(false)
+                .setCancelable(false)
+                .setSingleButtonView(true)
+                .setPositiveListener("",null)
+                .setNegativeListener("",null)
+                .setSinglePositiveListener("OK", new IOSDialogClickListener() {
+                    @Override
+                    public void onClick(IOSDialog dialog) {
+                            dialog.dismiss();
+
+                    }
+                })
+                .build().show();
+
     }
 
 }

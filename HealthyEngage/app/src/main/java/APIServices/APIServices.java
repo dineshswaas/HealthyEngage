@@ -72,4 +72,8 @@ public interface APIServices {
     @POST("api/Delegates/signHipaa")
     Call<APIResponseModels> submitHippa(@Header("Authorization") String value,
                                         @Body Delegates delegates);
+
+    @GET("api/Users/")
+    Call<APIResponseModels> getUserDetails(@Header("Authorization") String value,
+                                        @Body Delegates delegates);
 }
