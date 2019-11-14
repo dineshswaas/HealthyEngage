@@ -128,7 +128,9 @@ public class OTPScreenActivity extends AppCompatActivity {
         if(!TextUtils.isEmpty(apiResponseModels.getDelegateId()) && !apiResponseModels.isIs_hipaa_signed()){
                 startActivity(new Intent(OTPScreenActivity.this,HippaActivity.class));
         }else{
-            startActivity(new Intent(OTPScreenActivity.this,HomePageActivity.class));
+            Intent intent = new Intent(OTPScreenActivity.this,HomePageActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         }
 
 
