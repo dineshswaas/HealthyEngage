@@ -109,7 +109,8 @@ public class CareTakersDetailsActivity extends AppCompatActivity {
                 intent.putExtra(Constants.INTENT_PARM,connectAPIModel);
                 startActivityForResult(intent,Update_Request_code);
             }
-
+        }else{
+            onBackPressed();
         }
         return true;
     }

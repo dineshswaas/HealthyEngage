@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -38,6 +40,7 @@ import Alerts.IOSDialog;
 import Alerts.IOSDialogBuilder;
 import Alerts.IOSDialogClickListener;
 import Repositories.APIRepository;
+import br.com.sapereaude.maskedEditText.MaskedEditText;
 import models.APIResponseModels;
 import models.ConnectAPIModel;
 import models.Delegates;
@@ -48,7 +51,8 @@ import utils.PreferenceUtils;
 
 public class AddDelegateActivity extends AppCompatActivity {
 
-    EditText mobileEd,nameEd;
+    EditText nameEd;
+    MaskedEditText mobileEd;
     Spinner relationSpinner;
     ImageView contactImage;
     int PICK_CONTACT = 121;
@@ -141,7 +145,10 @@ public class AddDelegateActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Add Delegate");
-        mobileEd = (EditText)findViewById(R.id.mobileEd);
+        mobileEd = (MaskedEditText) findViewById(R.id.mobileEd);
+        String cCode = Locale.getDefault().getCountry();
+        cCode = PreferenceUtils.GetCountryZipCode(this,cCode);
+        mobileEd.setMask("+"+cCode+"(###)###-##-##");
         nameEd = (EditText)findViewById(R.id.nameEd);
         submitText = (TextView)findViewById(R.id.submitText);
         relationSpinner = (Spinner)findViewById(R.id.relationSpinner);
@@ -197,7 +204,7 @@ public class AddDelegateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(TextUtils.isEmpty(nameEd.getText().toString())){
                     showAlertMessage("Enter delegate name");
-                }else if(TextUtils.isEmpty(mobileEd.getText().toString())){
+                }else if(TextUtils.isEmpty(mobileEd.getRawText().trim())){
                     showAlertMessage("Enter delegate mobile number");
                 } else if(relationshipCategoryModel == null){
                     showAlertMessage("select delegate relationship");
@@ -220,8 +227,15 @@ public class AddDelegateActivity extends AppCompatActivity {
             @Override
             public void getAPIResponseModelSuccess(APIResponseModels apiResponseModels) {
                 if(apiResponseModels!= null){
-                    setResult(Request_code);
-                    finish();
+                    if(connectAPIModel != null){
+                        if(isFromDelete){
+                            showAlertSuccessMessage("Delegate has been deleted","Delete");
+                        }else{
+                            showAlertSuccessMessage("Delegate details has been updated","Update");
+                        }
+                    }else{
+                        showAlertSuccessMessage("Delegate has been added successfully","Success");
+                    }
                 }else{
                     showAlertMessage("Delegate mobile number already exists");
                 }
@@ -243,7 +257,7 @@ public class AddDelegateActivity extends AppCompatActivity {
             delegates.setFirst_name(nameEd.getText().toString().trim());
             delegates.setLast_name("");
         }
-        delegates.setMobile_no(mobileEd.getText().toString());
+        delegates.setMobile_no(mobileEd.getRawText());
         String cCode = Locale.getDefault().getCountry();
         delegates.setCountry_code(PreferenceUtils.GetCountryZipCode(AddDelegateActivity.this,cCode));
         delegates.setRelationship_category_id(relationshipCategoryModel.getId());
@@ -297,6 +311,8 @@ public class AddDelegateActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.delegateEdit){
             isFromDelete = false;
             deleteConfirmation();
+        }else{
+            finish();
         }
         return true;
     }
@@ -345,6 +361,28 @@ public class AddDelegateActivity extends AppCompatActivity {
                 .build().show();
 
     }
+
+    void showAlertSuccessMessage(String message,String title){
+        new IOSDialogBuilder(this)
+                .setTitle(title)
+                .setSubtitle(message)
+                .setBoldPositiveLabel(false)
+                .setCancelable(false)
+                .setSingleButtonView(true)
+                .setPositiveListener("",null)
+                .setNegativeListener("",null)
+                .setSinglePositiveListener("OK", new IOSDialogClickListener() {
+                    @Override
+                    public void onClick(IOSDialog dialog) {
+                        dialog.dismiss();
+                        setResult(Request_code);
+                        finish();
+                    }
+                })
+                .build().show();
+
+    }
+
 
 
     public void onActivityResult(int reqCode, int resultCode, Intent data) {

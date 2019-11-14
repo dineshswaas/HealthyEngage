@@ -188,7 +188,7 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
                     ConnectAPIModel.Delegates.RelationshipCategory relationshipCategories = delegates.getRelationshipCategory();
                     if(relationshipCategories != null){
                         if(!delegates.isIs_active()){
-                            connectAPIModel.setRelationName(relationshipCategories.getName() +" (Awaiting Confirmation)");
+                            connectAPIModel.setRelationName(relationshipCategories.getName() +" \n(Awaiting Confirmation)");
                         }
 
                     }

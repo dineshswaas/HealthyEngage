@@ -72,7 +72,7 @@
                 android:padding="5dp"
                 android:text="Mobile" />
 
-            <EditText
+           <!-- <EditText
                 android:id="@+id/mobileEd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,7 +81,21 @@
                 android:ems="10"
                 android:layout_toRightOf="@+id/mobile"
                 android:textColor="@color/grey_black"
-                android:inputType="textPersonName" />
+                android:inputType="phone" />-->
+
+            <br.com.sapereaude.maskedEditText.MaskedEditText
+                android:id="@+id/mobileEd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/mobile"
+                android:inputType="phone"
+                android:background="@color/transparent"
+                android:layout_marginLeft="50dp"
+                android:typeface="monospace"
+                app:allowed_chars="1234567890"
+                app:mask="+7(###)###-##-##"
+                app:keep_hint="true"
+                />
 
         </RelativeLayout>
 
