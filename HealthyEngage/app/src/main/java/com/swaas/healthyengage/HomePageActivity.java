@@ -12,6 +12,7 @@ import com.swaas.library.NavigationPage;
 
 public class HomePageActivity extends BottomBarHolderActivity implements CarePlanFragment.OnFragmentInteractionListener, InsightFragment.OnFragmentInteractionListener {
 
+    int backButtonCount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,5 +34,17 @@ public class HomePageActivity extends BottomBarHolderActivity implements CarePla
     @Override
     public void onClicked() {
         Toast.makeText(this, "Clicked!", Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (backButtonCount >= 1) {
+            backButtonCount = 0;
+            moveTaskToBack(true);
+        } else {
+            Toast.makeText(this, "Press the back button once again to close the application.", Toast.LENGTH_SHORT).show();
+            backButtonCount++;
+        }
     }
 }

@@ -56,7 +56,9 @@ public class HippaActivity extends AppCompatActivity {
             public void getAPIResponseModelSuccess(APIResponseModels apiResponseModels) {
                 progressDialog.show();
                 if(apiResponseModels.isIs_hipaa_signed()){
-                    startActivity(new Intent(HippaActivity.this,HomePageActivity.class));
+                    Intent intent = new Intent(HippaActivity.this,HomePageActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }else{
                     PreferenceUtils.clearAllData(HippaActivity.this);
                     startActivity(new Intent(HippaActivity.this,TimeOutActivity.class));
