@@ -489,6 +489,48 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
         }
     }
 
+    public void gethippa(){
+        if(NetworkUtils.isNetworkAvailable(mContext)){
+            Retrofit retrofit = RetrofitAPIBuilder.getInstance();
+            APIServices carePlanServices =retrofit.create(APIServices.class);
+            Call call =carePlanServices.acknowledgement(PreferenceUtils.getAuthorizationKey(mContext));
+            call.enqueue(new Callback<APIResponseModels>() {
+                @Override
+                public void onResponse(Response<APIResponseModels> response, Retrofit retrofit) {
+                    APIResponseModels apiResponseModels =response.body();
+                    getAPIResponseModel.getAPIResponseModelSuccess(apiResponseModels);
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    getAPIResponseModel.getAPIResponseModelFailure(t.getMessage());
+                }
+            });
+
+        }
+    }
+    public void updateHippa(Delegates delegates){
+        if(NetworkUtils.isNetworkAvailable(mContext)){
+            Retrofit retrofit = RetrofitAPIBuilder.getInstance();
+            APIServices carePlanServices =retrofit.create(APIServices.class);
+            Call call =carePlanServices.submitHippa(PreferenceUtils.getAuthorizationKey(mContext),delegates);
+            call.enqueue(new Callback<APIResponseModels>() {
+                @Override
+                public void onResponse(Response<APIResponseModels> response, Retrofit retrofit) {
+                    APIResponseModels apiResponseModels =response.body();
+                    getAPIResponseModel.getAPIResponseModelSuccess(apiResponseModels);
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    getAPIResponseModel.getAPIResponseModelFailure(t.getMessage());
+                }
+            });
+
+        }
+    }
+
+
 
     public void setGetDelegateDetails( GetDelegateDetails getDelegateDetails){
         this.getDelegateDetails = getDelegateDetails;

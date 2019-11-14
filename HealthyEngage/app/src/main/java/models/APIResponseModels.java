@@ -10,9 +10,50 @@ public class APIResponseModels<T> {
     private List<T> careplan;
     private  Error error;
     String day,mobileNo,country_code,mobile_no,token,careplanId,patientId,delegateId,lastSyncDate;
-    boolean sync,status;
+    boolean sync,status,is_hipaa_signed;
     Delegates delegates;
-    String first_name,last_name,patient_id,delegate_id,relationship_category_id;
+    String first_name,last_name,patient_id,delegate_id,relationship_category_id,name,type,content;
+    boolean is_active;
+
+    public boolean isIs_hipaa_signed() {
+        return is_hipaa_signed;
+    }
+
+    public void setIs_hipaa_signed(boolean is_hipaa_signed) {
+        this.is_hipaa_signed = is_hipaa_signed;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public boolean isIs_active() {
+        return is_active;
+    }
+
+    public void setIs_active(boolean is_active) {
+        this.is_active = is_active;
+    }
 
     public String getFirst_name() {
         return first_name;

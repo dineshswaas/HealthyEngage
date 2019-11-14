@@ -64,4 +64,12 @@ public interface APIServices {
     @POST("api/Delegates/update")
     Call<APIResponseModels> updateDelegate(@Header("Authorization") String value,
                                         @Body Delegates delegates);
+
+    @GET("api/StaticContents/hipaa")
+    Call<APIResponseModels> acknowledgement(@Header("Authorization") String value);
+
+
+    @POST("api/Delegates/signHipaa")
+    Call<APIResponseModels> submitHippa(@Header("Authorization") String value,
+                                        @Body Delegates delegates);
 }

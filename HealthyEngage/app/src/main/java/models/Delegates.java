@@ -5,8 +5,16 @@ public class Delegates {
     String id,user_id;
     User user;
     String first_name,last_name,patient_id,delegate_id,relationship_category_id,mobile_no,country_code;
-    boolean is_deleted,is_patient;
+    boolean is_deleted,is_patient,is_hipaa_signed;
 
+
+    public boolean isIs_hipaa_signed() {
+        return is_hipaa_signed;
+    }
+
+    public void setIs_hipaa_signed(boolean is_hipaa_signed) {
+        this.is_hipaa_signed = is_hipaa_signed;
+    }
 
     public boolean isIs_deleted() {
         return is_deleted;

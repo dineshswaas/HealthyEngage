@@ -98,14 +98,7 @@ public class OTPScreenActivity extends AppCompatActivity {
         public void getAPIResponseModelSuccess(APIResponseModels apiResponseModels) {
             if(apiResponseModels != null){
                 progressDialog.hide();
-                APIResponseModels.AccessToken accessToken = apiResponseModels.getAccessToken();
-                PreferenceUtils.setAuthorizationKey(OTPScreenActivity.this,accessToken.getId());
-                PreferenceUtils.setUserId(OTPScreenActivity.this,accessToken.getUserId());
-            PreferenceUtils.setCarePlanId(OTPScreenActivity.this,apiResponseModels.getCareplanId());
-            PreferenceUtils.setPatientId(OTPScreenActivity.this,apiResponseModels.getPatientId());
-            PreferenceUtils.setDelegateId(OTPScreenActivity.this,apiResponseModels.getDelegateId());
-            PreferenceUtils.setLastSyncDate(OTPScreenActivity.this,apiResponseModels.getLastSyncDate());
-            startActivity(new Intent(OTPScreenActivity.this,HomePageActivity.class));
+                moveToHome(apiResponseModels);
             }
         }
 
@@ -121,6 +114,25 @@ public class OTPScreenActivity extends AppCompatActivity {
         userVerifyModel.setCountry_code(PreferenceUtils.GetCountryZipCode(this,cCode));
         userVerifyModel.setToken(FirebaseInstanceId.getInstance().getToken());
     apiRepository.getPatientDetails(userVerifyModel);
+    }
+
+    private void moveToHome(APIResponseModels apiResponseModels) {
+        APIResponseModels.AccessToken accessToken = apiResponseModels.getAccessToken();
+        PreferenceUtils.setAuthorizationKey(OTPScreenActivity.this,accessToken.getId());
+        PreferenceUtils.setUserId(OTPScreenActivity.this,accessToken.getUserId());
+        PreferenceUtils.setCarePlanId(OTPScreenActivity.this,apiResponseModels.getCareplanId());
+        PreferenceUtils.setPatientId(OTPScreenActivity.this,apiResponseModels.getPatientId());
+        PreferenceUtils.setDelegateId(OTPScreenActivity.this,apiResponseModels.getDelegateId());
+        PreferenceUtils.setLastSyncDate(OTPScreenActivity.this,apiResponseModels.getLastSyncDate());
+
+        if(!TextUtils.isEmpty(apiResponseModels.getDelegateId()) && !apiResponseModels.isIs_hipaa_signed()){
+                startActivity(new Intent(OTPScreenActivity.this,HippaActivity.class));
+        }else{
+            startActivity(new Intent(OTPScreenActivity.this,HomePageActivity.class));
+        }
+
+
+
     }
 
     void showAlertMessage(String message){

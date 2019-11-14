@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HippaActivity">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/divider"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/hippatext"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_above="@+id/bottomaly"
+            android:layout_height="match_parent"
+            android:text="loading..." />
+    </ScrollView>
+
+
+<View
+    android:id="@+id/divider"
+    android:layout_above="@+id/bottomaly"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/draft_grey">
+
+</View>
+
+    <RelativeLayout
+        android:id="@+id/bottomaly"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:padding="15dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/disagree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Disagree" />
+
+        <TextView
+            android:id="@+id/agree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Agree" />
+    </RelativeLayout>
+</RelativeLayout>
