@@ -61,5 +61,7 @@ public interface APIServices {
     Call<APIResponseModels> addDelegate(@Header("Authorization") String value,
                                                                  @Body Delegates delegates);
 
-
+    @POST("api/Delegates/update")
+    Call<APIResponseModels> updateDelegate(@Header("Authorization") String value,
+                                        @Body Delegates delegates);
 }

@@ -40,8 +40,16 @@ public class ConnectAPIModel<T> implements Serializable {
     }
 
     String id,first_name,last_name,email,mobile_no,gender,country_code,headerText;
-    String time_zone,shift_start_time,shift_end_time,emergency_number,relationName,relationship_category_id;
+    String time_zone,shift_start_time,shift_end_time,emergency_number,relationName,relationship_category_id,delegate_id;
     boolean isFromPatient,is_patient,is_Delegate;
+
+    public String getDelegate_id() {
+        return delegate_id;
+    }
+
+    public void setDelegate_id(String delegate_id) {
+        this.delegate_id = delegate_id;
+    }
 
     public String getRelationship_category_id() {
         return relationship_category_id;

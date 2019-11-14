@@ -5,8 +5,24 @@ public class Delegates {
     String id,user_id;
     User user;
     String first_name,last_name,patient_id,delegate_id,relationship_category_id,mobile_no,country_code;
+    boolean is_deleted,is_patient;
 
 
+    public boolean isIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(boolean is_deleted) {
+        this.is_deleted = is_deleted;
+    }
+
+    public boolean isIs_patient() {
+        return is_patient;
+    }
+
+    public void setIs_patient(boolean is_patient) {
+        this.is_patient = is_patient;
+    }
 
     public String getFirst_name() {
         return first_name;

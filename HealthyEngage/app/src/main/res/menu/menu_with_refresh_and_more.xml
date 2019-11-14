@@ -6,6 +6,7 @@
     <item
         android:id="@+id/delegateEdit"
         android:title="Edit"
+        android:visible="false"
         app:showAsAction="always" />
 
 

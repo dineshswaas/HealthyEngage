@@ -41,6 +41,7 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
     ConnectAdapter connectAdapter;
     List<ConnectAPIModel> connectAPIModelList;
     int Request_code=91;
+    int Update_Request_code=91;
     View mView;
     LinearLayout addDelegate;
     public static ConnectFragment newInstance() {
@@ -183,6 +184,7 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
                     connectAPIModel.setId(delegates.getId());;
                     connectAPIModel.setFirst_name(delegates.getFirst_name());
                     connectAPIModel.setLast_name(delegates.getLast_name());
+                    connectAPIModel.setDelegate_id(delegates.getDelegate_id());
                     ConnectAPIModel.Delegates.RelationshipCategory relationshipCategories = delegates.getRelationshipCategory();
                     if(relationshipCategories != null){
                         if(!delegates.isIs_active()){
@@ -227,7 +229,7 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
 
         Intent intent = new Intent(getActivity(),CareTakersDetailsActivity.class);
         intent.putExtra(Constants.INTENT_PARM, (Serializable) connectAPIModelList.get(position));
-        startActivity(intent);
+        startActivityForResult(intent,Update_Request_code);
 
     }
 

@@ -1,6 +1,7 @@
 package com.swaas.healthyengage;
 
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,6 +18,7 @@ public class CareTakersDetailsActivity extends AppCompatActivity {
 
     TextView firstheaderletter,name,phonenumber,textnumber,emailtext,others;
     ConnectAPIModel connectAPIModel;
+    int Update_Request_code=91;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,10 +107,19 @@ public class CareTakersDetailsActivity extends AppCompatActivity {
             if(NetworkUtils.isNetworkAvailable(CareTakersDetailsActivity.this)){
                 Intent intent = new Intent(CareTakersDetailsActivity.this,AddDelegateActivity.class);
                 intent.putExtra(Constants.INTENT_PARM,connectAPIModel);
-                startActivity(intent);
+                startActivityForResult(intent,Update_Request_code);
             }
 
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Update_Request_code){
+            setResult(Update_Request_code);
+            finish();
+        }
     }
 }

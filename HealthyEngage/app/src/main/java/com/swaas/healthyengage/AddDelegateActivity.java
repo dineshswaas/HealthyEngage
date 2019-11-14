@@ -16,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -24,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
@@ -51,17 +54,20 @@ public class AddDelegateActivity extends AppCompatActivity {
     int PICK_CONTACT = 121;
     int REQUEST_MULTIPLE_PERMISSIONS = 123;
     int Request_code=91;
+    int Update_Request_code=92;
     ArrayAdapter adapter;
     RelationshipCategoryModel relationshipCategoryModel = new RelationshipCategoryModel();
     List<RelationshipCategoryModel> relationshipCategoryModelList;
     RelativeLayout buttonlayout;
     ProgressDialog progressDialog;
     ConnectAPIModel connectAPIModel;
+    TextView submitText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_delegate);
         initializeViews();
+        getIntentData();
         if(NetworkUtils.isNetworkAvailable(this)){
             getRelationShipDetails();
         }
@@ -70,7 +76,7 @@ public class AddDelegateActivity extends AppCompatActivity {
 
 
     private void getRelationShipDetails() {
-
+        showProgress("Fetching relationship details");
         APIRepository apiRepository = new APIRepository(this);
         apiRepository.setGetCareTakersDetails(new APIRepository.GetCareTakersDetails() {
             @Override
@@ -79,12 +85,22 @@ public class AddDelegateActivity extends AppCompatActivity {
                 adapter = new ArrayAdapter<RelationshipCategoryModel>
                         (AddDelegateActivity.this, android.R.layout.simple_spinner_dropdown_item, relationshipCategoryModelList);
                 relationSpinner.setAdapter(adapter);
-                getIntentData();
+                if(connectAPIModel != null){
+                    if(relationshipCategoryModelList != null && relationshipCategoryModelList.size() > 0){
+                        for(RelationshipCategoryModel categoryModel : relationshipCategoryModelList ){
+                            if(categoryModel.getId().equalsIgnoreCase(connectAPIModel.getRelationship_category_id())){
+                                relationSpinner.setSelection(relationshipCategoryModelList.indexOf(categoryModel));
+                                break;
+                            }
+                        }
+                    }
+                }
+                hideProgress();
             }
 
             @Override
             public void getCareTakersFailure(String s) {
-
+                hideProgress();
             }
         });
         apiRepository.getRelationDetails();
@@ -104,22 +120,17 @@ public class AddDelegateActivity extends AppCompatActivity {
     }
     private void getIntentData() {
         connectAPIModel = (ConnectAPIModel) getIntent().getSerializableExtra(Constants.INTENT_PARM);
-        if(!TextUtils.isEmpty(connectAPIModel.getLast_name())){
-            nameEd.setText(connectAPIModel.getFirst_name()+ " "+connectAPIModel.getLast_name());
-        }else{
-            nameEd.setText(connectAPIModel.getFirst_name());
-        }
-        if(!TextUtils.isEmpty(connectAPIModel.getMobile_no())){
-            mobileEd.setText(connectAPIModel.getMobile_no());
-        }
-
-        if(relationshipCategoryModelList != null && relationshipCategoryModelList.size() > 0){
-            for(RelationshipCategoryModel categoryModel : relationshipCategoryModelList ){
-                if(categoryModel.getId().equalsIgnoreCase(connectAPIModel.getRelationship_category_id())){
-                    relationSpinner.setSelection(relationshipCategoryModelList.indexOf(categoryModel));
-                    break;
-                }
+        if(connectAPIModel != null){
+            if(!TextUtils.isEmpty(connectAPIModel.getLast_name())){
+                nameEd.setText(connectAPIModel.getFirst_name()+ " "+connectAPIModel.getLast_name());
+            }else{
+                nameEd.setText(connectAPIModel.getFirst_name());
             }
+            if(!TextUtils.isEmpty(connectAPIModel.getMobile_no())){
+                mobileEd.setText(connectAPIModel.getMobile_no());
+            }
+
+            submitText.setText("UPDATE");
         }
 
 
@@ -131,7 +142,7 @@ public class AddDelegateActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Add Delegate");
         mobileEd = (EditText)findViewById(R.id.mobileEd);
         nameEd = (EditText)findViewById(R.id.nameEd);
-        progressDialog = new ProgressDialog(this);
+        submitText = (TextView)findViewById(R.id.submitText);
         relationSpinner = (Spinner)findViewById(R.id.relationSpinner);
         contactImage = (ImageView)findViewById(R.id.contactimage);
         buttonlayout = (RelativeLayout)findViewById(R.id.buttonlayout);
@@ -202,25 +213,24 @@ public class AddDelegateActivity extends AppCompatActivity {
     }
 
     private void submitApiCall() {
-        progressDialog.setMessage("Adding new delegate");
-        progressDialog.show();
+
         APIRepository apiRepository = new APIRepository(AddDelegateActivity.this);
         apiRepository.setGetAPIResponseModel(new APIRepository.GetAPIResponseModel() {
             @Override
             public void getAPIResponseModelSuccess(APIResponseModels apiResponseModels) {
-                progressDialog.dismiss();
                 if(apiResponseModels!= null){
                     setResult(Request_code);
                     finish();
                 }else{
                     showAlertMessage("Delegate mobile number already exists");
                 }
+                hideProgress();
             }
 
             @Override
             public void getAPIResponseModelFailure(String s) {
                 showAlertMessage("Something went wrong");
-                progressDialog.dismiss();
+                hideProgress();
             }
         });
         Delegates delegates = new Delegates();
@@ -236,7 +246,17 @@ public class AddDelegateActivity extends AppCompatActivity {
         String cCode = Locale.getDefault().getCountry();
         delegates.setCountry_code(PreferenceUtils.GetCountryZipCode(AddDelegateActivity.this,cCode));
         delegates.setRelationship_category_id(relationshipCategoryModel.getId());
-        apiRepository.submitDelegate(delegates);
+        if(connectAPIModel != null){
+            delegates.setDelegate_id(connectAPIModel.getDelegate_id());
+            delegates.setIs_deleted(false);
+            delegates.setIs_patient(true);
+            showProgress("Updating delegate details");
+            apiRepository.updateDelegate(delegates);
+        }else{
+            showProgress("Adding new delegate");
+            apiRepository.submitDelegate(delegates);
+        }
+
     }
 
 
@@ -253,6 +273,17 @@ public class AddDelegateActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_with_refresh_and_more,menu);
+        MenuItem menuItem = menu.findItem(R.id.delegateEdit);
+        if(connectAPIModel != null){
+            menuItem.setTitle("Delete");
+            menuItem.setVisible(true);
+        }
+        return true;
+
+    }
 
     void showAlertMessage(String message){
         new IOSDialogBuilder(this)
@@ -305,5 +336,16 @@ public class AddDelegateActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+
+    void showProgress(String message){
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+    void hideProgress(){
+        progressDialog.dismiss();
     }
 }
