@@ -62,6 +62,7 @@ public class AddDelegateActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     ConnectAPIModel connectAPIModel;
     TextView submitText;
+    boolean isFromDelete;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -248,9 +249,15 @@ public class AddDelegateActivity extends AppCompatActivity {
         delegates.setRelationship_category_id(relationshipCategoryModel.getId());
         if(connectAPIModel != null){
             delegates.setDelegate_id(connectAPIModel.getDelegate_id());
-            delegates.setIs_deleted(false);
+            if(isFromDelete){
+                showProgress("Deleting the delegate details");
+                delegates.setIs_deleted(isFromDelete);
+            }else{
+                showProgress("Updating delegate details");
+                delegates.setIs_deleted(isFromDelete);
+            }
             delegates.setIs_patient(true);
-            showProgress("Updating delegate details");
+
             apiRepository.updateDelegate(delegates);
         }else{
             showProgress("Adding new delegate");
@@ -282,6 +289,41 @@ public class AddDelegateActivity extends AppCompatActivity {
             menuItem.setVisible(true);
         }
         return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.delegateEdit){
+            isFromDelete = false;
+            deleteConfirmation();
+        }
+        return true;
+    }
+
+    private void deleteConfirmation() {
+            new IOSDialogBuilder(this)
+                    .setTitle("Delete confirmation")
+                    .setSubtitle("Are you sure you want to delete this delegate?")
+                    .setBoldPositiveLabel(false)
+                    .setCancelable(false)
+                    .setSingleButtonView(false)
+                    .setPositiveListener("Delete", new IOSDialogClickListener() {
+                        @Override
+                        public void onClick(IOSDialog dialog) {
+                            dialog.dismiss();
+                            isFromDelete = true;
+                            submitApiCall();
+                        }
+                    })
+                    .setNegativeListener("Cancel", new IOSDialogClickListener() {
+                        @Override
+                        public void onClick(IOSDialog dialog) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setSinglePositiveListener("OK", null)
+                    .build().show();
 
     }
 

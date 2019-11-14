@@ -44,22 +44,13 @@ class ConnectAdapter extends RecyclerView.Adapter<ConnectAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         final ConnectAPIModel connectAPIModel = connectAPIModelList.get(position);
         if(!TextUtils.isEmpty(connectAPIModel.getHeaderText())){
+            holder.divider.setVisibility(View.GONE);
             holder.headerLayout.setVisibility(View.VISIBLE);
             holder.headerText.setText(connectAPIModel.getHeaderText());
             holder.assessmentMainLayout.setVisibility(View.GONE);
-/*
-            holder.headerText.setText(connectAPIModel.getHeaderText());
-
-                String trimLetter = connectAPIModel.getFirst_name().trim().charAt(0) +""+connectAPIModel.getLast_name().trim().charAt(0);
-                holder.firstletter.setText(trimLetter);
-                holder.assesmentname.setText(connectAPIModel.getFirst_name() +" " +connectAPIModel.getLast_name());
-                holder.assesmentnameSubName.setText(connectAPIModel.getMobile_no());
-                if(!TextUtils.isEmpty(connectAPIModel.getShift_start_time()) && !TextUtils.isEmpty(connectAPIModel.getShift_end_time())){
-                    holder.assesmentnameSubName.setText(connectAPIModel.getShift_start_time() +" - "+connectAPIModel.getShift_end_time());
-                }
-*/
 
         }else{
+                holder.divider.setVisibility(View.VISIBLE);
                 holder.headerLayout.setVisibility(View.GONE);
                 holder.assessmentMainLayout.setVisibility(View.VISIBLE);
                 if(TextUtils.isEmpty(connectAPIModel.getLast_name())){
@@ -106,6 +97,7 @@ class ConnectAdapter extends RecyclerView.Adapter<ConnectAdapter.ViewHolder> {
         TextView headerText,assesmentname,assesmentnameSubName,firstletter;
         RelativeLayout assessmentMainLayout;
         LinearLayout headerLayout;
+        View divider;
         public ViewHolder(View itemView) {
             super(itemView);
             assesmentname = (TextView)itemView.findViewById(R.id.assesmentname);
@@ -114,6 +106,7 @@ class ConnectAdapter extends RecyclerView.Adapter<ConnectAdapter.ViewHolder> {
             headerText = (TextView)itemView.findViewById(R.id.headerText);
             assessmentMainLayout = (RelativeLayout)itemView.findViewById(R.id.assessmentMainLayout);
             headerLayout = (LinearLayout)itemView.findViewById(R.id.headerLayout);
+            divider= (View)itemView.findViewById(R.id.divider);
         }
     }
 

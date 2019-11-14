@@ -91,5 +91,12 @@
 
 
     </RelativeLayout>
+    <View
+        android:id="@+id/divider"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@color/gray_non_pressed">
+
+    </View>
 
 </LinearLayout>

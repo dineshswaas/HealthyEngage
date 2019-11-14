@@ -210,7 +210,7 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
         connectRecycler.setLayoutManager(new LinearLayoutManager(connectRecycler.getContext(), LinearLayoutManager.VERTICAL, false));
         connectAdapter = new ConnectAdapter(ConnectFragment.this,connectAPIModelList);
         connectAdapter.setOnCareClickClickListener(this);
-        connectRecycler.addItemDecoration(new DividerItemDecoration(connectRecycler.getContext(), DividerItemDecoration.VERTICAL));
+       // connectRecycler.addItemDecoration(new DividerItemDecoration(connectRecycler.getContext(), DividerItemDecoration.VERTICAL));
         connectRecycler.setAdapter(connectAdapter);
     }
 
