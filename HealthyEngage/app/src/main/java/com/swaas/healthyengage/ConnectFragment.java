@@ -24,6 +24,7 @@ import Repositories.APIRepository;
 import models.ConnectAPIModel;
 import models.Delegates;
 import utils.Constants;
+import utils.NetworkUtils;
 import utils.PreferenceUtils;
 
 /**
@@ -68,8 +69,11 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
         addDelegate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),AddDelegateActivity.class);
-                startActivityForResult(intent,Request_code);
+                if(NetworkUtils.isNetworkAvailable(getActivity())){
+                    Intent intent = new Intent(getActivity(),AddDelegateActivity.class);
+                    startActivityForResult(intent,Request_code);
+                }
+
             }
         });
     }
@@ -191,6 +195,7 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
                     connectAPIModel.setCountry_code(delegateForMobile.getUser().getCountry_code());
                     connectAPIModel.setIs_Delegate(true);
                     connectAPIModel.setFromPatient(false);
+                    connectAPIModel.setRelationship_category_id(delegates.getRelationship_category_id());
                     connectAPIModelList.add(connectAPIModel);
 
             }

@@ -1,14 +1,17 @@
 package com.swaas.healthyengage;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import models.ConnectAPIModel;
 import utils.Constants;
+import utils.NetworkUtils;
 
 public class CareTakersDetailsActivity extends AppCompatActivity {
 
@@ -79,7 +82,33 @@ public class CareTakersDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
 
+        try {
+            getMenuInflater().inflate(R.menu.menu_with_refresh_and_more, menu);
+            MenuItem editDelegate =menu.findItem(R.id.delegateEdit);
+            if(connectAPIModel != null && connectAPIModel.isIs_Delegate()){
+                editDelegate.setVisible(true);
+            }else{
+                editDelegate.setVisible(false);
+            }
+        } catch (Exception e) {
+
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.delegateEdit){
+            if(NetworkUtils.isNetworkAvailable(CareTakersDetailsActivity.this)){
+                Intent intent = new Intent(CareTakersDetailsActivity.this,AddDelegateActivity.class);
+                intent.putExtra(Constants.INTENT_PARM,connectAPIModel);
+                startActivity(intent);
+            }
+
+        }
+        return true;
     }
 }

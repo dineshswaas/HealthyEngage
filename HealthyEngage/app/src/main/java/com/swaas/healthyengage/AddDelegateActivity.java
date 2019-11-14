@@ -39,6 +39,7 @@ import models.APIResponseModels;
 import models.ConnectAPIModel;
 import models.Delegates;
 import models.RelationshipCategoryModel;
+import utils.Constants;
 import utils.NetworkUtils;
 import utils.PreferenceUtils;
 
@@ -55,6 +56,7 @@ public class AddDelegateActivity extends AppCompatActivity {
     List<RelationshipCategoryModel> relationshipCategoryModelList;
     RelativeLayout buttonlayout;
     ProgressDialog progressDialog;
+    ConnectAPIModel connectAPIModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +65,9 @@ public class AddDelegateActivity extends AppCompatActivity {
         if(NetworkUtils.isNetworkAvailable(this)){
             getRelationShipDetails();
         }
+
     }
+
 
     private void getRelationShipDetails() {
 
@@ -75,6 +79,7 @@ public class AddDelegateActivity extends AppCompatActivity {
                 adapter = new ArrayAdapter<RelationshipCategoryModel>
                         (AddDelegateActivity.this, android.R.layout.simple_spinner_dropdown_item, relationshipCategoryModelList);
                 relationSpinner.setAdapter(adapter);
+                getIntentData();
             }
 
             @Override
@@ -96,6 +101,28 @@ public class AddDelegateActivity extends AppCompatActivity {
 
             }
         });
+    }
+    private void getIntentData() {
+        connectAPIModel = (ConnectAPIModel) getIntent().getSerializableExtra(Constants.INTENT_PARM);
+        if(!TextUtils.isEmpty(connectAPIModel.getLast_name())){
+            nameEd.setText(connectAPIModel.getFirst_name()+ " "+connectAPIModel.getLast_name());
+        }else{
+            nameEd.setText(connectAPIModel.getFirst_name());
+        }
+        if(!TextUtils.isEmpty(connectAPIModel.getMobile_no())){
+            mobileEd.setText(connectAPIModel.getMobile_no());
+        }
+
+        if(relationshipCategoryModelList != null && relationshipCategoryModelList.size() > 0){
+            for(RelationshipCategoryModel categoryModel : relationshipCategoryModelList ){
+                if(categoryModel.getId().equalsIgnoreCase(connectAPIModel.getRelationship_category_id())){
+                    relationSpinner.setSelection(relationshipCategoryModelList.indexOf(categoryModel));
+                    break;
+                }
+            }
+        }
+
+
     }
 
     private void initializeViews() {
