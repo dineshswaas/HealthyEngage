@@ -129,13 +129,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:gravity="center"
-                        android:text="21-Aug-2019" />
+                        android:text="@string/not_available" />
 
                     <TextView
                         android:id="@+id/percentIndicatior"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:text="Your care overview is 0% complete "
                         android:textColor="@color/black"
                         android:textSize="18sp"

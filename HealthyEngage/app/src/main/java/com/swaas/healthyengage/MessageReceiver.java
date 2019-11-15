@@ -70,6 +70,27 @@ public class MessageReceiver extends FirebaseMessagingService {
 
     }
 
+
+    void showAlertMessage(final String message){
+        new IOSDialogBuilder(this)
+                .setTitle("Alert")
+                .setSubtitle(message)
+                .setBoldPositiveLabel(false)
+                .setCancelable(false)
+                .setSingleButtonView(true)
+                .setPositiveListener("",null)
+                .setNegativeListener("",null)
+                .setSinglePositiveListener("OK", new IOSDialogClickListener() {
+                    @Override
+                    public void onClick(IOSDialog dialog) {
+                        dialog.dismiss();
+                    }
+                })
+                .build().show();
+
+    }
+
+
     @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.O)
     public Notification.Builder getAndroidChannelNotification(String title, String body) {
         return new Notification.Builder(getApplicationContext(), ANDROID_CHANNEL_ID)

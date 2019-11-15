@@ -730,11 +730,12 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
                 .setSinglePositiveListener("OK", new IOSDialogClickListener() {
                     @Override
                     public void onClick(IOSDialog dialog) {
+                        dialog.dismiss();
                         if(message.equalsIgnoreCase("No Care plan is assigned to this patient")){
-                            dialog.dismiss();
-                            startActivity(new Intent(getActivity(),TimeOutActivity.class));
-                        }else{
-                            dialog.dismiss();
+                            Intent intent = new Intent(getActivity(),TimeOutActivity.class);
+                            PreferenceUtils.clearAllData(getActivity());
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                         }
 
                     }

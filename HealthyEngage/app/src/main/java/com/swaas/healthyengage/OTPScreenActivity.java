@@ -105,7 +105,7 @@ public class OTPScreenActivity extends AppCompatActivity {
         @Override
         public void getAPIResponseModelFailure(String s) {
             progressDialog.hide();
-            Toast.makeText(OTPScreenActivity.this,"Something went wrong",Toast.LENGTH_SHORT).show();
+            showAlertMessage(s);
         }
     });
 
@@ -137,7 +137,7 @@ public class OTPScreenActivity extends AppCompatActivity {
 
     }
 
-    void showAlertMessage(String message){
+    void showAlertMessage(final String message){
         new IOSDialogBuilder(this)
                 .setTitle("Alert")
                 .setSubtitle(message)
@@ -150,6 +150,11 @@ public class OTPScreenActivity extends AppCompatActivity {
                     @Override
                     public void onClick(IOSDialog dialog) {
                         dialog.dismiss();
+                        if(message.equalsIgnoreCase("No Care Plan Assigned")){
+                            Intent intent = new Intent(OTPScreenActivity.this,TimeOutActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
                     }
                 })
                 .build().show();

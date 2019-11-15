@@ -35,6 +35,9 @@ import com.zhouyou.view.seekbar.SignSeekBar;
 import java.util.ArrayList;
 import java.util.List;
 
+import Alerts.IOSDialog;
+import Alerts.IOSDialogBuilder;
+import Alerts.IOSDialogClickListener;
 import Repositories.APIRepository;
 import models.APIResponseModels;
 import models.CarePlanModels;
@@ -140,7 +143,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         }
 
 
-        if(carePlanAssessment.getPatientAssessment() != null){
+        if(carePlanAssessment.getPatientAssessment() != null && carePlanAssessment.getPatientAssessment().size() > 0){
             CarePlanModels.CarePlanAssessment.PatientAssessment assessment = carePlanAssessment.getPatientAssessment().get(0);
             if(assessment != null){
                 if(carePlanAssessment.getPatientAssessment() != null && carePlanAssessment.getPatientAssessment().size() > 0){
@@ -263,7 +266,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
 
         }
 
-        if(carePlanAssessment.getPatientAssessment() != null){
+        if(carePlanAssessment.getPatientAssessment() != null && carePlanAssessment.getPatientAssessment().size() > 0){
             CarePlanModels.CarePlanAssessment.PatientAssessment assessment = carePlanAssessment.getPatientAssessment().get(0);
             if(assessment != null){
                 if(carePlanAssessment.getPatientAssessment() != null && carePlanAssessment.getPatientAssessment().size() > 0){
@@ -318,16 +321,16 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         if(!TextUtils.isEmpty(carePlanAssessment.getQuestion())){
             question.setText(carePlanAssessment.getQuestion());
         }
+        if(!TextUtils.isEmpty(carePlanAssessment.getMin()) && !TextUtils.isEmpty(carePlanAssessment.getMax())){
+            min = Integer.parseInt(carePlanAssessment.getMin());
+            max = Integer.parseInt(carePlanAssessment.getMax());
+        }
+
         submitTextDisabled();
 
-        if(carePlanAssessment.getPatientAssessment() != null){
+        if(carePlanAssessment.getPatientAssessment() != null && carePlanAssessment.getPatientAssessment().size() > 0){
             CarePlanModels.CarePlanAssessment.PatientAssessment assessment = carePlanAssessment.getPatientAssessment().get(0);
             if(assessment != null){
-                if(!TextUtils.isEmpty(carePlanAssessment.getMin()) && !TextUtils.isEmpty(carePlanAssessment.getMax())){
-                    min = Integer.parseInt(carePlanAssessment.getMin());
-                    max = Integer.parseInt(carePlanAssessment.getMax());
-                }
-
                 if(carePlanAssessment.getPatientAssessment() != null && carePlanAssessment.getPatientAssessment().size() > 0){
                     for(CarePlanModels.CarePlanAssessment.PatientAssessment patientAssessment : carePlanAssessment.getPatientAssessment()){
                         if(patientAssessment.getAssessment_date().split("T")[0].equalsIgnoreCase(carePlanAssessment.getAssessmentDate())){
@@ -373,11 +376,9 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
                 if(!TextUtils.isEmpty(textEditText.getText().toString())){
                     int actualValue = Integer.parseInt(textEditText.getText().toString());
                     if(actualValue < min){
-                        Toast.makeText(AssessmentDetailsActivity.this,
-                                String.valueOf(actualValue)+" exceeds the minimum allowed value ("+String.valueOf(min)+")",Toast.LENGTH_SHORT).show();
+                        showAlertMessage(String.valueOf(actualValue)+" exceeds the minimum allowed value ("+String.valueOf(min)+")");
                     } else if(actualValue > max){
-                        Toast.makeText(AssessmentDetailsActivity.this,
-                                String.valueOf(actualValue)+" exceeds the maximim allowed value ("+String.valueOf(max)+")",Toast.LENGTH_SHORT).show();
+                        showAlertMessage(String.valueOf(actualValue)+" exceeds the maximum allowed value ("+String.valueOf(max)+")");
                     }else{
                         carePlanAssessment.setValue(textEditText.getText().toString().trim());
                         if(NetworkUtils.isNetworkAvailable(AssessmentDetailsActivity.this)){
@@ -443,7 +444,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         }
 
         radioGroup.clearCheck();
-        if(carePlanAssessment.getPatientAssessment() != null){
+        if(carePlanAssessment.getPatientAssessment() != null && carePlanAssessment.getPatientAssessment().size() > 0){
             CarePlanModels.CarePlanAssessment.PatientAssessment assessment = carePlanAssessment.getPatientAssessment().get(0);
             if(assessment != null){
                 if(carePlanAssessment.getPatientAssessment() != null && carePlanAssessment.getPatientAssessment().size() > 0){
@@ -501,6 +502,26 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
 
 
     }
+
+    void showAlertMessage(final String message){
+        new IOSDialogBuilder(AssessmentDetailsActivity.this)
+                .setTitle("Alert")
+                .setSubtitle(message)
+                .setBoldPositiveLabel(false)
+                .setCancelable(false)
+                .setSingleButtonView(true)
+                .setPositiveListener("",null)
+                .setNegativeListener("",null)
+                .setSinglePositiveListener("OK", new IOSDialogClickListener() {
+                    @Override
+                    public void onClick(IOSDialog dialog) {
+                        dialog.dismiss();
+                    }
+                })
+                .build().show();
+
+    }
+
 
     private void initializeView() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
