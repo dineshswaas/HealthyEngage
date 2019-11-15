@@ -46,6 +46,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
         app:animateProgress="true"
+        android:visibility="visible"
         app:backgroundStrokeColor="@color/gray_non_pressed"
         app:backgroundStrokeWidth="3dp"
         app:drawBackgroundStroke="true"
@@ -59,6 +60,18 @@
         app:maximum="100"
         app:progressAnimationDuration="1000"
         app:startAngle="270"/>
+
+
+    <ImageView
+        android:id="@+id/completeImage"
+        android:layout_width="30dp"
+        android:visibility="gone"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/circlepinked"
+        android:layout_height="30dp">
+
+    </ImageView>
+
 
 
 </LinearLayout>

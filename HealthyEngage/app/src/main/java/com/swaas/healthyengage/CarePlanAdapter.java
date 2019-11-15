@@ -42,6 +42,13 @@ class CarePlanAdapter extends RecyclerView.Adapter<CarePlanAdapter.ViewHolder>{
         holder.day.setText(tpHeaderModel.getDayString().toUpperCase().substring(0, 1));
         holder.date.setText(String.valueOf(tpHeaderModel.getDayInt()));
         holder.circularProgressBar.setProgress(tpHeaderModel.getProgressValue());
+        if(tpHeaderModel.getProgressValue() >= 100){
+            holder.circularProgressBar.setVisibility(View.GONE);
+            holder.completeImage.setVisibility(View.VISIBLE);
+        }else{
+            holder.circularProgressBar.setVisibility(View.VISIBLE);
+            holder.completeImage.setVisibility(View.GONE);
+        }
         if(!tpHeaderModel.isSelected()){
             holder.day.setTextColor(activity.getResources().getColor(R.color.grey_black));
             holder.day.setBackground(activity.getResources().getDrawable(R.drawable.rectangleborderwhite));
@@ -100,6 +107,7 @@ class CarePlanAdapter extends RecyclerView.Adapter<CarePlanAdapter.ViewHolder>{
         public final TextView date, day;
         public final LinearLayout dateLayout;
         public final CircularProgressBar circularProgressBar;
+        ImageView completeImage;
         public ImageView indicator;
         public ViewHolder(View view) {
             super(view);
@@ -108,6 +116,7 @@ class CarePlanAdapter extends RecyclerView.Adapter<CarePlanAdapter.ViewHolder>{
             date = (TextView) view.findViewById(R.id.date);
             day = (TextView) view.findViewById(R.id.day);
             circularProgressBar = (CircularProgressBar)view.findViewById(R.id.donut_progress);
+            completeImage = (ImageView)view.findViewById(R.id.completeImage);
         }
     }
 
