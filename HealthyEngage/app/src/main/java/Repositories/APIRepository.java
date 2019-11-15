@@ -9,6 +9,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.swaas.healthyengage.LoginWithMobileActivity;
@@ -444,6 +445,71 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
                     getAPIResponseModel.getAPIResponseModelFailure(t.getMessage());
                 }
             });
+
+        }
+    }
+
+
+    public void getPatientDetailsUsingVolley(UserVerifyModel userVerifyModel){
+
+        if(NetworkUtils.isNetworkAvailable(mContext)) {
+            try {
+
+                RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+                String url = Constants.COMPANY_BASE_URL + "api/Users/patient/verify";
+                JSONObject jsonBody = new JSONObject();
+                jsonBody.put("country_code", userVerifyModel.getCountry_code());
+                jsonBody.put("mobile_no", userVerifyModel.getMobile_no());
+                jsonBody.put("token",userVerifyModel.getToken());
+
+
+                final String requestBody = jsonBody.toString();
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jsonResponse = null;
+                        try {
+                            jsonResponse = new JSONObject(response);
+                            APIResponseModels userVerifyModel = new APIResponseModels();
+                            userVerifyModel.setStatus(jsonResponse.getBoolean("status"));
+                            userVerifyModel.setIs_hipaa_signed(jsonResponse.getBoolean("success"));
+                            getAPIResponseModel.getAPIResponseModelSuccess(userVerifyModel);
+                        } catch (JSONException e) {
+                            getUserVerifyModel.getUserVerifyModelFailure("Verification code is incorrect");
+                            e.printStackTrace();
+                        }
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        try {
+                            String responseBody = new String(error.networkResponse.data, "utf-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }) {
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8";
+                    }
+
+                    @Override
+                    public byte[] getBody() throws AuthFailureError {
+                        try {
+                            return requestBody == null ? null : requestBody.getBytes("utf-8");
+                        } catch (UnsupportedEncodingException uee) {
+                            VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                            return null;
+                        }
+                    }
+                };
+
+                requestQueue.add(stringRequest);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
 
         }
     }

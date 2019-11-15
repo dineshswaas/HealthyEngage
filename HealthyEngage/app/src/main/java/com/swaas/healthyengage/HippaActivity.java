@@ -10,6 +10,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import Alerts.IOSDialog;
+import Alerts.IOSDialogBuilder;
+import Alerts.IOSDialogClickListener;
 import Repositories.APIRepository;
 import models.APIResponseModels;
 import models.Delegates;
@@ -55,14 +58,19 @@ public class HippaActivity extends AppCompatActivity {
             @Override
             public void getAPIResponseModelSuccess(APIResponseModels apiResponseModels) {
                 progressDialog.show();
-                if(apiResponseModels.isIs_hipaa_signed()){
-                    Intent intent = new Intent(HippaActivity.this,HomePageActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                if(apiResponseModels != null){
+                    if(apiResponseModels.isIs_hipaa_signed()){
+                        Intent intent = new Intent(HippaActivity.this,HomePageActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }else{
+                        PreferenceUtils.clearAllData(HippaActivity.this);
+                        startActivity(new Intent(HippaActivity.this,TimeOutActivity.class));
+                    }
                 }else{
-                    PreferenceUtils.clearAllData(HippaActivity.this);
-                    startActivity(new Intent(HippaActivity.this,TimeOutActivity.class));
+                    showAlertMessage();
                 }
+
             }
 
             @Override
@@ -82,6 +90,31 @@ public class HippaActivity extends AppCompatActivity {
 
     }
 
+    void showAlertMessage(){
+        new IOSDialogBuilder(this)
+                .setTitle("Patient care Error")
+                .setSubtitle("No delegate assigned to this patient")
+                .setBoldPositiveLabel(false)
+                .setCancelable(false)
+                .setSingleButtonView(true)
+                .setPositiveListener("",null)
+                .setNegativeListener("",null)
+                .setSinglePositiveListener("OK", new IOSDialogClickListener() {
+                    @Override
+                    public void onClick(IOSDialog dialog) {
+                        dialog.dismiss();
+                           /* Intent intent = new Intent(HippaActivity.this,TimeOutActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            PreferenceUtils.clearAllData(HippaActivity.this);
+                            startActivity(intent);*/
+                        Intent intent = new Intent(HippaActivity.this,HomePageActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+                })
+                .build().show();
+
+    }
 
     @Override
     public void onBackPressed() {

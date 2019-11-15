@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -82,19 +83,6 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView =  inflater.inflate(R.layout.fragment_careplan, container, false);
         intializeViews();
-
-/*        PreferenceUtils.setAuthorizationKey(getActivity(),"LpWno3DZs4dnmcoejrGPaWBFlk5DwSxETal0DMMJJmkJQEME8zWzDrtIBM8wU6Ea");
-        PreferenceUtils.setCarePlanId(getActivity(),"60b0d2ff-8fde-401e-8fc3-9454ca46702b");
-        PreferenceUtils.setPatientId(getActivity(),"52575534-bcee-40f0-b6b5-0612bfe7db06");
-        PreferenceUtils.setUserId(getActivity(),"e031d072-14db-4b10-abd6-0e18e5daf0c4");
-        PreferenceUtils.setLastSyncDate(getActivity(),"2019-11-07T00:00:00.000Z");*/
-
-        //ProductionUser
-/*        PreferenceUtils.setAuthorizationKey(getActivity(),"OJkUbcTXbGLTXeiiBV0yw1RadXZ9KWeojMFjn9P4X2iDc4MCnqMQ4oVzCwentCV7");
-        PreferenceUtils.setCarePlanId(getActivity(),"694401f8-eb1e-4896-b2bb-3f2ebcf3d957");
-        PreferenceUtils.setPatientId(getActivity(),"3f6e4590-cf2f-41bd-b1e2-d301d8108cbf");*/
-
-
         selectedDate = DateHelper.getCurrentDate();
         getCarePlanDetailsFromAPI(DateHelper.getCurrentDate());
         //SessionExpiredServices.timer.start();
