@@ -14,6 +14,10 @@ public class APIResponseModels<T> {
     Delegates delegates;
     String first_name,last_name,patient_id,delegate_id,relationship_category_id,name,type,content;
     boolean is_active;
+    UserModel<T> user;
+
+
+
 
     public boolean isIs_hipaa_signed() {
         return is_hipaa_signed;

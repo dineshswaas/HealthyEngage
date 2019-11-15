@@ -6,6 +6,7 @@ import models.ConnectAPIModel;
 import models.Delegates;
 import models.PatientMessageAPIModel;
 import models.PatientMessageModels;
+import models.UserModel;
 import models.UserVerifyModel;
 import retrofit.Call;
 import retrofit.http.Body;
@@ -73,7 +74,7 @@ public interface APIServices {
     Call<APIResponseModels> submitHippa(@Header("Authorization") String value,
                                         @Body Delegates delegates);
 
-    @GET("api/Users/")
-    Call<APIResponseModels> getUserDetails(@Header("Authorization") String value,
-                                        @Body Delegates delegates);
+    @GET("api/Users/{id}")
+    Call<UserModel> getUserDetails(@Header("Authorization") String value,
+                                   @Path("id") String id);
 }

@@ -23,6 +23,7 @@ import java.util.List;
 import Repositories.APIRepository;
 import models.ConnectAPIModel;
 import models.Delegates;
+import models.UserModel;
 import utils.Constants;
 import utils.NetworkUtils;
 import utils.PreferenceUtils;
@@ -54,8 +55,40 @@ public class ConnectFragment extends Fragment implements ConnectAdapter.OnCareCl
         mView =  inflater.inflate(R.layout.fragment_connect, container, false);
         initializeViews();
         getConnectDetails();
+        if(TextUtils.isEmpty(PreferenceUtils.getUserName(getActivity()))){
+            getUserDetails();
+        }else{
+            loginname.setText(PreferenceUtils.getUserName(getActivity()));
+            firstletter.setText(PreferenceUtils.getUserName(getActivity()).charAt(0)+"");
+        }
+
         return mView;
 
+    }
+
+    private void getUserDetails() {
+
+        APIRepository apiRepository = new APIRepository(getActivity());
+        apiRepository.setGetUserDetails(new APIRepository.GetUserDetails() {
+            @Override
+            public void getSuccess(UserModel userModelAPI) {
+            UserModel userModel = userModelAPI;
+            if(userModel != null){
+                if(TextUtils.isEmpty(userModel.getLast_name())){
+                    userModel.setLast_name("");
+                }
+                loginname.setText(userModel.getFirst_name()+" "+userModel.getLast_name());
+                firstletter.setText(userModel.getFirst_name().charAt(0)+"");
+                PreferenceUtils.setUserName(getActivity(),userModel.getFirst_name()+" "+userModel.getLast_name());
+            }
+            }
+
+            @Override
+            public void getFailure(String s) {
+
+            }
+        });
+        apiRepository.getUserDetails(PreferenceUtils.getUserId(getActivity()));
     }
 
     private void initializeViews() {

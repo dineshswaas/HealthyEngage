@@ -31,6 +31,7 @@ import models.ConnectAPIModel;
 import models.Delegates;
 import models.PatientMessageAPIModel;
 import models.PatientMessageModels;
+import models.UserModel;
 import models.UserVerifyModel;
 import retrofit.Call;
 import retrofit.Callback;
@@ -49,6 +50,9 @@ public class APIRepository {
     private GetAPIResponseModel getAPIResponseModel;
     private GetUserVerifyModel getUserVerifyModel;
     private GetDelegateDetails getDelegateDetails;
+    private GetUserDetails getUserDetails;
+
+
   public APIRepository(Context context){
     this.mContext = context;
   }
@@ -550,4 +554,38 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
         void getUserVerifyModelFailure(String s);
 
     }
+
+    public void getUserDetails(String  userId){
+        if(NetworkUtils.isNetworkAvailable(mContext)){
+            Retrofit retrofit = RetrofitAPIBuilder.getInstance();
+            APIServices carePlanServices =retrofit.create(APIServices.class);
+            Call call =carePlanServices.getUserDetails(PreferenceUtils.getAuthorizationKey(mContext),userId);
+            call.enqueue(new Callback<UserModel>() {
+                @Override
+                public void onResponse(Response<UserModel> response, Retrofit retrofit) {
+                    UserModel apiResponseModels =response.body();
+                    getUserDetails.getSuccess(apiResponseModels);
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    getUserDetails.getFailure(t.getMessage());
+                }
+            });
+
+        }
+    }
+
+
+
+
+
+    public void setGetUserDetails( GetUserDetails getUserDetails){
+        this.getUserDetails = getUserDetails;
+    }
+    public interface GetUserDetails{
+        void getSuccess(UserModel delegates);
+        void getFailure(String s);
+    }
+
 }

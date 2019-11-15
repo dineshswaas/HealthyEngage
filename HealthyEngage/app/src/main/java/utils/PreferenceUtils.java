@@ -23,6 +23,7 @@ public class PreferenceUtils {
     private static final String USER_ID = "USER_ID";
     private static final String UUID = "UUID";
     private static final String LOGIN_MOBILE_NUMBER = "LOGIN_MOBILE_NUMBER";
+    private static final String USER_NAME = "USER_NAME";
     public static String getAuthorizationKey(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
         String mode = sharedPreferences.getString(Authorization, "");
@@ -142,12 +143,26 @@ public class PreferenceUtils {
         return mode;
     }
 
+    public static void setUserName(Context context, String value) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USER_NAME, value);
+        editor.commit();
+    }
+
+    public static String getUserName(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
+        String mode = sharedPreferences.getString(USER_NAME, "");
+        return mode;
+    }
+
     public static void setLoginMobileNumber(Context context, String value) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(LOGIN_MOBILE_NUMBER, value);
         editor.commit();
     }
+
 
 
     public static void clearAllData(Context mContext){

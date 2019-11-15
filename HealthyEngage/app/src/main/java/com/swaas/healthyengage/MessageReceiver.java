@@ -38,8 +38,8 @@ public class MessageReceiver extends FirebaseMessagingService {
         Map<String, String> data = remoteMessage.getData();
         String topic = remoteMessage.getFrom();
         createChannels();
-        //showNotifications(remoteMessage.getNotification().getBody(), remoteMessage.getNotification().getTitle(),topic);
-        getAndroidChannelNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
+        showNotifications(remoteMessage.getNotification().getBody(), remoteMessage.getNotification().getTitle(),topic);
+        //getAndroidChannelNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
     }
 
 

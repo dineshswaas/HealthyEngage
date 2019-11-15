@@ -75,7 +75,7 @@
             android:background="@drawable/circlebordergrey"
             android:textColor="@color/white"
             android:textSize="28dp"
-            android:text="D" />
+             />
 
         <TextView
             android:id="@+id/loginname"
