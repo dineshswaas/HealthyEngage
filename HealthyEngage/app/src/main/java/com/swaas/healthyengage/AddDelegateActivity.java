@@ -148,7 +148,7 @@ public class AddDelegateActivity extends AppCompatActivity {
         mobileEd = (MaskedEditText) findViewById(R.id.mobileEd);
         String cCode = Locale.getDefault().getCountry();
         cCode = PreferenceUtils.GetCountryZipCode(this,cCode);
-        mobileEd.setMask("+"+cCode+"(###)###-##-##");
+       // mobileEd.setMask("(###)###-####");
         nameEd = (EditText)findViewById(R.id.nameEd);
         submitText = (TextView)findViewById(R.id.submitText);
         relationSpinner = (Spinner)findViewById(R.id.relationSpinner);

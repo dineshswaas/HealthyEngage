@@ -189,7 +189,6 @@ public class PreferenceUtils {
                 break;
             }
         }
-        return String.valueOf("91");
-        //return CountryZipCode;
+        return CountryZipCode;
     }
 }

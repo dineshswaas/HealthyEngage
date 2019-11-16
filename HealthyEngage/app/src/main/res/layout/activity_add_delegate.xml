@@ -93,7 +93,7 @@
                 android:layout_marginLeft="50dp"
                 android:typeface="monospace"
                 app:allowed_chars="1234567890"
-                app:mask="+7(###)###-##-##"
+                app:mask="(###)###-####"
                 app:keep_hint="true"
                 />
 
