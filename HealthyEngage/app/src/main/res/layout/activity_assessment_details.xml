@@ -85,7 +85,6 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:padding="25dp"
-                        android:inputType="number"
                         android:background="@color/transparent"
                         android:hint="Tap to answer" />
 

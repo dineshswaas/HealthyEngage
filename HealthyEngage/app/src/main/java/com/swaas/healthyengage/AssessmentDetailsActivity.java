@@ -9,6 +9,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -42,6 +44,7 @@ import Repositories.APIRepository;
 import models.APIResponseModels;
 import models.CarePlanModels;
 import utils.Constants;
+import utils.DeciamalFormatter;
 import utils.NetworkUtils;
 import utils.PreferenceUtils;
 
@@ -347,6 +350,10 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
 
         }
 
+
+        textEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        textEditText.setFilters(new InputFilter[]{new DeciamalFormatter(4, 5)});
+
         textEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -374,7 +381,8 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!TextUtils.isEmpty(textEditText.getText().toString())){
-                    int actualValue = Integer.parseInt(textEditText.getText().toString());
+                    float tempfloat = Float.parseFloat(textEditText.getText().toString());
+                    int actualValue = (int) Math.round(tempfloat);
                     if(actualValue < min){
                         showAlertMessage(String.valueOf(actualValue)+" exceeds the minimum allowed value ("+String.valueOf(min)+")");
                     } else if(actualValue > max){
