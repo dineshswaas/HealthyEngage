@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:background="@color/white">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_above="@+id/buttonparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_smoke">
+
+        <RelativeLayout
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:background="@color/white">
+
+
+
+            <RelativeLayout
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/header"
+                    android:layout_width="match_parent"
+                    android:background="@color/gray_non_pressed"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/firstletter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_centerHorizontal="true"
+                        android:padding="50dp"
+                        android:textStyle="bold"
+                        android:background="@drawable/circlebordergrey"
+                        android:textColor="@color/white"
+                        android:textSize="28dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/loginname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/firstletter"
+                        android:textColor="@color/black"
+                        android:text="@string/not_available" />
+
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/detailsHeader"
+                    android:layout_width="match_parent"
+                    android:layout_below="@id/header"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:padding="15dp"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textView8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:text="First Name" />
+
+                        <EditText
+                            android:background="@color/transparent"
+                            android:id="@+id/nameValue"
+                            android:textSize="15sp"
+                            android:layout_width="wrap_content"
+                            android:inputType="textPersonName"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/not_available" />
+                    </RelativeLayout>
+                    <View
+                        android:id="@+id/assdivider1"
+                        android:layout_width="match_parent"
+                        android:background="@color/draft_grey"
+                        android:layout_height="1dp">
+
+                    </View>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:padding="15dp"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textView9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:text="Last Name" />
+
+                        <EditText
+                            android:background="@color/transparent"
+                            android:inputType="textPersonName"
+                            android:textSize="15sp"
+                            android:id="@+id/lastnameValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/not_available" />
+                    </RelativeLayout>
+                    <View
+                        android:id="@+id/assdivider2"
+                        android:layout_width="match_parent"
+                        android:background="@color/draft_grey"
+                        android:layout_height="1dp">
+
+                    </View>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:padding="15dp"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textView81"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:text="Sex" />
+
+                        <Spinner
+                            android:id="@+id/sexValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true" />
+                    </RelativeLayout>
+                    <View
+                        android:id="@+id/assdividerqq"
+                        android:layout_width="match_parent"
+                        android:background="@color/draft_grey"
+                        android:layout_height="1dp">
+
+                    </View>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:padding="15dp"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textView18"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:text="Date of Birth" />
+
+                        <TextView
+                            android:id="@+id/dobValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/not_available" />
+                    </RelativeLayout>
+                    <View
+                        android:id="@+id/assdividser"
+                        android:layout_width="match_parent"
+                        android:background="@color/draft_grey"
+                        android:layout_height="1dp">
+
+                    </View>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:padding="15dp"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textVsiew8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:text="Mobile" />
+
+                        <br.com.sapereaude.maskedEditText.MaskedEditText
+                            android:id="@+id/mobileValue"
+                            android:layout_width="wrap_content"
+                            android:background="@color/transparent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:textSize="15sp"
+                            app:mask="(###)###-####"
+                            android:editable="false"
+                            android:textColor="@color/grey_non_pressed"
+                            android:text="@string/not_available" />
+                    </RelativeLayout>
+                    <View
+                        android:id="@+id/assdivdider"
+                        android:layout_width="match_parent"
+                        android:background="@color/draft_grey"
+                        android:layout_height="1dp">
+
+                    </View>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:padding="15dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/textVsisew8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:text="Email" />
+
+                        <TextView
+                            android:id="@+id/emailValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/not_available" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+
+
+            </RelativeLayout>
+
+
+
+        </RelativeLayout>
+
+
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+    <RelativeLayout
+        android:id="@+id/buttonparent"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/assdisvider"
+            android:layout_width="match_parent"
+            android:background="@color/draft_grey"
+            android:layout_height="1dp">
+
+        </View>
+        <TextView
+            android:id="@+id/aboutText"
+            android:layout_width="wrap_content"
+            android:padding="20dp"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="About" />
+
+        <TextView
+            android:id="@+id/LogoutText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/dark_red"
+            android:text="Logout" />
+    </RelativeLayout>
+
+
+</RelativeLayout>
+
+

@@ -71,6 +71,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     int currentDatePosition=0;
     String selectedDate;
     List<CarePlanModels> offlineCarePlaneList;
+    ImageView profileimageView;
     public static CarePlanFragment newInstance() {
         return new CarePlanFragment();
     }
@@ -491,8 +492,10 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
         interdosage = (TextView)mView.findViewById(R.id.interdosage);
         instruction = (TextView)mView.findViewById(R.id.instruction);
         back = (TextView)mView.findViewById(R.id.back);
+        profileimageView = (ImageView)mView.findViewById(R.id.profileimageView);
         today.setOnClickListener(this);
         back.setOnClickListener(this);
+        profileimageView.setOnClickListener(this);
 
 
     }
@@ -602,6 +605,9 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
                 calenderView.setVisibility(View.VISIBLE);
                 detailsView.setVisibility(View.GONE);
                 break;
+
+            case R.id.profileimageView:
+                startActivity(new Intent(getActivity(),UserProfileActivity.class));
         }
     }
 
