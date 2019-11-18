@@ -607,7 +607,10 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
                 break;
 
             case R.id.profileimageView:
-                startActivity(new Intent(getActivity(),UserProfileActivity.class));
+                if(NetworkUtils.isNetworkAvailable(getActivity())){
+                    startActivity(new Intent(getActivity(),UserProfileActivity.class));
+                }
+
         }
     }
 
