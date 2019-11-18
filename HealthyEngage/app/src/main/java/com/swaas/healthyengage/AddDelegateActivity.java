@@ -17,9 +17,11 @@ import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -202,21 +204,47 @@ public class AddDelegateActivity extends AppCompatActivity {
         buttonlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(TextUtils.isEmpty(nameEd.getText().toString())){
-                    showAlertMessage("Enter delegate name");
-                }else if(TextUtils.isEmpty(mobileEd.getRawText().trim())){
-                    showAlertMessage("Enter delegate mobile number");
-                } else if(relationshipCategoryModel == null){
-                    showAlertMessage("select delegate relationship");
-                }else{
-                    if(NetworkUtils.isNetworkAvailable(AddDelegateActivity.this)){
-                        submitApiCall();
-                    }
-                }
-
-
+                validationCheck();
             }
         });
+
+
+
+        mobileEd.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) ||
+                        (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    validationCheck();
+                }
+                return false;
+            }
+        });
+
+        nameEd.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) ||
+                        (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    validationCheck();
+                }
+                return false;
+            }
+        });
+    }
+
+    private void validationCheck() {
+        if(TextUtils.isEmpty(nameEd.getText().toString())){
+            showAlertMessage("Enter delegate name");
+        }else if(TextUtils.isEmpty(mobileEd.getRawText().trim())){
+            showAlertMessage("Enter delegate mobile number");
+        } else if(relationshipCategoryModel == null){
+            showAlertMessage("select delegate relationship");
+        }else{
+            if(NetworkUtils.isNetworkAvailable(AddDelegateActivity.this)){
+                submitApiCall();
+            }
+        }
 
     }
 
