@@ -14,7 +14,9 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -374,8 +376,36 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             }
             }
         });
-        //9 exceeds the maximum allowed value (8)
-        //0 is less than minimum allowed value (1)
+
+        textEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) ||
+                        (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    if(!TextUtils.isEmpty(textEditText.getText().toString())){
+                        float tempfloat = Float.parseFloat(textEditText.getText().toString());
+                        int actualValue = (int) Math.round(tempfloat);
+                        if(actualValue < min){
+                            showAlertMessage(String.valueOf(actualValue)+" exceeds the minimum allowed value ("+String.valueOf(min)+")");
+                        } else if(actualValue > max){
+                            showAlertMessage(String.valueOf(actualValue)+" exceeds the maximum allowed value ("+String.valueOf(max)+")");
+                        }else{
+                            carePlanAssessment.setValue(textEditText.getText().toString().trim());
+                            if(NetworkUtils.isNetworkAvailable(AssessmentDetailsActivity.this)){
+                                if(!TextUtils.isEmpty(previousValue) && previousValue.equalsIgnoreCase(textEditText.getText().toString().trim())){
+                                    finish();
+                                }else{
+                                    updateAssessmentValue();
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+                return false;
+            }
+        });
 
         submitText.setOnClickListener(new View.OnClickListener() {
             @Override
