@@ -9,9 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.swaas.healthyengage.GlobalApplication;
-
-import utils.Constants;
+import com.healthyengage.patientcare.GlobalApplication;
 
 public class SessionExpiredServices extends Service {
     public static CountDownTimer timer;

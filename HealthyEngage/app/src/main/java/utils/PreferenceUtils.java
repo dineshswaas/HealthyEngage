@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.telephony.TelephonyManager;
 
 import com.google.gson.Gson;
-import com.swaas.healthyengage.R;
+import com.healthyengage.patientcare.R;
 
 import java.util.List;
 

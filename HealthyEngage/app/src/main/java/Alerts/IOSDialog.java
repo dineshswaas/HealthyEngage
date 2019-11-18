@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.swaas.healthyengage.R;
+import com.healthyengage.patientcare.R;
 
 public class IOSDialog {
 

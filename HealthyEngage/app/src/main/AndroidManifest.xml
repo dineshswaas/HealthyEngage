@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.swaas.healthyengage">
+    package="com.healthyengage.patientcare">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -11,36 +11,36 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".GlobalApplication"
+        android:name="com.healthyengage.patientcare.GlobalApplication"
         android:allowBackup="true"
         android:icon="@mipmap/appicon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/appicon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HippaActivity"></activity>
-        <activity android:name=".UserProfileActivity"></activity>
-        <activity android:name=".AddDelegateActivity" />
-        <activity android:name=".OTPScreenActivity" />
-        <activity android:name=".CareTakersDetailsActivity" />
-        <activity android:name=".AssessmentDetailsActivity" />
-        <activity android:name=".LoginWithMobileActivity" />
-        <activity android:name=".HomePageActivity" />
-        <activity android:name=".TimeOutActivity">
+        <activity android:name="com.healthyengage.patientcare.HippaActivity"></activity>
+        <activity android:name="com.healthyengage.patientcare.UserProfileActivity"></activity>
+        <activity android:name="com.healthyengage.patientcare.AddDelegateActivity" />
+        <activity android:name="com.healthyengage.patientcare.OTPScreenActivity" />
+        <activity android:name="com.healthyengage.patientcare.CareTakersDetailsActivity" />
+        <activity android:name="com.healthyengage.patientcare.AssessmentDetailsActivity" />
+        <activity android:name="com.healthyengage.patientcare.LoginWithMobileActivity" />
+        <activity android:name="com.healthyengage.patientcare.HomePageActivity" />
+        <activity android:name="com.healthyengage.patientcare.TimeOutActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.swaas.library.BottomBarHolderActivity" />
+        <activity android:name="com.healthyengage.library.BottomBarHolderActivity" />
 
-        <service android:name=".MessageReceiver">
+        <service android:name="com.healthyengage.patientcare.MessageReceiver">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".InstanceIdService">
+        <service android:name="com.healthyengage.patientcare.InstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
