@@ -113,7 +113,7 @@ public class OTPScreenActivity extends AppCompatActivity {
         String cCode = Locale.getDefault().getCountry();
         userVerifyModel.setCountry_code(PreferenceUtils.GetCountryZipCode(this,cCode));
         userVerifyModel.setToken(FirebaseInstanceId.getInstance().getToken());
-    apiRepository.getPatientDetails(userVerifyModel);
+    apiRepository.getPatientDetailsUsingVolley(userVerifyModel);
     }
 
     private void moveToHome(APIResponseModels apiResponseModels) {

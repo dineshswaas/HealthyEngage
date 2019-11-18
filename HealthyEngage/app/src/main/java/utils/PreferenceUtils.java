@@ -172,6 +172,7 @@ public class PreferenceUtils {
         PreferenceUtils.setPatientId(mContext,null);
         PreferenceUtils.setDelegateId(mContext,null);
         PreferenceUtils.setCarePlanId(mContext,null);
+        PreferenceUtils.setUserName(mContext,null);
     }
 
     public static String GetCountryZipCode(Context context,String cCode){

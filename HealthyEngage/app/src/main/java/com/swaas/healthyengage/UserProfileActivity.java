@@ -133,7 +133,7 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 new IOSDialogBuilder(UserProfileActivity.this)
                         .setTitle("Logout")
-                        .setSubtitle("Are you sure,you want to logout ?")
+                        .setSubtitle("Are you sure,you want to logout?")
                         .setBoldPositiveLabel(false)
                         .setCancelable(false)
                         .setSingleButtonView(false)
@@ -142,7 +142,9 @@ public class UserProfileActivity extends AppCompatActivity {
                             public void onClick(IOSDialog dialog) {
                                 dialog.dismiss();
                                 PreferenceUtils.clearAllData(UserProfileActivity.this);
-                                startActivity(new Intent(UserProfileActivity.this,TimeOutActivity.class));
+                                Intent intent = new Intent(UserProfileActivity.this,TimeOutActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
                             }
                         })
                         .setNegativeListener("No", new IOSDialogClickListener() {

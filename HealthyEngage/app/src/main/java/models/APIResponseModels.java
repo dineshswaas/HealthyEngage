@@ -196,7 +196,7 @@ public class APIResponseModels<T> {
         this.accessToken = accessToken;
     }
 
-    public class AccessToken <T>{
+    public static class AccessToken <T>{
 
         String id,created,userId;
         int ttl;

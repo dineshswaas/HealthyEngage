@@ -12,6 +12,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.swaas.healthyengage.LoginWithMobileActivity;
 
 import org.json.JSONArray;
@@ -457,7 +459,7 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
 
                 RequestQueue requestQueue = Volley.newRequestQueue(mContext);
                 String url = Constants.COMPANY_BASE_URL + "api/Users/patient/verify";
-                JSONObject jsonBody = new JSONObject();
+                final JSONObject jsonBody = new JSONObject();
                 jsonBody.put("country_code", userVerifyModel.getCountry_code());
                 jsonBody.put("mobile_no", userVerifyModel.getMobile_no());
                 jsonBody.put("token",userVerifyModel.getToken());
@@ -471,8 +473,26 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
                         try {
                             jsonResponse = new JSONObject(response);
                             APIResponseModels userVerifyModel = new APIResponseModels();
+                            JSONObject jsonObject = jsonResponse.getJSONObject("accessToken");
+                            APIResponseModels.AccessToken accessToken = new APIResponseModels.AccessToken();
+                            accessToken.setId(jsonObject.getString("id"));
+                            accessToken.setUserId(jsonObject.getString("userId"));
+                            userVerifyModel.setAccessToken(accessToken);
+                            userVerifyModel.setPatientId(jsonResponse.getString("patientId"));
+                            userVerifyModel.setDelegateId(jsonResponse.getString("delegateId"));
+                            if(userVerifyModel.getDelegateId().equalsIgnoreCase("null")){
+                                userVerifyModel.setDelegateId(null);
+                            }
+                            userVerifyModel.setCareplanId(jsonResponse.getString("careplanId"));
                             userVerifyModel.setStatus(jsonResponse.getBoolean("status"));
-                            userVerifyModel.setIs_hipaa_signed(jsonResponse.getBoolean("success"));
+                            userVerifyModel.setLastSyncDate(jsonResponse.getString("lastSyncDate"));
+                            if(jsonResponse.has("is_hipaa_signed")){
+                                userVerifyModel.setIs_hipaa_signed(jsonResponse.getBoolean("is_hipaa_signed"));
+                            }else{
+                                userVerifyModel.setIs_hipaa_signed(true);
+                            }
+
+
                             getAPIResponseModel.getAPIResponseModelSuccess(userVerifyModel);
                         } catch (JSONException e) {
                             getUserVerifyModel.getUserVerifyModelFailure("Verification code is incorrect");
