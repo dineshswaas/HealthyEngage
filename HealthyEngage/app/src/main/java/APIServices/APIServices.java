@@ -12,6 +12,7 @@ import retrofit.Call;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.Header;
+import retrofit.http.PATCH;
 import retrofit.http.POST;
 import retrofit.http.Path;
 
@@ -77,4 +78,9 @@ public interface APIServices {
     @GET("api/Users/{id}")
     Call<UserModel> getUserDetails(@Header("Authorization") String value,
                                    @Path("id") String id);
+
+    @PATCH("api/Users/{id}")
+    Call<UserModel> updateUserDetails(@Header("Authorization") String value,
+                                      @Path("id") String id,
+                                      @Body UserModel userModel);
 }

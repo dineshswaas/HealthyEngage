@@ -8,13 +8,16 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import Alerts.IOSDialog;
 import Alerts.IOSDialogBuilder;
@@ -22,6 +25,7 @@ import Alerts.IOSDialogClickListener;
 import Repositories.APIRepository;
 import br.com.sapereaude.maskedEditText.MaskedEditText;
 import models.UserModel;
+import utils.NetworkUtils;
 import utils.PreferenceUtils;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -35,6 +39,7 @@ public class UserProfileActivity extends AppCompatActivity {
     MenuItem menuItem;
     List<String> stringList;
     ArrayAdapter adapter;
+    String genderValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +80,69 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
+
+    private void updateUserDetails() {
+        userModel = new UserModel();
+        userModel.setId(PreferenceUtils.getUserId(this));
+        userModel.setLast_name(lastnameValue.getText().toString().trim());
+        userModel.setFirst_name(nameValue.getText().toString().trim());
+        userModel.setGender(genderValue);
+        userModel.setMobile_no(mobileValue.getRawText());
+        String cCode = Locale.getDefault().getCountry();
+        cCode = PreferenceUtils.GetCountryZipCode(this,cCode);
+        userModel.setCountry_code(cCode);
+        userModel.setEmail(emailValue.getText().toString().trim());
+        showProgressBar("Updating user details");
+        APIRepository apiRepository = new APIRepository(UserProfileActivity.this);
+        apiRepository.setGetUserDetails(new APIRepository.GetUserDetails() {
+            @Override
+            public void getSuccess(UserModel userModelAPI) {
+                userModel = userModelAPI;
+                hideProgress();
+                setLableDisabled(false);
+                UserModel userModel = userModelAPI;
+                if(userModel != null){
+                    if(TextUtils.isEmpty(userModel.getLast_name())){
+                        userModel.setLast_name("");
+                    }
+                    loginname.setText(userModel.getFirst_name()+" "+userModel.getLast_name());
+                    firstletter.setText(userModel.getFirst_name().charAt(0)+"");
+                }
+                if(userModel != null){
+                    setUserDetails();
+                }
+                if(menuItem != null){
+                    menuItem.setTitle("Edit");
+                }
+
+            }
+
+            @Override
+            public void getFailure(String s) {
+                hideProgress();
+            }
+        });
+        apiRepository.updateUserDetails(userModel,PreferenceUtils.getUserId(UserProfileActivity.this));
+
+    }
+
+    private String getAge(int year, int month, int day){
+        Calendar dob = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+
+        dob.set(year, month, day);
+
+        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)){
+            age--;
+        }
+
+        Integer ageInt = new Integer(age);
+        String ageS = ageInt.toString();
+
+        return ageS;
+    }
     private void setUserDetails() {
 
         if(!TextUtils.isEmpty(userModel.getFirst_name())){
@@ -85,7 +153,10 @@ public class UserProfileActivity extends AppCompatActivity {
         }
 
         if(!TextUtils.isEmpty(userModel.getDob())){
-            dobValue.setText(DateHelper.getDisplayFormat(userModel.getDob().split("T")[0],"yyyy-MM-dd"));
+            String dob = userModel.getDob().split("T")[0];
+            String age = getAge(Integer.parseInt(dob.split("-")[0]),
+                    Integer.parseInt(dob.split("-")[1]),Integer.parseInt(dob.split("-")[2]));
+            dobValue.setText(DateHelper.getDisplayFormat(userModel.getDob().split("T")[0],"yyyy-MM-dd")+" ("+age+")");
         }
 
         if(!TextUtils.isEmpty(userModel.getMobile_no())){
@@ -104,6 +175,11 @@ public class UserProfileActivity extends AppCompatActivity {
         dobValue.setEnabled(status);
         mobileValue.setEnabled(status);
         sexValue.setEnabled(status);
+/*        nameValue.setTextColor(getResources().getColor(R.color.gray_non_pressed));
+        dobValue.setTextColor(getResources().getColor(R.color.gray_non_pressed));
+        mobileValue.setTextColor(getResources().getColor(R.color.gray_non_pressed));
+        emailValue.setTextColor(getResources().getColor(R.color.gray_non_pressed));*/
+
     }
 
 
@@ -157,6 +233,22 @@ public class UserProfileActivity extends AppCompatActivity {
                         .build().show();
             }
         });
+
+
+
+        sexValue.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                genderValue = stringList.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
     }
 
 
@@ -166,8 +258,7 @@ public class UserProfileActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_with_refresh_and_more,menu);
         menuItem = menu.findItem(R.id.delegateEdit);
         menuItem.setTitle("Edit");
-        menuItem.setVisible(false);
-
+        menuItem.setVisible(true);
         return true;
 
     }
@@ -175,14 +266,15 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.delegateEdit){
-            if(item.getTitle().equals("Edit")){
-                menuItem.setTitle("Done");
-                setLableDisabled(true);
-            }else{
-                menuItem.setTitle("Edit");
-                setLableDisabled(false);
+            if(NetworkUtils.isNetworkAvailable(this)){
+                if(item.getTitle().equals("Edit")){
+                    menuItem.setTitle("Done");
+                    setLableDisabled(true);
+                }else{
+                    updateUserDetails();
+                    //setLableDisabled(false);
+                }
             }
-
         }else{
             finish();
         }

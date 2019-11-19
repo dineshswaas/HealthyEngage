@@ -654,6 +654,26 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
         }
     }
 
+    public void updateUserDetails(UserModel userModel,String  userId){
+        if(NetworkUtils.isNetworkAvailable(mContext)){
+            Retrofit retrofit = RetrofitAPIBuilder.getInstance();
+            APIServices carePlanServices =retrofit.create(APIServices.class);
+            Call call =carePlanServices.updateUserDetails(PreferenceUtils.getAuthorizationKey(mContext),userId,userModel);
+            call.enqueue(new Callback<UserModel>() {
+                @Override
+                public void onResponse(Response<UserModel> response, Retrofit retrofit) {
+                    UserModel apiResponseModels =response.body();
+                    getUserDetails.getSuccess(apiResponseModels);
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    getUserDetails.getFailure(t.getMessage());
+                }
+            });
+
+        }
+    }
 
 
 
