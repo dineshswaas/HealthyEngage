@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/material_margin"
+    android:animateLayoutChanges="true"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/enable_guest_join_api"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enable_guest_join_beta" />
+
+    <TextView
+        android:id="@+id/guest_api_credentials"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/material_margin"
+        tools:text="Guest API cred here" />
+
+    <TextView
+        android:id="@+id/io_api_credentials"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/material_margin"
+        tools:text="IO API Cred here" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/material_margin"
+        android:gravity="start"
+        android:text="@string/note"
+        android:textColor="@color/semi_trans" />
+</LinearLayout>

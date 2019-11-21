@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Vidyo Connector Dual Sample</string>
+
+    <string name="lib_version">Library version: %s</string>
+
+    <string name="disconnected">Disconnected</string>
+    <string name="connected">Connected</string>
+
+    <string name="custom_layouts">Video Conference</string>
+
+    <string name="debug_option">Debug option enabled:</string>
+    <string name="settings">Settings</string>
+    <string name="enable_guest_join_beta">Enable Guest Join (Beta)</string>
+    <string name="note">Please check ConnectParams.java file in order to change these values</string>
+</resources>
