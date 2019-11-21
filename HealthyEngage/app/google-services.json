@@ -8,20 +8,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:327476888176:android:7055c3695ab34d4d9aeab5",
+        "mobilesdk_app_id": "1:327476888176:android:cf05e7aa881acd479aeab5",
         "android_client_info": {
-          "package_name": "com.swaas.healthyengage"
+          "package_name": "com.healthyengage.patientcare"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "327476888176-1lrnd7mh1e3e9eafmglq07bjbr96b4qm.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.swaas.healthyengage",
-            "certificate_hash": "29004ac568eb431b1a1e5eb850f14e16fd8420b3"
-          }
-        },
         {
           "client_id": "327476888176-67m7rlunfb92e8krtnema18jgkhchqb5.apps.googleusercontent.com",
           "client_type": 3

@@ -10,7 +10,8 @@ import java.util.List;
 import com.healthyengage.library.BottomBarHolderActivity;
 import com.healthyengage.library.NavigationPage;
 
-public class HomePageActivity extends BottomBarHolderActivity implements CarePlanFragment.OnFragmentInteractionListener, InsightFragment.OnFragmentInteractionListener {
+public class HomePageActivity extends BottomBarHolderActivity implements
+        CarePlanFragment.OnFragmentInteractionListener, InsightFragment.OnFragmentInteractionListener {
 
     int backButtonCount;
     @Override
@@ -47,4 +48,14 @@ public class HomePageActivity extends BottomBarHolderActivity implements CarePla
             backButtonCount++;
         }
     }
+
+/*    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        GlobalApplication.sThis.touch();
+    }
+
+    public GlobalApplication getApp() {
+        return (GlobalApplication) getApplication();
+    }*/
 }

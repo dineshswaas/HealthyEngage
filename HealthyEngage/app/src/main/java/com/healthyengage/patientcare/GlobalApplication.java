@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.facebook.stetho.Stetho;
 
+import SessionTimeOut.ApplockManager;
+
 
 public class GlobalApplication extends Application {
 
@@ -19,6 +21,10 @@ public static GlobalApplication sThis;
 
         Stetho.initializeWithDefaults(this);
 
+    }
+    public void touch() {
+        ApplockManager.getInstance().enableDefaultAppLockIfAvailable(sThis);
+        ApplockManager.getInstance().updateTouch();
     }
 
     public static GlobalApplication getThis() {

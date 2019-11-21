@@ -437,7 +437,12 @@ public class AddDelegateActivity extends AppCompatActivity {
 
         }
     }
-
+/*
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        GlobalApplication.sThis.touch();
+    }*/
 
     void showProgress(String message){
         progressDialog = new ProgressDialog(this);
