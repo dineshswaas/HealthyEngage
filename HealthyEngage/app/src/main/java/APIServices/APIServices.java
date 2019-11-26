@@ -83,4 +83,12 @@ public interface APIServices {
     Call<UserModel> updateUserDetails(@Header("Authorization") String value,
                                       @Path("id") String id,
                                       @Body UserModel userModel);
+
+
+
+    @POST("api/Patients/joinVideoCall")
+    Call<APIResponseModels> joinVideoCall(@Header("Authorization") String value,
+                                        @Body APIResponseModels apiResponseModels);
+
+
 }

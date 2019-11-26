@@ -7,12 +7,14 @@ import android.text.TextUtils;
 import android.view.View;
 
 import utils.PreferenceUtils;
+import vidyo.VideoConferenceActivity;
 
 public class TimeOutActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_time_out);
         getSupportActionBar().hide();
         if(!TextUtils.isEmpty(PreferenceUtils.getLoginMobileNumber(this)) &&

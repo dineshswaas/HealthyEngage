@@ -614,6 +614,30 @@ public void getCarePlanDetails(CarePlanModels carePlanModels){
 
 
 
+    public void joinVideoCall(APIResponseModels apiResponseModels){
+        if(NetworkUtils.isNetworkAvailable(mContext)){
+            Retrofit retrofit = RetrofitAPIBuilder.getInstance();
+            APIServices carePlanServices =retrofit.create(APIServices.class);
+            Call call =carePlanServices.joinVideoCall(PreferenceUtils.getAuthorizationKey(mContext),apiResponseModels);
+            call.enqueue(new Callback<APIResponseModels>() {
+                @Override
+                public void onResponse(Response<APIResponseModels> response, Retrofit retrofit) {
+                    APIResponseModels apiResponseModels =response.body();
+                    getAPIResponseModel.getAPIResponseModelSuccess(apiResponseModels);
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    getAPIResponseModel.getAPIResponseModelFailure(t.getMessage());
+                }
+            });
+
+        }
+    }
+
+
+
+
     public void setGetDelegateDetails( GetDelegateDetails getDelegateDetails){
         this.getDelegateDetails = getDelegateDetails;
     }

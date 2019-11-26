@@ -3,9 +3,12 @@ package com.healthyengage.patientcare;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -13,10 +16,13 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -25,7 +31,6 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.warkiz.tickseekbar.TickSeekBar;
 import com.xw.repo.BubbleSeekBar;
 
@@ -60,6 +65,10 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
     String previousValue,selectedValue;
     SeekBar seekBar;
     BubbleSeekBar demo_3_seek_bar_2;
+    RecyclerView multiSelectRecycler;
+    RelativeLayout spinnerHeader;
+    MultiSelectModel multiSelectModel;
+    ArrayList<MultiSelectModel> multiSelectModelList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +79,6 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         }catch (Exception e){
             Log.d("parm",e.getMessage());
         }
-
-
     }
 
     private void getIntentData() {
@@ -236,12 +243,36 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             pickerList = new ArrayList<>();
             pickerList.add("Select an answer");
             for (int i = min; i <= max ;i++){
-                pickerList.add(String.valueOf(i));
+                //pickerList.add(String.valueOf(i));
+                multiSelectModel = new MultiSelectModel();
+                multiSelectModel.setName(String.valueOf(i));
+                multiSelectModelList.add(multiSelectModel);
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_dropdown_item,pickerList);
             pickerSpinner.setAdapter(adapter);
+            pickerSpinner.setEnabled(false);
 
+            multiSelectRecycler.setLayoutManager(new LinearLayoutManager(multiSelectRecycler.getContext(),
+                    LinearLayoutManager.VERTICAL, false));
+            MultiSelectAdapter multiSelectAdapter = new MultiSelectAdapter();
+            multiSelectRecycler.setAdapter(multiSelectAdapter);
+            multiSelectRecycler.setVisibility(View.GONE);
+
+
+            spinnerHeader.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(multiSelectRecycler.getVisibility() == View.VISIBLE){
+                        multiSelectRecycler.setVisibility(View.GONE);
+                    }else{
+                        multiSelectRecycler.setVisibility(View.VISIBLE);
+                    }
+
+                }
+            });
+
+/*
             pickerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -259,8 +290,10 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
 
                 }
             });
+*/
 
         }
+
 
         if(carePlanAssessment.getPatientAssessment() != null && carePlanAssessment.getPatientAssessment().size() > 0){
             CarePlanModels.CarePlanAssessment.PatientAssessment assessment = carePlanAssessment.getPatientAssessment().get(0);
@@ -579,7 +612,9 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         submitText = (TextView)findViewById(R.id.submitText);
         seekBar = (SeekBar)findViewById(R.id.seekbar);
         demo_3_seek_bar_2 = (BubbleSeekBar)findViewById(R.id.demo_3_seek_bar_2);
-
+        multiSelectRecycler = (RecyclerView)findViewById(R.id.multiSelectRecycler);
+        spinnerHeader = (RelativeLayout)findViewById(R.id.spinnerHeader);
+        multiSelectModel = new MultiSelectModel();
     }
 
 
@@ -606,4 +641,40 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         submitText.setTextColor(getResources().getColor(R.color.white));
         submitText.setBackground(getResources().getDrawable((R.color.colorPrimary)));
     }
+
+    private class MultiSelectAdapter  extends RecyclerView.Adapter<ViewHolder>{
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.multi_select_item_custom, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+            MultiSelectModel multiSelectModel = multiSelectModelList.get(position);
+            viewHolder.dialog_item_name.setText(multiSelectModel.getName());
+        }
+
+        @Override
+        public int getItemCount() {
+            return multiSelectModelList.size();
+        }
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        View view;
+        CheckBox dialog_item_checkbox;
+        TextView dialog_item_name;
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            view = itemView;
+            dialog_item_checkbox = (CheckBox)view.findViewById(R.id.dialog_item_checkbox);
+            dialog_item_name = (TextView)view.findViewById(R.id.dialog_item_name);
+
+        }
+    }
+
+
 }

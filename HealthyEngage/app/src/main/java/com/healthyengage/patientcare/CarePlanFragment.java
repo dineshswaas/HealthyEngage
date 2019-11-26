@@ -54,7 +54,7 @@ public class CarePlanFragment extends Fragment implements  CarePlanAdapter.OnTpD
     TextView percentIndicatior,dateText,today,intername,interdosage,instruction,back;
     CircularProgressBar donut_progress;
     boolean imageonebool,imagetwobool,isdateAlreadySelect;
-    int selectedItemposition = -1;
+    int selectedItemposition = 0;
     APIRepository carePlanRepository;
     List<CarePlanModels> carePlanList;
     LinearLayout interventionMainLayout,assessmentMainLayout,readonlyMainLayout,detailsView,calenderView;

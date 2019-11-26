@@ -24,6 +24,10 @@ public class PreferenceUtils {
     private static final String UUID = "UUID";
     private static final String LOGIN_MOBILE_NUMBER = "LOGIN_MOBILE_NUMBER";
     private static final String USER_NAME = "USER_NAME";
+
+    private static final String VIDEO_TOKEN = "VIDEO_TOKEN";
+    private static final String VIDEO_ROOM_ID = "VIDEO_ROOM_ID";
+
     public static String getAuthorizationKey(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
         String mode = sharedPreferences.getString(Authorization, "");
@@ -156,6 +160,39 @@ public class PreferenceUtils {
         return mode;
     }
 
+
+
+    public static void setVideoToken(Context context, String value) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(VIDEO_TOKEN, value);
+        editor.commit();
+    }
+
+    public static String getVideoToken(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
+        String mode = sharedPreferences.getString(VIDEO_TOKEN, "");
+        return mode;
+    }
+
+
+
+    public static void setVideoRoomId(Context context, String value) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(VIDEO_ROOM_ID, value);
+        editor.commit();
+    }
+
+    public static String getVideoRoomId(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
+        String mode = sharedPreferences.getString(VIDEO_ROOM_ID, "");
+        return mode;
+    }
+
+
+
+
     public static void setLoginMobileNumber(Context context, String value) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(HEALTHY_ENGAGE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -173,6 +210,9 @@ public class PreferenceUtils {
         PreferenceUtils.setDelegateId(mContext,null);
         PreferenceUtils.setCarePlanId(mContext,null);
         PreferenceUtils.setUserName(mContext,null);
+        PreferenceUtils.setAuthorizationKey(mContext,null);
+        PreferenceUtils.setUuid(mContext,null);
+        PreferenceUtils.setLastSyncDate(mContext,null);
     }
 
     public static String GetCountryZipCode(Context context,String cCode){

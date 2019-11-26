@@ -15,5 +15,9 @@
         <item name="android:windowEnterAnimation">@anim/side_in</item>
         <item name="android:windowExitAnimation">@anim/side_out</item>
     </style>
-
+    <style name="ControlButton">
+        <item name="android:layout_width">@dimen/control_icon_size</item>
+        <item name="android:layout_height">@dimen/control_icon_size</item>
+        <item name="android:layout_margin">@dimen/small_margin</item>
+    </style>
 </resources>

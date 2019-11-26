@@ -34,6 +34,7 @@ public class Constants {
 
     public static final String COLOR_ORANGE="#F7941D";
     public static final String COLOR_PURPLE="#A71930";
-
+    public static final String VIDEO_CALL_INITIATED="Video call initiated. Please click the link: https://www.healthyengage.net/videocall";
+    public static final String HOST = "prod.vidyo.io";
 
 }

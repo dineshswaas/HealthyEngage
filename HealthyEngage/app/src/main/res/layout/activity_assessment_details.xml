@@ -166,7 +166,7 @@
 
             <RelativeLayout
                 android:id="@+id/pickerParentView"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white">
@@ -197,11 +197,44 @@
 
                     </View>
 
-                    <Spinner
-                        android:id="@+id/pickerSpinner"
-                        android:padding="15dp"
+                    <RelativeLayout
+                        android:id="@+id/spinnerHeader"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:padding="15dp"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/selectanswertext"
+                            android:layout_width="match_parent"
+                            android:text="Select an answer"
+                            android:layout_height="wrap_content"></TextView>
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_alignParentRight="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@android:drawable/arrow_down_float" />
+
+                        <Spinner
+                            android:id="@+id/pickerSpinner"
+                            android:padding="15dp"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+
+
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/multiSelectRecycler"
+                        android:layout_width="match_parent"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_height="match_parent">
+
+                    </android.support.v7.widget.RecyclerView>
+
 
 
                 </LinearLayout>
@@ -211,7 +244,7 @@
 
             <RelativeLayout
                 android:id="@+id/sliderParentView"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white">

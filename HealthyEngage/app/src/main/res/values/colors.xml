@@ -6,7 +6,7 @@
     <color name="inteventionorange">#F7941D</color>
     <color name="interventionpurple">#A71930</color>
     <color name="white">#ffffffff</color>
-
+    <color name="semi_trans">#8a000000</color>
 
     <color name="company_bg_color">#17487A</color>
     <color name="company_txt_readonly">#f1eeee</color>"
