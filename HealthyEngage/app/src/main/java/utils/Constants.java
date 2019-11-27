@@ -4,8 +4,8 @@ package utils;
 public class Constants {
 
     // ***************************** Production ********************************************
-    public static final String COMPANY_BASE_URL = "https://www.healthyengage.net/"; // Prod
-    //public static final String COMPANY_BASE_URL = "http://18.191.216.174:3000/"; // DEV
+   // public static final String COMPANY_BASE_URL = "https://www.healthyengage.net/"; // Prod
+    public static final String COMPANY_BASE_URL = "http://18.191.216.174:3000/"; // DEV
 
     public static final String AUTHY_API_URL = "https://api.authy.com/";
     public static final String AUTHY_API_KEY="X-Authy-API-Key";
@@ -16,6 +16,7 @@ public class Constants {
     public static final String INPUT_TEXT = "Text";
     public static final String INPUT_BOOLEAN = "Boolean";
     public static final String INPUT_PICKER ="Picker";
+    public static final String INPUT_MULTI_SELECT="MultipleChoice";
     public static final String DEFAULT_SERVER_DATE = "1970-01-01T00:00:00.000Z";
 
 

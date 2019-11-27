@@ -1,14 +1,19 @@
 package vidyo;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.healthyengage.patientcare.AddDelegateActivity;
 import com.healthyengage.patientcare.HomePageActivity;
 import com.healthyengage.patientcare.R;
 import com.vidyo.VidyoClient.Connector.Connector;
@@ -26,6 +31,9 @@ import com.vidyo.VidyoClient.Endpoint.Participant;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import Alerts.IOSDialog;
+import Alerts.IOSDialogBuilder;
+import Alerts.IOSDialogClickListener;
 import Repositories.APIRepository;
 import models.APIResponseModels;
 import models.VideoData;
@@ -55,7 +63,7 @@ public class VideoConferenceActivity extends FragmentActivity  implements
 
     private ControlView controlView;
     private View progressBar;
-
+    int REQUEST_MULTIPLE_PERMISSIONS = 124;
     private Connector connector;
 
     private AtomicBoolean isCameraDisabledForBackground = new AtomicBoolean(false);
@@ -75,11 +83,42 @@ public class VideoConferenceActivity extends FragmentActivity  implements
             connector.setMicrophonePrivacy(state.isMuteMic());
             connector.setSpeakerPrivacy(state.isMuteSpeaker());
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(ActivityCompat.checkSelfPermission(VideoConferenceActivity.this, Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_GRANTED){
+                LocalCamera localCamera = customTilesHelper.getLastSelectedLocalCamera();
+                if (connector != null && localCamera != null && isCameraDisabledForBackground.getAndSet(false)) {
+                    connector.selectLocalCamera(localCamera);
+                }
+            }else{
+                new IOSDialogBuilder(VideoConferenceActivity.this)
+                        .setTitle("Permission Needed")
+                        .setSubtitle("You need to grant access the camera")
+                        .setBoldPositiveLabel(false)
+                        .setCancelable(false)
+                        .setSingleButtonView(false)
+                        .setPositiveListener("Cancel", new IOSDialogClickListener() {
+                            @Override
+                            public void onClick(IOSDialog dialog) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeListener("OK", new IOSDialogClickListener() {
+                            @Override
+                            public void onClick(IOSDialog dialog) {
+                                dialog.dismiss();
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    requestPermissions(new String[]{Manifest.permission.CAMERA},
+                                            REQUEST_MULTIPLE_PERMISSIONS);
 
-        LocalCamera localCamera = customTilesHelper.getLastSelectedLocalCamera();
-        if (connector != null && localCamera != null && isCameraDisabledForBackground.getAndSet(false)) {
-            connector.selectLocalCamera(localCamera);
+                                }
+                            }
+                        })
+                        .setSinglePositiveListener("OK", null)
+                        .build().show();
+            }
         }
+
     }
 
     @Override

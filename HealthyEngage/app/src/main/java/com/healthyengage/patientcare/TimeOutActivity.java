@@ -22,6 +22,7 @@ public class TimeOutActivity extends AppCompatActivity {
                 !TextUtils.isEmpty(PreferenceUtils.getPatientId(this)) &&
                 !TextUtils.isEmpty(PreferenceUtils.getUserId(this))){
             startActivity(new Intent(this, HomePageActivity.class));
+            //startActivity(new Intent(this, VideoConferenceActivity.class));
         }
 
     }

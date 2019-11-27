@@ -461,6 +461,77 @@ public class CarePlanModels implements Serializable{
             int prompt_time;
             String assessmentDate,careplanAssessmentId,lastSyncDate,patientId,userId,value;
 
+            List<CarePlanAssessmentSymptoms> careplanAssessmentSymptoms;
+
+
+            public List<CarePlanAssessmentSymptoms> getCareplanAssessmentSymptoms() {
+                return careplanAssessmentSymptoms;
+            }
+
+            public void setCareplanAssessmentSymptoms(List<CarePlanAssessmentSymptoms> careplanAssessmentSymptoms) {
+                this.careplanAssessmentSymptoms = careplanAssessmentSymptoms;
+            }
+
+           public class CarePlanAssessmentSymptoms implements Serializable{
+
+                String id,careplan_assessment_id,assesment_symptom_id;
+                AssessmentSymptom assessmentSymptom;
+
+               public AssessmentSymptom getAssessmentSymptom() {
+                   return assessmentSymptom;
+               }
+
+               public void setAssessmentSymptom(AssessmentSymptom assessmentSymptom) {
+                   this.assessmentSymptom = assessmentSymptom;
+               }
+
+               public String getId() {
+                    return id;
+                }
+
+                public void setId(String id) {
+                    this.id = id;
+                }
+
+                public String getCareplan_assessment_id() {
+                    return careplan_assessment_id;
+                }
+
+                public void setCareplan_assessment_id(String careplan_assessment_id) {
+                    this.careplan_assessment_id = careplan_assessment_id;
+                }
+
+                public String getAssesment_symptom_id() {
+                    return assesment_symptom_id;
+                }
+
+                public void setAssesment_symptom_id(String assesment_symptom_id) {
+                    this.assesment_symptom_id = assesment_symptom_id;
+                }
+
+               public class AssessmentSymptom implements Serializable{
+                    String id,name;
+
+                    public String getId() {
+                        return id;
+                    }
+
+                    public void setId(String id) {
+                        this.id = id;
+                    }
+
+                    public String getName() {
+                        return name;
+                    }
+
+                    public void setName(String name) {
+                        this.name = name;
+                    }
+                }
+
+
+            }
+
             public String getAssessmentDate() {
                 return assessmentDate;
             }

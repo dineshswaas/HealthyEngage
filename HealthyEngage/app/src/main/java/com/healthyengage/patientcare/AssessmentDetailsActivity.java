@@ -51,9 +51,9 @@ import utils.PreferenceUtils;
 public class AssessmentDetailsActivity extends AppCompatActivity {
 
 
-    TextView name,description,question,booleanquestion,pickerquestion,sliderquestion,minlabel,maxlabel;
+    TextView name,description,question,booleanquestion,pickerquestion,multipickerquestion,sliderquestion,minlabel,maxlabel;
     CarePlanModels.CarePlanAssessment carePlanAssessment;
-    RelativeLayout textParentLayout,booleanParentView,pickerParentView,sliderParentView,buttonlayout;
+    RelativeLayout textParentLayout,booleanParentView,pickerParentView,sliderParentView,multipickerParentView,buttonlayout;
     EditText textEditText;
     RadioGroup radioGroup;
     RadioButton rpositiveButton,rnegativeButton;
@@ -101,17 +101,20 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             booleanParentView.setVisibility(View.GONE);
             pickerParentView.setVisibility(View.GONE);
             sliderParentView.setVisibility(View.GONE);
+            multipickerParentView.setVisibility(View.GONE);
             onBindTextDetails();
         }else if(carePlanAssessment.getInput_type().equalsIgnoreCase(Constants.INPUT_BOOLEAN)){
             textParentLayout.setVisibility(View.GONE);
             booleanParentView.setVisibility(View.VISIBLE);
             pickerParentView.setVisibility(View.GONE);
+            multipickerParentView.setVisibility(View.GONE);
             sliderParentView.setVisibility(View.GONE);
             onBindBooleanDetails();
         }else if(carePlanAssessment.getInput_type().equalsIgnoreCase(Constants.INPUT_PICKER)){
             textParentLayout.setVisibility(View.GONE);
             booleanParentView.setVisibility(View.GONE);
             pickerParentView.setVisibility(View.VISIBLE);
+            multipickerParentView.setVisibility(View.GONE);
             sliderParentView.setVisibility(View.GONE);
             onBindPickerDetails();
         }else if(carePlanAssessment.getInput_type().equalsIgnoreCase(Constants.INPUT_SLIDER)){
@@ -119,8 +122,72 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             pickerParentView.setVisibility(View.GONE);
             booleanParentView.setVisibility(View.GONE);
             sliderParentView.setVisibility(View.VISIBLE);
+            multipickerParentView.setVisibility(View.GONE);
             onBindSliderDetails();
+        }else if(carePlanAssessment.getInput_type().equalsIgnoreCase(Constants.INPUT_MULTI_SELECT)){
+            textParentLayout.setVisibility(View.GONE);
+            pickerParentView.setVisibility(View.GONE);
+            booleanParentView.setVisibility(View.GONE);
+            sliderParentView.setVisibility(View.GONE);
+            multipickerParentView.setVisibility(View.VISIBLE);
+            onBindMultiPickerDetails();
         }
+
+
+
+
+    }
+
+    private void onBindMultiPickerDetails() {
+
+        if(!TextUtils.isEmpty(carePlanAssessment.getQuestion())){
+            multipickerquestion.setText(carePlanAssessment.getQuestion());
+        }
+        submitTextDisabled();
+
+        for(CarePlanModels.CarePlanAssessment.CarePlanAssessmentSymptoms
+                assessmentSymptoms : carePlanAssessment.getCareplanAssessmentSymptoms()){
+            CarePlanModels.CarePlanAssessment.CarePlanAssessmentSymptoms.AssessmentSymptom
+                    symptom = assessmentSymptoms.getAssessmentSymptom();
+            if(!TextUtils.isEmpty(symptom.getId()) && !TextUtils.isEmpty(symptom.getName())){
+                multiSelectModel = new MultiSelectModel();
+                multiSelectModel.setName(symptom.getName());
+                multiSelectModel.setId(symptom.getId());
+                multiSelectModelList.add(multiSelectModel);
+            }
+        }
+        multiSelectRecycler.setLayoutManager(new LinearLayoutManager(multiSelectRecycler.getContext(),
+                LinearLayoutManager.VERTICAL, false));
+        MultiSelectAdapter multiSelectAdapter = new MultiSelectAdapter();
+        multiSelectRecycler.setAdapter(multiSelectAdapter);
+        multiSelectRecycler.setVisibility(View.GONE);
+
+        spinnerHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(multiSelectRecycler.getVisibility() == View.VISIBLE){
+                    multiSelectRecycler.setVisibility(View.GONE);
+                }else{
+                    multiSelectRecycler.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        submitText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(NetworkUtils.isNetworkAvailable(AssessmentDetailsActivity.this)){
+                    if(!TextUtils.isEmpty(previousValue) && previousValue.equalsIgnoreCase(selectedValue)){
+                        finish();
+                    }else{
+                        carePlanAssessment.setValue(selectedValue);
+                        updateAssessmentValue();
+                    }
+
+                }
+            }
+        });
 
 
 
@@ -243,22 +310,11 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
             pickerList = new ArrayList<>();
             pickerList.add("Select an answer");
             for (int i = min; i <= max ;i++){
-                //pickerList.add(String.valueOf(i));
-                multiSelectModel = new MultiSelectModel();
-                multiSelectModel.setName(String.valueOf(i));
-                multiSelectModelList.add(multiSelectModel);
+                pickerList.add(String.valueOf(i));
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_dropdown_item,pickerList);
             pickerSpinner.setAdapter(adapter);
-            pickerSpinner.setEnabled(false);
-
-            multiSelectRecycler.setLayoutManager(new LinearLayoutManager(multiSelectRecycler.getContext(),
-                    LinearLayoutManager.VERTICAL, false));
-            MultiSelectAdapter multiSelectAdapter = new MultiSelectAdapter();
-            multiSelectRecycler.setAdapter(multiSelectAdapter);
-            multiSelectRecycler.setVisibility(View.GONE);
-
 
             spinnerHeader.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -272,7 +328,6 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
                 }
             });
 
-/*
             pickerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -290,7 +345,6 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
 
                 }
             });
-*/
 
         }
 
@@ -603,6 +657,7 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         pickerParentView = (RelativeLayout)findViewById(R.id.pickerParentView);
         pickerSpinner= (Spinner)findViewById(R.id.pickerSpinner);
         pickerquestion = (TextView)findViewById(R.id.pickerquestion);
+        multipickerquestion = (TextView)findViewById(R.id.multipickerquestion);
         sliderParentView = (RelativeLayout)findViewById(R.id.sliderParentView);
         sliderquestion = (TextView)findViewById(R.id.sliderquestion);
         tickSeekBar = (TickSeekBar) findViewById(R.id.tickSeekBar);
@@ -613,7 +668,8 @@ public class AssessmentDetailsActivity extends AppCompatActivity {
         seekBar = (SeekBar)findViewById(R.id.seekbar);
         demo_3_seek_bar_2 = (BubbleSeekBar)findViewById(R.id.demo_3_seek_bar_2);
         multiSelectRecycler = (RecyclerView)findViewById(R.id.multiSelectRecycler);
-        spinnerHeader = (RelativeLayout)findViewById(R.id.spinnerHeader);
+        spinnerHeader = (RelativeLayout)findViewById(R.id.multispinnerHeader);
+        multipickerParentView = (RelativeLayout)findViewById(R.id.multipickerParentView);
         multiSelectModel = new MultiSelectModel();
     }
 

@@ -26,6 +26,7 @@ import Alerts.IOSDialogClickListener;
 import utils.Constants;
 import vidyo.VideoConferenceActivity;
 
+import static android.media.RingtoneManager.getDefaultUri;
 import static utils.Constants.NOTIFICATION_ID;
 
 public class MessageReceiver extends FirebaseMessagingService {
@@ -51,37 +52,30 @@ public class MessageReceiver extends FirebaseMessagingService {
 
     private void showNotifications(String msg, String title,String topic) {
         if(msg.equalsIgnoreCase(Constants.VIDEO_CALL_INITIATED)){
-            Intent intent = new Intent(getApplicationContext(), VideoConferenceActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("pushnotification", "yes");
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            NotificationManager mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                int importance = NotificationManager.IMPORTANCE_LOW;
-                NotificationChannel mChannel = new NotificationChannel("Sesame", "Sesame", importance);
-                mChannel.setDescription(msg);
-                mChannel.enableLights(true);
-                mChannel.setLightColor(Color.RED);
-                mChannel.enableVibration(true);
-                mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-                mNotifyManager.createNotificationChannel(mChannel);
-            }else{
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "Seasame");
-                mBuilder.setContentTitle(title)
-                        .setContentText(msg)
-                        .setSmallIcon(R.mipmap.appicon)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.appicon))
-                        .setAutoCancel(true)
-                        .setSound(defaultSoundUri)
-                        .setColor(Color.parseColor("#FFD600"))
-                        .setContentIntent(pendingIntent)
-                        .setChannelId("Sesame")
-                        .setPriority(NotificationCompat.PRIORITY_LOW);
 
-                mNotifyManager.notify(count, mBuilder.build());
-                count++;
-            }
+            int requestID = (int) System.currentTimeMillis();
+
+            Uri alarmSound = getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            NotificationManager mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+            Intent notificationIntent = new Intent(getApplicationContext(), VideoConferenceActivity.class);
+
+        //**add this line**
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        //**edit this line to put requestID as requestCode**
+            PendingIntent contentIntent = PendingIntent.getActivity(this, requestID,notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext())
+                    .setSmallIcon(R.mipmap.appicon)
+                    .setContentTitle("My Notification")
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(msg))
+                    .setContentText(msg).setAutoCancel(true);
+            mBuilder.setSound(alarmSound);
+            mBuilder.setContentIntent(contentIntent);
+            mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
+
+
         }
 
 
